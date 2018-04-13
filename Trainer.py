@@ -3,7 +3,7 @@ from DNN import DNN
 class Trainer(DNN):
     def __init__(self , recorder):
         print '####################################################'
-        print '#                   Trainer                         #'
+        print '#                   Trainer                        #'
         print '####################################################'
 
         self.recorder = recorder
