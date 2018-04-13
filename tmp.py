@@ -7,7 +7,6 @@ class A(object):
     @classmethod
     def print_(cls):
         print 'class method 을 통해 클래스 변수를 불러옵니다 ', cls.class_a
-        global class_a2
         cls.class_a_2 = 'class a_2'
         return 'class method 을 통해 클래스 변수를 불러옵니다 ' + cls.class_a
     @classmethod
@@ -39,6 +38,10 @@ class D(A):
 
 
 a=A()
+a.print_()
+print a.class_a_2
+
+"""
 print a.class_a
 a.change()
 print a.class_a
@@ -52,6 +55,9 @@ print class_C.class_a
 d=D()
 d._print()
 print d.class_a
+
+"""
+
 """
 class A(object):
     def __init__(self):

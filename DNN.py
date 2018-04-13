@@ -12,6 +12,13 @@ class DNN(object):
     cam_ind = None
     learning_rate = None
     is_training = None
+    pred=None
+    pred_cls=None
+    cost=None
+    train_op=None
+    correct_pred=None
+    accuracy=None
+
 
     def weight_variable_msra(self, shape, name):
         return tf.get_variable(name=name, shape=shape, initializer=tf.contrib.layers.variance_scaling_initializer())
@@ -147,28 +154,30 @@ class DNN(object):
         return output
     """
     @classmethod
-    def algorithm(cls , optimizer='GradientDescentOptimizer'):
+    def algorithm(cls, logits , optimizer='GradientDescentOptimizer'):
         """
         :param y_conv: logits
         :param y_: labels
         :param learning_rate: learning rate
         :return:  pred,pred_cls , cost , correct_pred ,accuracy
         """
-        if __debug__ == True:
-            print 'debug start : cnn.py | algorithm'
-            print 'optimizer option : GradientDescentOptimizer(default) | AdamOptimizer | moment | '
-            print 'selected optimizer : ', optimizer
-            print cls.logits.get_shape()
-            print cls.y_.get_shape()
+
+        print "############################################################"
+        print "#                     Optimizer                            #"
+        print "############################################################"
+        print 'optimizer option : GradientDescentOptimizer(default) | AdamOptimizer | moment | '
+        print 'selected optimizer : ', optimizer
+        print 'logits tensor Shape : {}', logits.get_shape()
+        print 'Preds tensor Shape : {}', cls.y_.get_shape()
         optimizer_dic = {'GradientDescentOptimizer': tf.train.GradientDescentOptimizer,
                          'AdamOptimizer': tf.train.AdamOptimizer}
 
-        cls.pred = tf.nn.softmax(cls.logits, name='softmax')
-        cls.pred_cls = tf.argmax(cls.pred, axis=1, name='pred_cls')
-        cls.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=cls.logits, labels=cls.y_), name='cost')
-        cls.train_op = optimizer_dic[optimizer](cls.learning_rate).minimize(cls.cost)
-        cls.correct_pred = tf.equal(tf.argmax(cls.logits, 1), tf.argmax(cls.y_, 1), name='correct_pred')
-        cls.accuracy = tf.reduce_mean(tf.cast(cls.correct_pred, dtype=tf.float32), name='accuracy')
+        cls.pred_op = tf.nn.softmax(logits, name='softmax')
+        cls.pred_cls_op = tf.argmax(cls.pred_op, axis=1, name='pred_cls')
+        cls.cost_op= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=cls.y_), name='cost')
+        cls.train_op = optimizer_dic[optimizer](cls.lr_).minimize(cls.cost_op)
+        cls.correct_pred_op = tf.equal(tf.argmax(logits, 1), tf.argmax(cls.y_, 1), name='correct_pred')
+        cls.accuracy_op = tf.reduce_mean(tf.cast(cls.correct_pred_op, dtype=tf.float32), name='accuracy')
 
 
     @classmethod
@@ -176,15 +185,15 @@ class DNN(object):
         cls.x_= tf.placeholder(tf.float32, shape=shape, name='x_')
         cls.y_ = tf.placeholder(tf.float32, shape=[None, cls.n_classes], name='y_')
         cls.cam_ind = tf.placeholder(tf.int32, shape=[], name='cam_ind')
-        cls.learning_rate = tf.placeholder(tf.float32, shape=[], name='learning_rate')
+        cls.lr_ = tf.placeholder(tf.float32, shape=[], name='learning_rate')
         cls.is_training = tf.placeholder(tf.bool, shape=[], name='is_training')
 
     @classmethod
-    def _sess_start(self):
-        sess = tf.Session()
+    def sess_start(cls):
+        cls.sess = tf.Session()
         init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
-        sess.run(init)
-        return sess
+        cls.sess.run(init)
+        return cls.sess
 
     @classmethod
     def initialize(cls, optimizer_name, use_BN, use_l2_loss, model, logit_type, datatype):
@@ -212,7 +221,6 @@ class DNN(object):
             print cls.x_
             cls.top_conv=VGG(model , bn=True)
     """
-
 
 if __name__ == '__main__':
     dnn=DNN()

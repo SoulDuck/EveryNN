@@ -49,18 +49,21 @@ def fc_layer_to_clssses(_input, n_classes):
 """
 
 class VGG(DNN):
-    def __init__(self , model , bn  , logit_type , n_classes):
-        DNN.initialize('sgd', True, True, 'vgg_11', logit_type='fc', datatype='cifar10')
+    def __init__(self , model , bn  , logit_type , datatype):
+        DNN.initialize('sgd', True, True, 'vgg_11', logit_type='fc', datatype=datatype)
+        #DNN 에서 제공하는 정보들
+        # n_classes , x_ ,y_ , is_training , sess
         self.model = model
         self.bn = bn
         self.logit_type = logit_type
-        self.n_classes = n_classes
         self.build_graph()
+        DNN.algorithm(self.logits) # 이걸 self 로 바꾸면 안된다.
+        DNN.sess_start()
+
 
 
 
     def build_graph(self):
-
         ##### define conv connected layer #######
         image_size = int(DNN.x_.get_shape()[-2])
         n_classes = int(DNN.y_.get_shape()[-1])
@@ -171,13 +174,6 @@ class VGG(DNN):
             print '["fc", "gap"]'
             raise AssertionError
         return self.logits
-
-
-
-
-
-
-
 
 def train_algorithm_momentum(logits, labels, learning_rate, use_nesterov, l2_loss):
     print 'Optimizer : Momentum'
