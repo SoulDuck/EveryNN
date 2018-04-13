@@ -172,9 +172,9 @@ class DNN(object):
 
 
     @classmethod
-    def _define_input(cls, shape, n_classes):
+    def _define_input(cls, shape):
         cls.x_= tf.placeholder(tf.float32, shape=shape, name='x_')
-        cls.y_ = tf.placeholder(tf.float32, shape=[None, n_classes], name='y_')
+        cls.y_ = tf.placeholder(tf.float32, shape=[None, self.n_classes], name='y_')
         cls.cam_ind = tf.placeholder(tf.int32, shape=[], name='cam_ind')
         cls.learning_rate = tf.placeholder(tf.float32, shape=[], name='learning_rate')
         cls.is_training = tf.placeholder(tf.bool, shape=[], name='is_training')
@@ -199,7 +199,7 @@ class DNN(object):
         batch_xs, batch_ys, _ = cls.pipeline.next_batch(10)
         _, h, w, ch = np.shape(batch_xs)
         _, n_classes = np.shape(batch_ys)
-        cls._define_input(shape=[None, h, w, ch],n_classes=n_classes) #
+        cls._define_input(shape=[None, h, w, ch]) #
     @classmethod
     def build_graph(cls):
         raise NotImplementedError

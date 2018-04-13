@@ -10,7 +10,6 @@ import cifar
 
 class Input():
     def __init__(self, datatype):
-
         if datatype == 'cifar10':
             self.train_imgs, self.train_labs, self.test_imgs, self.test_labs = cifar.get_cifar_images_labels(
                 onehot=True);
