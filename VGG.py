@@ -239,31 +239,6 @@ def train_algorithm_grad(logits, labels, learning_rate, l2_loss):
     return train_op, accuracy, cross_entropy, prediction
 
 
-def define_inputs(shape, n_classes):
-    images = tf.placeholder(tf.float32, shape=shape, name='x_')
-    labels = tf.placeholder(tf.float32, shape=[None, n_classes], name='y_')
-    cam_ind = tf.placeholder(tf.int32, shape=[], name='cam_ind')
-    learning_rate = tf.placeholder(tf.float32, shape=[], name='learning_rate')
-    is_training = tf.placeholder(tf.bool, shape=[], name='is_training')
-    return images, labels, cam_ind, learning_rate, is_training
-
-
-def sess_start(logs_path):
-    saver = tf.train.Saver(max_to_keep=10000000)
-    sess = tf.Session()
-    summary_writer = tf.summary.FileWriter(logs_path)
-    summary_writer.add_graph(tf.get_default_graph())
-    init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
-    sess.run(init)
-    return sess, saver, summary_writer
-
-
-def write_acc_loss(summary_writer, prefix, loss, acc, step):
-    summary = tf.Summary(value=[tf.Summary.Value(tag='loss_{}'.format(prefix), simple_value=float(loss)),
-                                tf.Summary.Value(tag='accuracy_{}'.format(prefix), simple_value=float(acc))])
-    summary_writer.add_summary(summary, step)
-
-
 if __name__ == '__main__':
     vgg=VGG('vgg_11', True , logit_type='fc' , n_classes=10)
 

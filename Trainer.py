@@ -34,15 +34,3 @@ class Trainer(DNN ):
             # print 'train acc : {} loss : {}'.format(train_acc, train_loss)
             self.recorder.write_acc_loss('Train' , train_loss , train_acc , step )
 
-
-
-
-"""
-            if step % ckpt == 0:
-                test_fetches = [accuracy_op, loss_op, pred_op]
-                val_acc, val_loss, val_preds = validate(test_fetches, val_imgs, val_labs, batch_size)  # Validate 합니다.
-                max_acc = save_best_acc(val_acc, max_acc, step)
-                min_loss = save_best_loss(val_loss, min_loss, step)
-                write_summary(summary_writer, step, learning_rate, 'validation', val_acc, val_loss)
-                # add learning rate summary
-"""
