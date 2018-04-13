@@ -5,7 +5,11 @@ import tensorflow as tf
 class Tester(DNN):
 
     def __init__(self , recorder):
+        print '####################################################'
+        print '#                   Tester                         #'
+        print '####################################################'
         self.recorder = recorder
+
 
     def get_acc(self,trues, preds):
         assert np.ndim(trues) == np.ndim(preds), 'true shape : {} pred shape : {} '.format(np.shape(trues), np.shape(preds))
