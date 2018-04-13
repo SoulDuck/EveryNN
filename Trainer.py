@@ -2,9 +2,8 @@ from utils import show_progress
 from DNN import DNN
 class Trainer(DNN):
     def __init__(self , recorder):
+
         self.recorder = recorder
-        print self.x_
-        print self.train_op
 
     def _lr_scheduler(self , step):
         if step < 5000:
