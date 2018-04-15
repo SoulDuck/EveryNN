@@ -53,6 +53,26 @@ class DNN(object):
             layer = _fn()
         return layer
 
+    def convolution2d_manual(self,name, x, out_ch, k_h, k_w, s=2, padding='SAME'):
+        def _fn():
+            in_ch = x.get_shape()[-1]
+            filter = tf.get_variable("w", [k_h, k_w, in_ch, out_ch], initializer=tf.contrib.layers.xavier_initializer())
+            bias = tf.Variable(tf.constant(0.1), out_ch)
+            layer = tf.nn.conv2d(x, filter, [1, s, s, 1], padding) + bias
+            layer = tf.nn.relu(layer, name='relu')
+            if __debug__ == True:
+                print 'layer name : ', name
+                print 'layer shape : ', layer.get_shape()
+            return layer
+
+        if name is not None:
+            with tf.variable_scope(name) as scope:
+                layer = _fn()
+        else:
+            layer = _fn()
+        return layer
+
+
     def max_pool(self,name, x, k=3, s=2, padding='SAME'):
         with tf.variable_scope(name) as scope:
             if __debug__ == True:
