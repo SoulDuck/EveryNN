@@ -35,8 +35,6 @@ class INCEPTION_V4(DNN):
             print 'layer_shape :',layer_join.get_shape()
         return layer_join
 
-
-
     def reductionA(self,name,x ):
 
         with tf.variable_scope(name) as scope:
@@ -212,7 +210,7 @@ class INCEPTION_V4(DNN):
         top_conv = tf.identity(layer, name='top_conv')
         return top_conv
 
-    def structure_B( self,, x_ , phase_train):
+    def structure_B(self, x_, phase_train):
         print 'stem A -> B -> C -> blockA -> reductionA -> blockB -> reduction B -> blockC'
         layer = self.stem('stem', x_)
         layer=self.batch_norm_layer(layer,phase_train,'stem_bn')
