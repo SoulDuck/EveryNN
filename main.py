@@ -14,7 +14,7 @@ global_step=0
 
 for i in range(10):
     mean_acc, mean_loss, pred_all=tester.validate(test_imgs, test_labs , batch_size ,global_step)
-    print 'Acc :{}  Loss :{} '.format(mean_acc , mean_loss)
+    print '\t Acc :{}  Loss :{} '.format(mean_acc , mean_loss)
     global_step = trainer.training(1000,global_step ,batch_size)
 
 
