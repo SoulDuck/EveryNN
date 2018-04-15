@@ -1,16 +1,17 @@
 #-*- coding:utf-8 -*-
 import numpy  as np
-import Dataprovier
+import Dataprovider
 import tensorflow as tf
 from tensorflow.contrib.layers.python.layers import batch_norm as batch_norm
 
 class DNN(object):
 
     #define class variable
+
     x_=None
     y_=None
     cam_ind = None
-    learning_rate = None
+    lr_ = None
     is_training = None
     pred=None
     pred_cls=None
@@ -187,8 +188,8 @@ class DNN(object):
         print "############################################################"
         print 'optimizer option : GradientDescentOptimizer(default) | AdamOptimizer | moment | '
         print 'selected optimizer : ', optimizer
-        print 'logits tensor Shape : {}', logits.get_shape()
-        print 'Preds tensor Shape : {}', cls.y_.get_shape()
+        print 'logits tensor Shape : {}'.format(logits.get_shape())
+        print 'Preds tensor Shape : {}'.format(cls.y_.get_shape())
         optimizer_dic = {'GradientDescentOptimizer': tf.train.GradientDescentOptimizer,
                          'AdamOptimizer': tf.train.AdamOptimizer}
 
@@ -224,7 +225,7 @@ class DNN(object):
         cls.logit_type = logit_type
 
         ## input pipeline
-        cls.pipeline = Dataprovier.Input(datatype)
+        cls.pipeline = Dataprovider.Input(datatype)
         batch_xs, batch_ys, _ = cls.pipeline.next_batch(10)
         _, h, w, ch = np.shape(batch_xs)
         _, cls.n_classes = np.shape(batch_ys)
