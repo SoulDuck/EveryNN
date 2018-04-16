@@ -50,7 +50,7 @@ def fc_layer_to_clssses(_input, n_classes):
 
 class VGG(DNN):
     def __init__(self , optimizer_name, use_bn, use_l2Loss , vgg_model, logit_type , datatype):
-        DNN.initialize(optimizer_name , use_bn, use_l2Loss, vgg_model, logit_type=logit_type, datatype=datatype)
+        DNN.initialize(optimizer_name , use_bn, use_l2Loss, vgg_model, logit_type, datatype)
         #DNN 에서 제공하는 정보들
         # n_classes , x_ ,y_ , is_training , sess
         #self.model = model
