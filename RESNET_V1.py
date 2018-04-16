@@ -89,8 +89,7 @@ class Resnet(DNN):
                 layer = self.batch_norm_layer(layer , self.is_training  , 'bn_0')
                 layer = self.convolution2d('conv_0' , layer , out_ch = block_out_ch , k =1 , s =1 ) #fixed padding padding = "SAME"
                 layer = self.batch_norm_layer(layer, self.is_training, 'bn_1')
-                layer = self.convolution2d('conv_1', layer, out_ch=block_out_ch, k=3,
-                                      s=block_stride)  # fixed padding padding = "SAME"
+                layer = self.convolution2d('conv_1', layer, out_ch=block_out_ch, k=3,s=block_stride)  # fixed padding padding = "SAME"
                 layer = self.batch_norm_layer(layer, self.is_training, 'bn_2')
                 layer = self.convolution2d('conv_2', layer, out_ch=out_ch, k=1, s=1)  # fixed padding padding = "SAME"
                 shortcut_layer = self.convolution2d('shortcut_layer', shortcut_layer, out_ch=out_ch, k=1, s=block_stride)
