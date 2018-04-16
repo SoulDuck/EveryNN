@@ -56,6 +56,9 @@ class VGG(DNN):
         #self.model = model
         #self.bn = bn
         #self.logit_type = logit_type
+        print self.logit_type
+        print self.BN
+
         self.build_graph()
         DNN.algorithm(self.logits) # 이걸 self 로 바꾸면 안된다.
         DNN.sess_start()
