@@ -14,6 +14,10 @@ class Resnet(DNN):
         :param bottlenect_factor = 32->32-> 32*4 -> 32 필터의 수를 bottlenect 하게 합니다.
         """
         assert len(n_filters_per_box) == len(n_blocks_per_box) == len(stride_per_box)
+
+
+
+
         DNN.initialize(optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype)
         ### bottlenect setting  ###
         self.n_filters_per_box = n_filters_per_box
@@ -25,6 +29,8 @@ class Resnet(DNN):
         building model
         """
         self._build_model()
+        DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
+        DNN.sess_start()
 
     def _build_model(self):
         with tf.variable_scope('stem'):
