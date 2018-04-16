@@ -13,15 +13,16 @@ class Resnet(DNN):
     def __init__ (self , x_ , phase_train ,  n_filters_per_box , n_blocks_per_box  , stride_per_box ,  use_bottlenect ,\
                   n_classes,activation=tf.nn.relu ,logit_type='gap' , bottlenect_factor =4):
         """
-
         :param n_filters_per_box: [32, 64, 64, 128 , 256 ]  , type = list
         :param n_blocks_per_box:  [3, 5 , 4, 3, 2 ]  , type = list
         :param stride_per_box: [2, 2, 2, 2 , 2 ]  , type = list
         :param use_bottlenect: True , dtype = boolean
         :param activation:  , e.g_) relu
         :param logit_type: 'gap' or 'fc' , dtype = str
+        :param bottlenect_factor = 32->32-> 32*4 -> 32 필터의 수를 bottlenect 하게 합니다.
         """
         assert len(n_filters_per_box) == len(n_blocks_per_box) == len(stride_per_box)
+        DNN.initialize()
         ### bottlenect setting  ###
         self.use_bottlenect = use_bottlenect
         self.activation = activation
