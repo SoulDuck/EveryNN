@@ -1,14 +1,6 @@
 #-*- coding:utf-8 -*-
 import tensorflow as tf
 from DNN import DNN
-
-
-
-import cnn
-
-filters_per_blocks=[]
-n_blocks=[]
-a=3
 class Resnet(DNN):
     def __init__ (self ,optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype,
                   n_filters_per_box , n_blocks_per_box  , stride_per_box , bottlenect_factor =4):
