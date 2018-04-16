@@ -221,7 +221,7 @@ class DNN(object):
         cls.optimizer_name = optimizer_name
         cls.use_BN = use_BN
         cls.use_l2_loss = use_l2_loss
-        cls.vgg_model = model
+        cls.model = model
         cls.logit_type = logit_type
 
         ## input pipeline
