@@ -10,8 +10,8 @@ filters_per_blocks=[]
 n_blocks=[]
 a=3
 class Resnet(DNN):
-    def __init__ (self , x_ , phase_train ,  n_filters_per_box , n_blocks_per_box  , stride_per_box ,  use_bottlenect ,\
-                  n_classes,activation=tf.nn.relu ,logit_type='gap' , bottlenect_factor =4):
+    def __init__ (self ,optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype,
+                  n_filters_per_box , n_blocks_per_box  , stride_per_box , bottlenect_factor =4):
         """
         :param n_filters_per_box: [32, 64, 64, 128 , 256 ]  , type = list
         :param n_blocks_per_box:  [3, 5 , 4, 3, 2 ]  , type = list
@@ -22,18 +22,12 @@ class Resnet(DNN):
         :param bottlenect_factor = 32->32-> 32*4 -> 32 필터의 수를 bottlenect 하게 합니다.
         """
         assert len(n_filters_per_box) == len(n_blocks_per_box) == len(stride_per_box)
-        DNN.initialize()
+        DNN.initialize(optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype)
         ### bottlenect setting  ###
-        self.use_bottlenect = use_bottlenect
-        self.activation = activation
         self.n_filters_per_box = n_filters_per_box
         self.n_blocks_per_box = n_blocks_per_box
         self.stride_per_box = stride_per_box
         self.n_boxes = len(n_filters_per_box)
-        self.logit_type = logit_type
-        self.x_ = x_
-        self.phase_train = phase_train
-        self.n_classes = n_classes
         self.bottlenect_factor = bottlenect_factor
         """
         building model
@@ -44,17 +38,38 @@ class Resnet(DNN):
         with tf.variable_scope('stem'):
             # conv filters out = 64
             layer = self.convolution2d('conv_0', out_ch= 32,  x=self.x_, k=7, s=2)
-            layer = self.batch_norm_layer(layer, phase_train= self.phase_train, scope_bn='bn_0')
-            layer = self.activation(layer)
+            layer = self.batch_norm_layer(layer, train_phase= self.is_training, scope_bn='bn_0')
+            #layer = self.activation(layer)
+            # BN을 activation 후에 하는게 좋은지 앞에서 하는게 좋은지는 토론중이다. 난 개인적으로 weight 을 앞에다 하는게 성능을 높일거라 생각한다.
         for box_idx in range(self.n_boxes):
             print '#######   box_{}  ########'.format(box_idx)
             with tf.variable_scope('box_{}'.format(box_idx)):
                 layer=self._box(layer , n_block= self.n_blocks_per_box[box_idx] , block_out_ch= self.n_filters_per_box[box_idx] ,
                           block_stride = self.stride_per_box[box_idx])
         self.top_conv=tf.identity(layer  , 'top_conv')
-        self.logit=self._logit(self.top_conv , self.phase_train)
+        if self.logit_type == 'gap':
+            layer = self.gap(self.top_conv)
+            self.logits = self.fc_layer_to_clssses(layer, self.n_classes)
 
-
+        elif self.logit_type == 'fc':
+            fc_features = [4096, 4096]
+            before_act_bn_mode = [False, False]
+            after_act_bn_mode = [False, False]
+            self.top_conv = layer
+            for i in range(len(fc_features)):
+                with tf.variable_scope('fc_{}'.format(str(i))) as scope:
+                    print i
+                    if before_act_bn_mode[i]:
+                        layer = self.batch_norm_layer(layer, self.is_training, 'bn')
+                    layer = self.affine(name=None, x=layer, out_ch=fc_features[i], keep_prob=0.5,
+                                        is_training=self.is_training)
+                    if after_act_bn_mode[i]:
+                        layer = self.batch_norm_layer(layer, self.is_training, 'bn')
+            self.logits = self.fc_layer_to_clssses(layer, self.n_classes)
+        else:
+            print '["fc", "gap"]'
+            raise AssertionError
+        return self.logits
 
     def _box(self, x,n_block , block_out_ch , block_stride):
         """
@@ -75,40 +90,27 @@ class Resnet(DNN):
     def _block(self , x , block_out_ch  , block_stride  , block_n):
         shortcut_layer = x
         layer=x
-        m=self.bottlenect_factor if self.use_bottlenect else 1
-        out_ch = m * block_out_ch
-        """ bottlenect layer """
-        if self.use_bottlenect:
+        out_ch = self.bottlenect_factor * block_out_ch
+
+        if self.bottlenect_factor > 1: #bottlenect layer
             with tf.variable_scope('bottlenect_{}'.format(block_n)):
-                layer = batch_norm_layer(layer , self.phase_train  , 'bn_0')
-                layer = convolution2d('conv_0' , layer , out_ch = block_out_ch , k =1 , s =1 ) #fixed padding padding = "SAME"
-                layer = batch_norm_layer(layer, self.phase_train, 'bn_1')
-                layer = convolution2d('conv_1', layer, out_ch=block_out_ch, k=3,
+                layer = self.batch_norm_layer(layer , self.is_training  , 'bn_0')
+                layer = self.convolution2d('conv_0' , layer , out_ch = block_out_ch , k =1 , s =1 ) #fixed padding padding = "SAME"
+                layer = self.batch_norm_layer(layer, self.is_training, 'bn_1')
+                layer = self.convolution2d('conv_1', layer, out_ch=block_out_ch, k=3,
                                       s=block_stride)  # fixed padding padding = "SAME"
-                layer = batch_norm_layer(layer, self.phase_train, 'bn_2')
-                layer = convolution2d('conv_2', layer, out_ch=out_ch, k=1, s=1)  # fixed padding padding = "SAME"
-                shortcut_layer = convolution2d('shortcut_layer', shortcut_layer, out_ch=out_ch, k=1, s=block_stride)
-        else: #""" redisual layer """
+                layer = self.batch_norm_layer(layer, self.is_training, 'bn_2')
+                layer = self.convolution2d('conv_2', layer, out_ch=out_ch, k=1, s=1)  # fixed padding padding = "SAME"
+                shortcut_layer = self.convolution2d('shortcut_layer', shortcut_layer, out_ch=out_ch, k=1, s=block_stride)
+        elif self.bottlenect_factor == 1: #redisual layer
             with tf.variable_scope('residual_{}.'.format(block_n)):
-                layer = convolution2d('conv_0' , layer , block_out_ch , k=3 , s=block_stride) # in here , if not block_stride = 1 , decrease image size
-                layer = batch_norm_layer(layer , self.phase_train,'bn_0' )
-                layer = convolution2d('conv_1', layer, block_out_ch, k=3, s=1)
-                shortcut_layer = convolution2d('shortcut_layer', shortcut_layer, out_ch=out_ch, k=1, s=block_stride)
-        return shortcut_layer + layer
-
-
-    def _logit(self ,x  , phase_train):
-        if self.logit_type == 'gap':
-            im_width=int(self.x_.get_shape()[1])
-            logit=gap('gap' , x , n_classes = self.n_classes)
-            self.cam = cam.get_class_map('gap', self.top_conv, 0, im_width)
-        elif self.logit_type == 'fc':
-            logit=affine('fc', x, out_ch=self.n_classes)
-        else :
-            print 'Not Implemneted , Sorry '
+                layer = self.convolution2d('conv_0' , layer , block_out_ch , k=3 , s=block_stride) # in here , if not block_stride = 1 , decrease image size
+                layer = self.batch_norm_layer(layer , self.is_training,'bn_0' )
+                layer = self.convolution2d('conv_1', layer, block_out_ch, k=3, s=1)
+                shortcut_layer = self.convolution2d('shortcut_layer', shortcut_layer, out_ch=out_ch, k=1, s=block_stride)
+        else:
             raise AssertionError
-        logit=tf.identity(logit , 'logit')
-        return logit
+        return shortcut_layer + layer
 
 
 class wide_resnet(object):
@@ -117,26 +119,4 @@ class wide_resnet(object):
 
 
 if __name__ =='__main__':
-    phase_train = tf.placeholder(dtype=tf.bool , name='phase_train')
-    x_ = tf.placeholder(dtype = tf.float32 , shape = [None , 32, 32 ,3 ] )
-    y_ = tf.placeholder(dtype=tf.float32, shape=[None, 32, 32, 3])
-    print x_
-    print y_
-
-    n_filters_per_box = [16,16,32,32]
-    n_blocks_per_box = [5,5,5,5]
-    stride_per_box= [5, 5, 5, 5]
-    use_bottlenect = True
-    model=Resnet(x_ , phase_train , n_filters_per_box , n_blocks_per_box , stride_per_box , \
-                  use_bottlenect , n_classes=2 , activation=tf.nn.relu  , logit_type='gap' )
-
-
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    saver = tf.train.Saver(max_to_keep=10000000)
-    last_model_saver = tf.train.Saver(max_to_keep=1)
-    sess = tf.Session(config=config)
-    init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
-    sess.run(init)
-    ##3
-    ###
+    pass;
