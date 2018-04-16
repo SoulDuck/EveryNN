@@ -57,7 +57,7 @@ class VGG(DNN):
         #self.bn = bn
         #self.logit_type = logit_type
         print self.logit_type
-        print self.BN
+        print self.use_BN
 
         self.build_graph()
         DNN.algorithm(self.logits) # 이걸 self 로 바꾸면 안된다.
