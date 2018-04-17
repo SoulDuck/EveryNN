@@ -4,12 +4,17 @@ from Recorder import Recorder
 from Trainer import Trainer
 from Tester import Tester
 import tensorflow as tf
-resnet_v1= RESNET_V1('sgd' , True , True,   model_name, 'fc'  , 'cifar10')
 
 
-"""
+
 model_name = 'vgg_11'
 vgg = VGG('sgd' , True , True,   model_name, 'fc'  , 'cifar10')
+
+
+model_name = 'resnet_18'
+resnet_v1 = RESNET_V1('sgd' , True , True , model_name , 'gap' , 'cifar_10')
+
+
 recorder = Recorder(folder_name=model_name)
 trainer = Trainer(recorder)
 tester=Tester(recorder)
@@ -24,5 +29,3 @@ for i in range(10):
     global_step = trainer.training(1000,global_step ,batch_size)
 
 tf.reset_default_graph()
-"""
-resnet_v1 = RESNET_V1
