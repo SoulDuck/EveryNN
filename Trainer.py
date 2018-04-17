@@ -1,5 +1,7 @@
 from utils import show_progress
 from DNN import DNN
+import Dataprovider
+import numpy as np
 class Trainer(DNN):
     def __init__(self , recorder):
         print '####################################################'
@@ -21,8 +23,7 @@ class Trainer(DNN):
             learning_rate = 0.00001
             ####
         return learning_rate
-    def training(self, max_iter , global_step , batch_size):
-
+    def training(self, max_iter , global_step):
         max_acc=0
         min_loss=0
         for step in range(global_step , global_step+max_iter):
@@ -31,11 +32,11 @@ class Trainer(DNN):
             #### learning rate schcedule
             """ #### Traininig  ### """
             train_fetches = [self.train_op, self.accuracy_op, self.cost_op]
-            batch_xs, batch_ys, batch_fname = self.pipeline.next_batch(batch_size)
+            batch_xs , batch_ys=self.sess.run([self.dataprovider.batch_xs ,self.dataprovider.batch_ys])
             train_feedDict = {self.x_: batch_xs, self.y_: batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
                               self.is_training: True}
             _, train_acc, train_loss = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)
             # print 'train acc : {} loss : {}'.format(train_acc, train_loss)
-            self.recorder.write_acc_loss('Train' , train_loss , train_acc , step )
+            self.recorder.write_acc_loss('Train' , train_loss , train_acc , step)
         return global_step
 

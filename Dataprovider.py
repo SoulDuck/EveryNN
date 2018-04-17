@@ -1,6 +1,6 @@
+#-*- coding:utf-8 -*-
 import random
 import numpy as np
-import cifar
 import glob
 import os
 import aug
@@ -8,12 +8,21 @@ import tensorflow as tf
 import cifar
 import sys
 from PIL import Image
-class Input():
-    def __init__(self, datatype):
+class Dataprovider():
+    def __init__(self, datatype , batch_size ,resize , num_epoch=10 , onehot = True):
+        self.resize = resize
+        self.num_epoch = num_epoch
         if datatype == 'cifar_10' or 'cifar10':
-            self.train_imgs, self.train_labs, self.test_imgs, self.test_labs = cifar.get_cifar_images_labels(
-                onehot=True);
-            self.fnames = np.asarray(range(len(self.train_labs)))
+            self.batch_size = batch_size
+            self.train_tfrecord = cifar.train_tfrecord
+            self.test_tfrecord = cifar.test_tfrecord
+            self.sample_image , self.sample_label , _ = self.get_sample(self.test_tfrecord , onehot = True)
+            self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
+            self.n_classes = 10
+            self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord, self.batch_size,
+                                                                                  self.resize , self.num_epoch)
+            if onehot:
+                self.batch_ys=tf.one_hot(self.batch_ys,self.n_classes)
 
         elif datatype == 'cifar_100' or 'cifar100':
             raise NotImplementedError
@@ -24,40 +33,40 @@ class Input():
         elif datatype == 'PASCAL' or 'pascal':
             raise NotImplementedError
 
-    def next_batch(self, batch_size):
-        indices = random.sample(range(np.shape(self.train_labs)[0]), batch_size)
-        batch_xs = self.train_imgs[indices]
-        batch_ys = self.train_labs[indices]
-        if not self.fnames is None:
-            batch_fs = self.fnames[indices]
+        print 'Data Infomation'
+        print 'Image Height  : {} Label Width : {} Image channel : {} '.format(self.img_h , self.img_w , self.img_ch)
+        print 'N classes : {}'.format(self.n_classes)
+        print 'N epoch : {}'.format(self.num_epoch)
+
+
+    @classmethod
+    def next_batch(cls, batch_size , train_imgs , train_labs , train_fnames):
+        indices = random.sample(range(np.shape(train_labs)[0]), batch_size)
+        batch_xs = train_imgs[indices]
+        batch_ys = train_labs[indices]
+        if not train_fnames is None:
+            batch_fs = train_fnames[indices]
         else:
             batch_fs = None
         return batch_xs, batch_ys, batch_fs
-
-    def cls2onehot(self, cls, depth):
+    @classmethod
+    def cls2onehot(cls, classes, depth):
         debug_flag = False
-        if not type(cls).__module__ == np.__name__:
-            cls = np.asarray(cls)
-        cls = cls.astype(np.int32)
+        if not type(classes).__module__ == np.__name__:
+            classes = np.asarray(classes)
+            classes = classes.astype(np.int32)
         debug_flag = False
-        labels = np.zeros([len(cls), depth], dtype=np.int32)
-        for i, ind in enumerate(cls):
+        labels = np.zeros([len(classes), depth], dtype=np.int32)
+        for i, ind in enumerate(classes):
             labels[i][ind:ind + 1] = 1
         if __debug__ == debug_flag:
             print '#### data.py | cls2onehot() ####'
             print 'show sample cls and converted labels'
-            print cls[:10]
+            print classes[:10]
             print labels[:10]
-            print cls[-10:]
+            print classes[-10:]
             print labels[-10:]
         return labels
-
-    def return_traindata(self):
-        return self.train_imgs, self.train_labs
-
-    def return_testdata(self):
-        return self.test_imgs, self.test_labs
-
     def aug(aug_flag, random_crop_resize, x_, is_training):
         if aug_flag:
             print 'aug : True'
@@ -70,10 +79,13 @@ class Input():
         return x_
 
     @classmethod
-    def make_tfrecord_rawdata(cls, tfrecord_path, paths, labels ):
+    def make_tfrecord_rawdata(cls, tfrecord_path, img_sources, labels ):
         """
+        img source 에는 두가지 형태로 존재합니다 . str type 의 path 와
+        numpy 형태의 list 입니다.
         :param tfrecord_path: e.g) './tmp.tfrecord'
-        :param paths: e.g)[./pic1.png , ./pic2.png]
+        :param img_sources: e.g)[./pic1.png , ./pic2.png] or list flatted_imgs
+        img_sources could be string , or numpy
         :param labels: 3.g) [1,1,1,1,1,0,0,0,0]
         :return:
         """
@@ -93,19 +105,27 @@ class Input():
             return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
         writer = tf.python_io.TFRecordWriter(tfrecord_path)
-        paths_labels = zip(paths, labels)
-        for ind, (path, label) in enumerate(paths_labels):
+        img_sources_labels = zip(img_sources, labels)
+        for ind, (img_source, label) in enumerate(img_sources_labels ):
             try:
-                msg = '\r-Progress : {0}'.format(str(ind) + '/' + str(len(paths_labels)))
+                msg = '\r-Progress : {0}'.format(str(ind) + '/' + str(len(img_sources_labels )))
                 sys.stdout.write(msg)
                 sys.stdout.flush()
+                if isinstance(img_source , str): # img source  == str
+                    np_img = np.asarray(Image.open(img_source)).astype(np.int8)
+                    height = np_img.shape[0]
+                    width = np_img.shape[1]
+                    dirpath, filename = os.path.split(img_source)
+                    filename, extension = os.path.splitext(filename)
+                elif type(img_source).__module__ == np.__name__: # img source  == Numpy
+                    np_img = img_source
+                    height , width = np.shape(img_source)[:2]
+                    filename = str(ind)
+                else:
+                    raise AssertionError , "img_sources's element should path(str) or numpy"
 
-                np_img = np.asarray(Image.open(path)).astype(np.int8)
-                height = np_img.shape[0]
-                width = np_img.shape[1]
-                raw_img = np_img.tostring()
-                dirpath, filename = os.path.split(path)
-                filename, extension = os.path.splitext(filename)
+                raw_img = np_img.tostring() # ** Image to String **
+
                 if __debug__ == debug_flag_lv1:
                     print ''
                     print 'image min', np.min(np_img)
@@ -113,7 +133,6 @@ class Input():
                     print 'image shape', np.shape(np_img)
                     print 'heigth , width', height, width
                     print 'filename', filename
-                    print 'extension ,', extension
 
                 example = tf.train.Example(features=tf.train.Features(feature={
                     'height': _int64_feature(height),
@@ -123,23 +142,35 @@ class Input():
                     'filename': _bytes_feature(tf.compat.as_bytes(filename))
                 }))
                 writer.write(example.SerializeToString())
-            except IndexError as ie:
-                print path
-                continue
             except IOError as ioe:
-                print path
+                if isinstance(img_source , str):
+                    print img_source
                 continue
             except Exception as e:
-                print path
+                if isinstance(img_source , str):
+                    print img_source
                 print str(e)
                 exit()
-
         writer.close()
 
 
+
     @classmethod
-    def get_iterator(cls,tfrecord_path):
+    def get_sample(cls , tfrecord_path , onehot):
         record_iter = tf.python_io.tf_record_iterator(path=tfrecord_path)
+        str_record=record_iter.next()
+        example = tf.train.Example()
+        example.ParseFromString(str_record)
+        height = int(example.features.feature['height'].int64_list.value[0])
+        width = int(example.features.feature['width'].int64_list.value[0])
+        raw_image = (example.features.feature['raw_image'].bytes_list.value[0])
+        label = int(example.features.feature['label'].int64_list.value[0])
+        filename = (example.features.feature['filename'].bytes_list.value[0])
+        image = np.fromstring(raw_image, dtype=np.uint8)
+        image = image.reshape((height, width, -1))
+        if onehot:
+            label=cls.cls2onehot([label] ,10)
+        return image , label , filename
 
     @classmethod
     def reconstruct_tfrecord_rawdata(cls,tfrecord_path):
@@ -182,9 +213,9 @@ class Input():
             print 'length of filenames : ', len(ret_filename_list)
         return ret_img, ret_lab, ret_filename_list
     @classmethod
-    def get_shuffled_batch(cls , tfrecord_path, batch_size, resize):
+    def get_shuffled_batch(cls , tfrecord_path, batch_size, resize , num_epoch):
         resize_height, resize_width = resize
-        filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=1 , name='filename_queue')
+        filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=num_epoch , name='filename_queue')
         reader = tf.TFRecordReader()
         _, serialized_example = reader.read(filename_queue)
         features = tf.parse_single_example(serialized_example,
@@ -205,13 +236,12 @@ class Input():
         image_shape = tf.stack([height, width, 3])  # image_shape shape is ..
         #image_size_const = tf.constant((resize_height, resize_width, 3), dtype=tf.int32)
         image = tf.reshape(image, image_shape)
-        image = tf.image.resize_image_with_crop_or_pad(image=image,
-                                                       target_height=resize_height,
+        image = tf.image.resize_image_with_crop_or_pad(image=image, target_height=resize_height,
                                                        target_width=resize_width)
-        images, labels = tf.train.shuffle_batch([image, label], batch_size=batch_size, capacity=30000, num_threads=1,
-                                                min_after_dequeue=10000)
-        return images, labels
-
+        images, labels, fnames = tf.train.shuffle_batch([image, label, filename], batch_size=batch_size, capacity=30000,
+                                                        num_threads=1,
+                                                        min_after_dequeue=10000)
+        return images, labels , fnames
     @classmethod
     def read_one_example(cls , tfrecord_path, resize):
         filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=10)
@@ -240,18 +270,5 @@ class Input():
         return image, label
 
 if '__main__' == __name__:
-    #Input.reconstruct_tfrecord_rawdata('tmp.tfrecord')
+    Dataprovider('cifar10' , 60 , (32,32))
 
-    images, labels = Input.get_shuffled_batch('tmp.tfrecord', 3, (224, 224))
-    init_op = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
-    sess = tf.Session()
-    sess.run(init_op)
-    coord = tf.train.Coordinator()
-    threads = tf.train.start_queue_runners(sess=sess, coord=coord)
-    imgs, labs = sess.run([images, labels])
-    for i in range(80000):
-        pass;
-    print i
-
-    coord.request_stop()
-    coord.join(threads)

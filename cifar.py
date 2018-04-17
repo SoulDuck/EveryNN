@@ -5,17 +5,7 @@ import tarfile
 import glob
 import numpy as np
 import pickle
-
-
-
-from urllib import urlretrieve
-import os ,sys
-import zipfile
-import tarfile
-import glob
-import numpy as np
-import pickle
-
+import Dataprovider
 url = 'http://www.cs.toronto.edu/~kriz/cifar-%d-python.tar.gz' % 10
 img_size = 32
 
@@ -28,8 +18,9 @@ img_size_flat = img_size * img_size * num_channels
 # Number of classes.
 num_classes = 10
 
-
-
+train_tfrecord = './cifar_10/cifar_10_train_imgs.tfrecord'
+test_tfrecord = './cifar_10/cifar_10_test_imgs.tfrecord'
+data_dir = './cifar_10/cifar-10-batches-py'
 def report_download_progress(count , block_size , total_size):
     pct_complete = float(count * block_size) / total_size
     msg = "\r {0:1%} already downloader".format(pct_complete)
@@ -76,7 +67,7 @@ def cls2onehot(cls , depth):
         labs[i,c]=1
     return labs
 
-def get_cifar_images_labels(onehot=True , data_dir ='./cifar_10/cifar-10-batches-py'):
+def get_cifar_images_labels(onehot=True , data_dir =data_dir):
     train_filenames = glob.glob(os.path.join(data_dir, 'data_batch*'))
     test_filenames = glob.glob(os.path.join(data_dir, 'test_batch*'))
     assert len(train_filenames) != 0
@@ -90,14 +81,24 @@ def get_cifar_images_labels(onehot=True , data_dir ='./cifar_10/cifar-10-batches
     return train_imgs ,train_labs , test_imgs ,test_labs
 
 
+
+
+
 if '__main__' == __name__:
-    download_data_url(url , './cifar_10')
-    train_filenames=glob.glob('./cifar_10/cifar-10-batches-py/data_batch*')
-    test_filenames=glob.glob('./cifar_10/cifar-10-batches-py/test_batch*')
+    print isinstance('str' , str)
+    print isinstance(np.array([1,2,3]), str)
+    a=np.array([0,0,0])
+    print type(a).__module__ == np.__name__
+    #download_data_url(url , './cifar_10') # Download Dataset
+    train_filenames=glob.glob(os.path.join(data_dir,'data_batch*'))
+    test_filenames=glob.glob(os.path.join(data_dir, '/test_batch*'))
     train_imgs , train_labs = get_images_labels(*train_filenames)
     test_imgs, test_labs = get_images_labels(*test_filenames)
+    Dataprovider.Dataprovider.make_tfrecord_rawdata( train_tfrecord, train_imgs , train_labs)
+    Dataprovider.Dataprovider.make_tfrecord_rawdata(test_tfrecord, test_imgs, test_labs)
+    print np.shape(Dataprovider.Dataprovider.get_sample(train_tfrecord)[0])
     print 'train imgs shape : {}'.format(np.shape(train_imgs))
-    print 'train labs shape : {}'.format(np.shape(train_imgs))
+    print 'train labs shape : {}'.format(np.shape(train_labs))
     print 'test imgs shape : {}'.format(np.shape(test_imgs))
     print 'test labs shape : {}'.format(np.shape(test_labs))
 

@@ -2,7 +2,7 @@
 import tensorflow as tf
 from DNN import DNN
 class RESNET_V1(DNN):
-    def __init__ (self ,optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype):
+    def __init__(self, optimizer_name, use_bn, use_l2Loss, model, logit_type, datatype, batch_size, resize, num_epoch):
         """
         :param n_filters_per_box: [32, 64, 64, 128 , 256 ]  , type = list
         :param n_blocks_per_box:  [3, 5 , 4, 3, 2 ]  , type = list
@@ -15,8 +15,7 @@ class RESNET_V1(DNN):
         customizing 을 함수를 추가한다.
         n_filters_per_box , n_blocks_per_box  , stride_per_box , bottlenect_factor =4
         """
-
-        DNN.initialize(optimizer_name, use_bn, use_l2Loss  , logit_type , datatype )
+        DNN.initialize(optimizer_name, use_bn, use_l2Loss, logit_type, datatype, batch_size, resize, num_epoch)
         ### bottlenect setting  ###
         """
         building model

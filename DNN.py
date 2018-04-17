@@ -1,13 +1,11 @@
 #-*- coding:utf-8 -*-
 import numpy  as np
-import Dataprovider
+from Dataprovider import Dataprovider
 import tensorflow as tf
 from tensorflow.contrib.layers.python.layers import batch_norm as batch_norm
 
 class DNN(object):
-
     #define class variable
-
     x_=None
     y_=None
     cam_ind = None
@@ -214,20 +212,25 @@ class DNN(object):
         cls.sess = tf.Session()
         init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
         cls.sess.run(init)
-        return cls.sess
-
+        cls.coord = tf.train.Coordinator()
+        cls.threads = tf.train.start_queue_runners(sess=cls.sess , coord = cls.coord)
     @classmethod
-    def initialize(cls, optimizer_name, use_BN, use_l2_loss, logit_type, datatype):
+    def sess_stop(cls):
+        cls.coord.request_stop()
+        cls.coord.join(cls.threads)
+        cls.sess.close()
+    @classmethod
+    def initialize(cls, optimizer_name, use_BN, use_l2_loss, logit_type, datatype , batch_size, resize , num_epoch ):
         cls.optimizer_name = optimizer_name
         cls.use_BN = use_BN
         cls.use_l2_loss = use_l2_loss
         cls.logit_type = logit_type
         ## input pipeline
-        cls.pipeline = Dataprovider.Input(datatype)
-        batch_xs, batch_ys, _ = cls.pipeline.next_batch(10)
-        _, h, w, ch = np.shape(batch_xs)
-        _, cls.n_classes = np.shape(batch_ys)
-        cls._define_input(shape=[None, h, w, ch]) #
+        # why cls? dataprovider was used in *Train , *Test class
+        cls.dataprovider = Dataprovider(datatype, batch_size, resize, num_epoch)
+        cls.n_classes = cls.dataprovider.n_classes
+        cls._define_input(shape=[None, cls.dataprovider.img_h, cls.dataprovider.img_w, cls.dataprovider.img_ch])#
+
     @classmethod
     def build_graph(cls):
         raise NotImplementedError
@@ -243,5 +246,5 @@ class DNN(object):
 
 if __name__ == '__main__':
     dnn=DNN()
-    dnn.initialize('sgd',True , True , 'vgg_11' , logit_type='fc' , datatype='cifar10')
+    dnn.initialize('sgd',True , True , logit_type='fc' , datatype='cifar10')
     #cls._algorithm(cls.optimizer_name)
