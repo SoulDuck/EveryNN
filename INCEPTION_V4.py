@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 from DNN import DNN
 import tensorflow as tf
 #ef convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
