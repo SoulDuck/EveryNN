@@ -222,7 +222,6 @@ class DNN(object):
         cls.use_BN = use_BN
         cls.use_l2_loss = use_l2_loss
         cls.logit_type = logit_type
-
         ## input pipeline
         cls.pipeline = Dataprovider.Input(datatype)
         batch_xs, batch_ys, _ = cls.pipeline.next_batch(10)
