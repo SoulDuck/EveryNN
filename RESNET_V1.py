@@ -1,9 +1,8 @@
 #-*- coding:utf-8 -*-
 import tensorflow as tf
 from DNN import DNN
-class Resnet(DNN):
-    def __init__ (self ,optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype,
-                  n_filters_per_box , n_blocks_per_box  , stride_per_box , bottlenect_factor =4):
+class RESNET_V1(DNN):
+    def __init__ (self ,optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype):
         """
         :param n_filters_per_box: [32, 64, 64, 128 , 256 ]  , type = list
         :param n_blocks_per_box:  [3, 5 , 4, 3, 2 ]  , type = list
@@ -12,19 +11,13 @@ class Resnet(DNN):
         :param activation:  , e.g_) relu
         :param logit_type: 'gap' or 'fc' , dtype = str
         :param bottlenect_factor = 32->32-> 32*4 -> 32 필터의 수를 bottlenect 하게 합니다.
+
+        customizing 을 함수를 추가한다.
+        n_filters_per_box , n_blocks_per_box  , stride_per_box , bottlenect_factor =4
         """
-        assert len(n_filters_per_box) == len(n_blocks_per_box) == len(stride_per_box)
 
-
-
-
-        DNN.initialize(optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype)
+        DNN.initialize(optimizer_name, use_bn, use_l2Loss  , logit_type , datatype)
         ### bottlenect setting  ###
-        self.n_filters_per_box = n_filters_per_box
-        self.n_blocks_per_box = n_blocks_per_box
-        self.stride_per_box = stride_per_box
-        self.n_boxes = len(n_filters_per_box)
-        self.bottlenect_factor = bottlenect_factor
         """
         building model
         """
@@ -33,6 +26,26 @@ class Resnet(DNN):
         DNN.sess_start()
 
     def _build_model(self):
+        self.n_filters_per_box = [64, 128, 256, 512]
+        self.stride_per_box = [2, 2, 2, 2]
+        if self.model == 'resnet_18':
+            self.bottlenect_factor=1
+            self.n_blocks_per_box = [2, 2, 2, 2]
+        elif self.model == 'resnet_34':
+            self.bottlenect_factor = 1
+            self.n_blocks_per_box = [3, 4, 6, 3]
+        elif self.model == 'resnet_50':
+            self.bottlenect_factor = 4
+            self.n_blocks_per_box = [3, 4, 6, 3]
+        elif self.model == 'resnet_101':
+            self.bottlenect_factor = 4
+            self.n_blocks_per_box = [3, 4, 23, 3]
+        elif self.model == 'resnet_152':
+            self.bottlenect_factor = 4
+            self.n_blocks_per_box = [3, 8, 36, 3]
+
+        assert len(self.n_filters_per_box) == len(self.n_blocks_per_box) == len(self.stride_per_box)
+
         with tf.variable_scope('stem'):
             # conv filters out = 64
             layer = self.convolution2d('conv_0', out_ch= 32,  x=self.x_, k=7, s=2)

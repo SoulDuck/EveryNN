@@ -1,7 +1,13 @@
 from VGG import VGG
+from RESNET_V1 import RESNET_V1
 from Recorder import Recorder
 from Trainer import Trainer
 from Tester import Tester
+import tensorflow as tf
+resnet_v1= RESNET_V1('sgd' , True , True,   model_name, 'fc'  , 'cifar10')
+
+
+"""
 model_name = 'vgg_11'
 vgg = VGG('sgd' , True , True,   model_name, 'fc'  , 'cifar10')
 recorder = Recorder(folder_name=model_name)
@@ -17,7 +23,6 @@ for i in range(10):
     print '\t Acc :{}  Loss :{} '.format(mean_acc , mean_loss)
     global_step = trainer.training(1000,global_step ,batch_size)
 
-
-
-
-
+tf.reset_default_graph()
+"""
+resnet_v1 = RESNET_V1

@@ -217,11 +217,10 @@ class DNN(object):
         return cls.sess
 
     @classmethod
-    def initialize(cls, optimizer_name, use_BN, use_l2_loss, model, logit_type, datatype):
+    def initialize(cls, optimizer_name, use_BN, use_l2_loss, logit_type, datatype):
         cls.optimizer_name = optimizer_name
         cls.use_BN = use_BN
         cls.use_l2_loss = use_l2_loss
-        cls.model = model
         cls.logit_type = logit_type
 
         ## input pipeline

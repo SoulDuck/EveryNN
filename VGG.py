@@ -50,7 +50,8 @@ def fc_layer_to_clssses(_input, n_classes):
 
 class VGG(DNN):
     def __init__(self , optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype):
-        DNN.initialize(optimizer_name , use_bn, use_l2Loss, model, logit_type, datatype)
+        DNN.initialize(optimizer_name , use_bn, use_l2Loss, logit_type, datatype)
+        self.model = model
         self.build_graph()
         DNN.algorithm(self.logits) # 이걸 self 로 바꾸면 안된다.
         DNN.sess_start()
@@ -231,7 +232,7 @@ def train_algorithm_grad(logits, labels, learning_rate, l2_loss):
 
 
 if __name__ == '__main__':
-    vgg=VGG('vgg_11', True , logit_type='fc' , n_classes=10)
+    vgg=VGG('vgg_11', True , logit_type='fc' ,)
 
 
 
