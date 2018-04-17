@@ -46,7 +46,7 @@ def download_data_url(url, download_dir):
             tarfile.open(name=file_path , mode='r:gz').extractall(download_dir)
 
 def get_images_labels(*filenames):
-    for  i,f in enumerate(filenames):
+    for i,f in enumerate(filenames):
         with open(f , mode='rb') as file:
             data = pickle.load(file)
             if i ==0:
@@ -91,7 +91,7 @@ if '__main__' == __name__:
     print type(a).__module__ == np.__name__
     #download_data_url(url , './cifar_10') # Download Dataset
     train_filenames=glob.glob(os.path.join(data_dir,'data_batch*'))
-    test_filenames=glob.glob(os.path.join(data_dir, '/test_batch*'))
+    test_filenames=glob.glob(os.path.join(data_dir, 'test_batch*'))
     train_imgs , train_labs = get_images_labels(*train_filenames)
     test_imgs, test_labs = get_images_labels(*test_filenames)
     Dataprovider.Dataprovider.make_tfrecord_rawdata( train_tfrecord, train_imgs , train_labs)
