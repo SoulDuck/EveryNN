@@ -96,7 +96,7 @@ if '__main__' == __name__:
     test_imgs, test_labs = get_images_labels(*test_filenames)
     Dataprovider.Dataprovider.make_tfrecord_rawdata( train_tfrecord, train_imgs , train_labs)
     Dataprovider.Dataprovider.make_tfrecord_rawdata(test_tfrecord, test_imgs, test_labs)
-    print np.shape(Dataprovider.Dataprovider.get_sample(train_tfrecord)[0])
+    print np.shape(Dataprovider.Dataprovider.get_sample(train_tfrecord , True)[0])
     print 'train imgs shape : {}'.format(np.shape(train_imgs))
     print 'train labs shape : {}'.format(np.shape(train_labs))
     print 'test imgs shape : {}'.format(np.shape(test_imgs))
