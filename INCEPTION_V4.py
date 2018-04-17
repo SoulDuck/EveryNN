@@ -13,7 +13,7 @@ class INCEPTION_V4(DNN):
         if self.model == 'A':
             self.top_conv = self.structure_A(self.x_)
         elif self.model == 'B':
-            self.top_conv= self.structure_B(self.x_)
+            self.top_conv = self.structure_B(self.x_)
         else:
             raise AssertionError
 
