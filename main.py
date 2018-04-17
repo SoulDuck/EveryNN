@@ -11,7 +11,7 @@ model_name = 'vgg_11'
 vgg = VGG('sgd' , True , True,   model_name, 'fc'  , 'cifar10')
 """
 
-model_name = 'resnet_36'
+model_name = 'resnet_34'
 resnet_v1 = RESNET_V1('sgd' , True , True , model_name , 'gap' , 'cifar_10')
 
 
