@@ -6,10 +6,10 @@ from Tester import Tester
 import tensorflow as tf
 
 
-
+"""
 model_name = 'vgg_11'
 vgg = VGG('sgd' , True , True,   model_name, 'fc'  , 'cifar10')
-
+"""
 
 model_name = 'resnet_18'
 resnet_v1 = RESNET_V1('sgd' , True , True , model_name , 'gap' , 'cifar_10')
