@@ -14,19 +14,14 @@ class Input():
             self.train_imgs, self.train_labs, self.test_imgs, self.test_labs = cifar.get_cifar_images_labels(
                 onehot=True);
             self.fnames = np.asarray(range(len(self.train_labs)))
-
         elif datatype == 'cifar_100' or 'cifar100':
             raise NotImplementedError
-
         elif datatype == 'SVNH' or 'svhn':
             raise NotImplementedError
-
         elif datatype == 'COCO' or 'coco':
             raise NotImplementedError
-
         elif datatype == 'PASCAL' or 'pascal':
             raise NotImplementedError
-
 
     def next_batch(self, batch_size):
         indices = random.sample(range(np.shape(self.train_labs)[0]), batch_size)
@@ -188,7 +183,7 @@ class Input():
     @classmethod
     def get_shuffled_batch(cls , tfrecord_path, batch_size, resize):
         resize_height, resize_width = resize
-        filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=20)
+        filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=1 , name='filename_queue')
         reader = tf.TFRecordReader()
         _, serialized_example = reader.read(filename_queue)
         features = tf.parse_single_example(serialized_example,
@@ -207,7 +202,7 @@ class Input():
         filename = tf.cast(features['filename'], tf.string)
 
         image_shape = tf.stack([height, width, 3])  # image_shape shape is ..
-        image_size_const = tf.constant((resize_height, resize_width, 3), dtype=tf.int32)
+        #image_size_const = tf.constant((resize_height, resize_width, 3), dtype=tf.int32)
         image = tf.reshape(image, image_shape)
         image = tf.image.resize_image_with_crop_or_pad(image=image,
                                                        target_height=resize_height,
@@ -215,6 +210,7 @@ class Input():
         images, labels = tf.train.shuffle_batch([image, label], batch_size=batch_size, capacity=30000, num_threads=1,
                                                 min_after_dequeue=10000)
         return images, labels
+
     @classmethod
     def read_one_example(cls , tfrecord_path, resize):
         filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=10)
@@ -232,7 +228,7 @@ class Input():
         height = tf.cast(features['height'], tf.int32)
         width = tf.cast(features['width'], tf.int32)
         label = tf.cast(features['label'], tf.int32)
-        image_shape = tf.pack([height, width, 3])
+        image_shape = tf.stack([height, width, 3])
         image = tf.reshape(image, image_shape)
         if not resize == None:
             resize_height, resize_width = resize
@@ -242,23 +238,19 @@ class Input():
                                                            target_width=resize_width)
         return image, label
 
-
 if '__main__' == __name__:
+    #Input.reconstruct_tfrecord_rawdata('tmp.tfrecord')
 
-
-    Input.reconstruct_tfrecord_rawdata('tmp.tfrecord')
-
-    """
-    sess = tf.Session()
-    images , labels=Input.get_shuffled_batch('tmp.tfrecord' , 60 , (224,224))
+    images, labels = Input.get_shuffled_batch('tmp.tfrecord', 3, (224, 224))
     init_op = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
+    sess = tf.Session()
+    sess.run(init_op)
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
-    for i in range(20000):
-        imgs, labs = sess.run([images, labels])
-        print np.shape(imgs)
-        print np.shape(labs)
+    imgs, labs = sess.run([images, labels])
+    for i in range(80000):
+        pass;
+    print i
 
     coord.request_stop()
     coord.join(threads)
-    """
