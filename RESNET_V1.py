@@ -16,11 +16,12 @@ class RESNET_V1(DNN):
         n_filters_per_box , n_blocks_per_box  , stride_per_box , bottlenect_factor =4
         """
 
-        DNN.initialize(optimizer_name, use_bn, use_l2Loss  , logit_type , datatype)
+        DNN.initialize(optimizer_name, use_bn, use_l2Loss  , logit_type , datatype )
         ### bottlenect setting  ###
         """
         building model
         """
+        self.model = model
         self._build_model()
         DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
         DNN.sess_start()
@@ -43,6 +44,9 @@ class RESNET_V1(DNN):
         elif self.model == 'resnet_152':
             self.bottlenect_factor = 4
             self.n_blocks_per_box = [3, 8, 36, 3]
+        else:
+            raise AssertionError
+
 
         assert len(self.n_filters_per_box) == len(self.n_blocks_per_box) == len(self.stride_per_box)
 
