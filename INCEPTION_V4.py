@@ -4,7 +4,7 @@ import tensorflow as tf
 #ef convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
 class INCEPTION_V4(DNN):
     def __init__(self,optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype):
-        DNN.initialize(optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype)
+        DNN.initialize(optimizer_name, use_bn, use_l2Loss , logit_type , datatype)
         self.model = model
         self.build_graph()
         DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
