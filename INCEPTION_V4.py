@@ -2,6 +2,46 @@ from DNN import DNN
 import tensorflow as tf
 #ef convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
 class INCEPTION_V4(DNN):
+    def __init__(self,optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype):
+        DNN.initialize(optimizer_name, use_bn, use_l2Loss , model , logit_type , datatype)
+        self.model = model
+        self.build_graph()
+        DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
+        DNN.sess_start()
+
+    def build_graph(self):
+        if self.model == 'A':
+            self.top_conv = self.structure_A(self.x_)
+        elif self.model == 'B':
+            self.top_conv= self.structure_B(self.x_)
+        else:
+            raise AssertionError
+
+        if self.logit_type == 'gap':
+            layer = self.gap(self.top_conv)
+        elif self.logit_type == 'fc':
+            fc_features = [4096, 4096]
+            before_act_bn_mode = [False, False]
+            after_act_bn_mode = [False, False]
+            layer = self.top_conv
+            for i in range(len(fc_features)):
+                with tf.variable_scope('fc_{}'.format(str(i))) as scope:
+                    print i
+                    if before_act_bn_mode[i]:
+                        layer = self.batch_norm_layer(layer, self.is_training, 'bn')
+                    layer = self.affine(name=None, x=layer, out_ch=fc_features[i], keep_prob=0.5,
+                                        is_training=self.is_training)
+                    if after_act_bn_mode[i]:
+                        layer = self.batch_norm_layer(layer, self.is_training, 'bn')
+        else:
+            print '["fc", "gap"]'
+            raise AssertionError
+        self.logits = self.fc_layer_to_clssses(layer, self.n_classes)
+        return self.logits
+
+
+
+
     def stem(self,name , x):
         with tf.variable_scope(name) as scope:
             layer=self.convolution2d('cnn_0',x,32,k=3,s=2 , padding='VALID')
@@ -181,7 +221,6 @@ class INCEPTION_V4(DNN):
                 x=self.convolution2d('upscale_dimension',x, layer_join.get_shape()[-1] , k=1,s=1)
             layer_join=tf.add(x,layer_join )
             return layer_join
-
     def resnet_blockC(self,name, x):
         with tf.variable_scope(name) as scope:
             layer = self.convolution2d('cnn0', x, 192, 1, 1)
@@ -196,9 +235,9 @@ class INCEPTION_V4(DNN):
             print 'layer_name :', 'join'
             print 'layer_shape :', layer_join.get_shape()
             return layer_join
+
     def structure_A(self,x_):
         print 'stem A -> B -> C -> blockA -> reductionA -> blockB -> reduction B -> blockC'
-
         layer = self.stem('stem', x_)
         layer = self.stem_1('stem_1', layer)
         layer = self.stem_2('stem_2', layer)
@@ -226,3 +265,8 @@ class INCEPTION_V4(DNN):
         layer = self.blockC('blockC_0', layer)
         layer = tf.identity(layer, name='top_conv')
         return layer
+
+
+
+
+

@@ -64,13 +64,10 @@ class RESNET_V1(DNN):
         self.top_conv=tf.identity(layer  , 'top_conv')
         if self.logit_type == 'gap':
             layer = self.gap(self.top_conv)
-            self.logits = self.fc_layer_to_clssses(layer, self.n_classes)
-
         elif self.logit_type == 'fc':
             fc_features = [4096, 4096]
             before_act_bn_mode = [False, False]
             after_act_bn_mode = [False, False]
-            self.top_conv = layer
             for i in range(len(fc_features)):
                 with tf.variable_scope('fc_{}'.format(str(i))) as scope:
                     print i
@@ -80,10 +77,10 @@ class RESNET_V1(DNN):
                                         is_training=self.is_training)
                     if after_act_bn_mode[i]:
                         layer = self.batch_norm_layer(layer, self.is_training, 'bn')
-            self.logits = self.fc_layer_to_clssses(layer, self.n_classes)
         else:
-            print '["fc", "gap"]'
+            print 'only ["fc", "gap"]'
             raise AssertionError
+        self.logits = self.fc_layer_to_clssses(layer, self.n_classes)
         return self.logits
 
     def _box(self, x,n_block , block_out_ch , block_stride):
