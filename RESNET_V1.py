@@ -56,7 +56,7 @@ class RESNET_V1(DNN):
             layer = self.batch_norm_layer(layer, train_phase= self.is_training, scope_bn='bn_0')
             #layer = self.activation(layer)
             # BN을 activation 후에 하는게 좋은지 앞에서 하는게 좋은지는 토론중이다. 난 개인적으로 weight 을 앞에다 하는게 성능을 높일거라 생각한다.
-        for box_idx in range(self.n_boxes):
+        for box_idx in range(len(self.n_filters_per_box)):
             print '#######   box_{}  ########'.format(box_idx)
             with tf.variable_scope('box_{}'.format(box_idx)):
                 layer=self._box(layer , n_block= self.n_blocks_per_box[box_idx] , block_out_ch= self.n_filters_per_box[box_idx] ,
