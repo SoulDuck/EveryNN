@@ -12,7 +12,7 @@ class Dataprovider():
     def __init__(self, datatype , batch_size ,resize , num_epoch=10 , onehot = True):
         self.resize = resize
         self.num_epoch = num_epoch
-        if datatype == 'cifar_10' or 'cifar10':
+        if datatype == 'cifar_10' or datatype == 'cifar10':
             self.batch_size = batch_size
             self.train_tfrecord = cifar.train_tfrecord
             self.test_tfrecord = cifar.test_tfrecord
@@ -24,14 +24,26 @@ class Dataprovider():
             if onehot:
                 self.batch_ys=tf.one_hot(self.batch_ys,self.n_classes)
 
-        elif datatype == 'cifar_100' or 'cifar100':
+        elif datatype == 'cifar_100' or datatype == 'cifar100':
             raise NotImplementedError
-        elif datatype == 'SVNH' or 'svhn':
+        elif datatype == 'SVNH' or datatype == 'svhn':
             raise NotImplementedError
-        elif datatype == 'COCO' or 'coco':
+        elif datatype == 'COCO' or datatype == 'coco':
             raise NotImplementedError
-        elif datatype == 'PASCAL' or 'pascal':
+        elif datatype == 'PASCAL' or datatype == 'pascal':
             raise NotImplementedError
+        elif datatype == 'KaggleFundus' or datatype == 'kagglefundus' or datatype == 'kaggle_fundus˜':
+            self.batch_size = batch_size
+            self.train_tfrecord = cifar.train_tfrecord
+            self.test_tfrecord = cifar.test_tfrecord
+            self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True)
+            self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
+            self.n_classes = 2
+            self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord,
+                                                                                  self.batch_size,
+                                                                                  self.resize, self.num_epoch)
+            if onehot:
+                self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
 
         print 'Data Infomation'
         print 'Image Height  : {} Label Width : {} Image channel : {} '.format(self.img_h , self.img_w , self.img_ch)
