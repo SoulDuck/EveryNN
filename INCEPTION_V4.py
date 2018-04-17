@@ -80,9 +80,7 @@ class INCEPTION_V4(DNN):
 
         with tf.variable_scope(name) as scope:
             layer_ =self.max_pool('max_pool_0' ,x, k=3, s=2 ,padding='VALID')
-
             layer__ =self.convolution2d('cnn__0' ,x,192 , k=3 , s=2 , padding='VALID'  )
-
             layer___ = self.convolution2d('cnn___0',x,224, k=1, s=1, padding='SAME')
             layer___ = self.convolution2d('cnn___1',layer___,256, k=3, s=1, padding='SAME')
             layer___ = self.convolution2d('cnn___2',layer___,385, k=3, s=2, padding='VALID')
