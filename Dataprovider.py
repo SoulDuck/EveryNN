@@ -14,6 +14,7 @@ class Input():
             self.train_imgs, self.train_labs, self.test_imgs, self.test_labs = cifar.get_cifar_images_labels(
                 onehot=True);
             self.fnames = np.asarray(range(len(self.train_labs)))
+
         elif datatype == 'cifar_100' or 'cifar100':
             raise NotImplementedError
         elif datatype == 'SVNH' or 'svhn':
