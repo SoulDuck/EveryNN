@@ -7,7 +7,7 @@ import aug
 import tensorflow as tf
 import cifar
 import sys
-
+from PIL import Image
 class Input():
     def __init__(self, datatype):
         if datatype == 'cifar_10' or 'cifar10':
@@ -74,15 +74,15 @@ class Input():
         return x_
 
     @classmethod
-    def make_tfrecord_rawdata(cls, tfrecord_path, paths, labels):
+    def make_tfrecord_rawdata(cls, tfrecord_path, paths, labels ):
         """
         :param tfrecord_path: e.g) './tmp.tfrecord'
         :param paths: e.g)[./pic1.png , ./pic2.png]
         :param labels: 3.g) [1,1,1,1,1,0,0,0,0]
         :return:
         """
-        debug_flag_lv0 = True
-        debug_flag_lv1 = True
+        debug_flag_lv0 = False
+        debug_flag_lv1 = False
         if __debug__ == debug_flag_lv0:
             print 'debug start | batch.py | class : tfrecord_batch | make_tfrecord_rawdata'
 
@@ -98,7 +98,6 @@ class Input():
 
         writer = tf.python_io.TFRecordWriter(tfrecord_path)
         paths_labels = zip(paths, labels)
-        error_file_paths = []
         for ind, (path, label) in enumerate(paths_labels):
             try:
                 msg = '\r-Progress : {0}'.format(str(ind) + '/' + str(len(paths_labels)))
@@ -137,38 +136,34 @@ class Input():
             except Exception as e:
                 print path
                 print str(e)
-                continue
+                exit()
+
         writer.close()
 
+
     @classmethod
-    def get_iterator(tfrecord_path):
+    def get_iterator(cls,tfrecord_path):
         record_iter = tf.python_io.tf_record_iterator(path=tfrecord_path)
 
     @classmethod
-    def reconstruct_tfrecord_rawdata(tfrecord_path):
+    def reconstruct_tfrecord_rawdata(cls,tfrecord_path):
         debug_flag_lv0 = True
         debug_flag_lv1 = True
         if __debug__ == debug_flag_lv0:
             print 'debug start | batch.py | class tfrecord_batch | reconstruct_tfrecord_rawdata '
 
         print 'now Reconstruct Image Data please wait a second'
-
         reconstruct_image = []
         # caution record_iter is generator
-
-        record_iter = tf.python_io.tf_record_iterator(path=tfrecord_path)
-        n = len(list(record_iter))
         record_iter = tf.python_io.tf_record_iterator(path=tfrecord_path)
 
-        print 'The Number of Data :', n
         ret_img_list = []
         ret_lab_list = []
         ret_filename_list = []
         for i, str_record in enumerate(record_iter):
-            msg = '\r -progress {0}/{1}'.format(i, n)
+            msg = '\r -progress {0}'.format(i)
             sys.stdout.write(msg)
             sys.stdout.flush()
-
             example = tf.train.Example()
             example.ParseFromString(str_record)
 
@@ -190,10 +185,10 @@ class Input():
             print 'labels shape : ', np.shape(ret_lab)
             print 'length of filenames : ', len(ret_filename_list)
         return ret_img, ret_lab, ret_filename_list
-
+    @classmethod
     def get_shuffled_batch(cls , tfrecord_path, batch_size, resize):
         resize_height, resize_width = resize
-        filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=10)
+        filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=20)
         reader = tf.TFRecordReader()
         _, serialized_example = reader.read(filename_queue)
         features = tf.parse_single_example(serialized_example,
@@ -217,8 +212,8 @@ class Input():
         image = tf.image.resize_image_with_crop_or_pad(image=image,
                                                        target_height=resize_height,
                                                        target_width=resize_width)
-        images, labels = tf.train.shuffle_batch([image, label], batch_size=batch_size, capacity=30, num_threads=1,
-                                                min_after_dequeue=10)
+        images, labels = tf.train.shuffle_batch([image, label], batch_size=batch_size, capacity=30000, num_threads=1,
+                                                min_after_dequeue=10000)
         return images, labels
     @classmethod
     def read_one_example(cls , tfrecord_path, resize):
@@ -246,3 +241,24 @@ class Input():
                                                            target_height=resize_height,
                                                            target_width=resize_width)
         return image, label
+
+
+if '__main__' == __name__:
+
+
+    Input.reconstruct_tfrecord_rawdata('tmp.tfrecord')
+
+    """
+    sess = tf.Session()
+    images , labels=Input.get_shuffled_batch('tmp.tfrecord' , 60 , (224,224))
+    init_op = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(sess=sess, coord=coord)
+    for i in range(20000):
+        imgs, labs = sess.run([images, labels])
+        print np.shape(imgs)
+        print np.shape(labs)
+
+    coord.request_stop()
+    coord.join(threads)
+    """
