@@ -1,3 +1,5 @@
+import matplotlib as mpl
+mpl.use('Agg')
 import tensorflow as tf
 import random
 from PIL import Image
