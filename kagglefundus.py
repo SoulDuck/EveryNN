@@ -1,8 +1,11 @@
-# bring kaggle fundus
+#-*- coding:utf-8 -*-
+
+
 import Dataprovider
 import os , glob
 import sys
 import argparse
+"""bring kaggle fundus"""
 parser=argparse.ArgumentParser()
 parser.add_argument('--datadir' , type= str , default='./kaggle_fundus')
 args=parser.parse_args()
