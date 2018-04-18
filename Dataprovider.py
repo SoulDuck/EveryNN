@@ -158,6 +158,10 @@ class Dataprovider():
                 if isinstance(img_source , str):
                     print img_source
                 continue
+            except TypeError as te:
+                if isinstance(img_source , str):
+                    print img_source
+                continue
             except Exception as e:
                 if isinstance(img_source , str):
                     print img_source
