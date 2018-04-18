@@ -21,18 +21,17 @@ for i in range(5):
     lines=f.readlines()
     ret_paths=[]
     ret_labels=[]
-
     for path in img_paths:
-        print path
         img_name = os.path.split(path)[-1]
         img_name =os.path.splitext(img_name)[0]
         for line in lines:
-
-            if img_name in line.split(',')[0]:
+            if line.split(',')[0] == img_name:
                 ret_paths.append(path)
                 ret_labels.append(line[1].replace('\n' , ''))
-        tfrecord_path=os.path.join(datadir, 'fundus_{}.tfrecord'.format(i))
-        Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_path, img_sources=ret_paths, labels=ret_paths)
+    ret_labels=map(int , ret_labels)
+    tfrecord_path=os.path.join(datadir, 'fundus_{}.tfrecord'.format(i))
+    print len(ret_paths)
+    Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_path, img_sources=ret_paths, labels=ret_labels)
 
 
 
