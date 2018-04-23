@@ -19,11 +19,9 @@ def get_test_imgs_labs(resize):
     abnormal_imgs, abnormal_labs, abnormal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
         test_abnormal_tfrecord)
 
+    normal_imgs=map(lambda img : Image.fromarray(img).resize(resize , Image.ANTIALIAS), normal_imgs)
+    abnormal_imgs = map(lambda img: Image.fromarray(img).resize(resize, Image.ANTIALIAS), abnormal_imgs)
     test_imgs=np.vstack([normal_imgs , abnormal_imgs])
-    for i,img in enumerate(test_imgs):
-        print i,np.shape(img)
-    test_imgs=map(lambda img : Image.fromarray(img).resize(resize , Image.ANTIALIAS), test_imgs)
-
     test_labs=np.vstack([normal_labs, abnormal_labs])
     test_labs=Dataprovider.Dataprovider.cls2onehot(test_labs, 2)
     print 'Image shape : {}'.format(test_imgs)
