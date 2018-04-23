@@ -27,7 +27,7 @@ if '__main__' == __name__:
     coord=tf.train.Coordinator()
     tf.train.start_queue_runners(sess=sess, coord = coord)
 
-    init = tf.group(tf.global_variables_initializer() , tf.local_variables_initializer())
+    init = tf.group([tf.global_variables_initializer() , tf.local_variables_initializer()])
     sess.run(init)
 
     images=sess.run(images)
