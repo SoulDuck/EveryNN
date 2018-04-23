@@ -16,8 +16,8 @@ class Dataprovider():
         self.batch_size = batch_size
         if datatype == 'cifar_10' or datatype == 'cifar10':
 
-            self.train_tfrecord = cifar.train_tfrecord
-            self.test_tfrecord = cifar.test_tfrecord
+            self.train_tfrecord = cifar.train_tfrecord # str
+            self.test_tfrecord = cifar.test_tfrecord # str
             self.n_classes = 10
             self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True,
                                                                       n_classes=self.n_classes)
@@ -38,13 +38,13 @@ class Dataprovider():
             raise NotImplementedError
         elif datatype == 'MyData' or datatype == 'mydata':
 
-            self.train_tfrecords = my_data.train_tfrecords
-            self.test_tfrecord = my_data.test_tfrecords
+            self.train_tfrecords = my_data.train_tfrecords # list
+            self.test_tfrecord = my_data.test_tfrecords # list
             self.n_classes = 2
             self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord[0], onehot=True , n_classes=self.n_classes)
             self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
             print self.img_h, self.img_w, self.img_ch
-            self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord,
+            self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecords,
                                                                                   self.batch_size,
                                                                                   self.resize, self.num_epoch)
             if onehot:
