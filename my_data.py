@@ -41,3 +41,5 @@ def read_one_example( tfrecord_path, resize):
     return image, label, filename
 image, label ,filename =read_one_example(tfrecord_path=test_normal_tfrecords , resize = (300,300))
 print np.shape(image)
+print label
+print filename
