@@ -1,5 +1,6 @@
 import tensorflow as tf
 import Dataprovider
+import numpy as np
 train_normal_tfrecords = './my_data/normal_train.tfrecord'
 train_abnormal_tfrecords = './my_data/abnormal_train.tfrecord'
 test_normal_tfrecords = './my_data/normal_test.tfrecord'
@@ -38,4 +39,5 @@ def read_one_example( tfrecord_path, resize):
                                                        target_height=resize_height,
                                                        target_width=resize_width)
     return image, label, filename
-read_one_example(tfrecord_path=test_normal_tfrecords , resize = (300,300))
+image, label ,filename =read_one_example(tfrecord_path=test_normal_tfrecords , resize = (300,300))
+print np.shape(imgae)
