@@ -19,7 +19,7 @@ def get_test_imgs_labs(resize):
     abnormal_imgs, abnormal_labs, abnormal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
         test_abnormal_tfrecord)
     img=Image.fromarray(normal_imgs[0]).resize(resize, Image.ANTIALIAS)
-    for img in range(normal_imgs):
+    for img in normal_imgs:
         print np.shape(img)
     normal_imgs=map(lambda img : Image.fromarray(img).resize(resize , Image.ANTIALIAS), normal_imgs)
     abnormal_imgs = map(lambda img: Image.fromarray(img).resize(resize, Image.ANTIALIAS), abnormal_imgs)
