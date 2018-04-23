@@ -260,7 +260,7 @@ class Dataprovider():
                                                        target_width=resize_width)
         images, labels, fnames = tf.train.shuffle_batch([image, label, filename], batch_size=batch_size, capacity=30000,
                                                         num_threads=1,
-                                                        min_after_dequeue=10000)
+                                                        min_after_dequeue=100)
         return images, labels , fnames
     @classmethod
     def read_one_example(cls , tfrecord_path, resize):
