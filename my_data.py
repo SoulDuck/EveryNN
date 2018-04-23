@@ -23,7 +23,7 @@ def get_test_imgs_labs():
     return test_imgs , test_labs
 
 if '__main__' == __name__:
-    test_imgs , test_labs=get_test_imgs()
+    test_imgs , test_labs=get_test_imgs_labs()
     print np.shape(test_imgs)
     print np.shape(test_labs)
     images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=test_tfrecords,
