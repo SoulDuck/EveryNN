@@ -20,5 +20,7 @@ if '__main__' == __name__:
     coord = tf.train.Coordinator()
     tf.train.start_queue_runners(sess=sess, coord=coord)
     images=sess.run(images)
+    labels = sess.run(labels)
+    print labels
     print np.shape(images)
     sess.close()
