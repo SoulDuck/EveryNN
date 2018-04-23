@@ -1,6 +1,8 @@
 import tensorflow as tf
 import Dataprovider
 import numpy as np
+from PIL import Image
+
 train_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_train.tfrecord'
 train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_train.tfrecord'
 test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_test.tfrecord'
@@ -11,15 +13,20 @@ train_tfrecords= [train_normal_tfrecord]+[train_abnormal_tfrecord]*6
 test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
 
 
-def get_test_imgs_labs():
+def get_test_imgs_labs(resize):
     normal_imgs, normal_labs, normal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
         test_normal_tfrecord)
     abnormal_imgs, abnormal_labs, abnormal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
         test_abnormal_tfrecord)
 
-
     test_imgs=np.vstack([normal_imgs , abnormal_imgs])
+    test_imgs=map(lambda img : Image.fromarray(img).resize(resize , Image.ANTIALIAS), test_imgs)
+
     test_labs=np.vstack([normal_labs, abnormal_labs])
+    test_labs=Dataprovider.Dataprovider.cls2onehot(test_labs, 2)
+    print 'Image shape : {}'.format(test_imgs)
+    print 'Label shaep : {}'.format(test_labs)
+
     return test_imgs , test_labs
 
 if '__main__' == __name__:
@@ -33,7 +40,7 @@ if '__main__' == __name__:
     init = tf.group(tf.global_variables_initializer() , tf.local_variables_initializer())
     sess.run(init)
     coord = tf.train.Coordinator()
-    for i in range(100):
+    for i in range(10):
         tf.train.start_queue_runners(sess=sess, coord=coord)
         imgs=sess.run(images)
         labs = sess.run(labels)
