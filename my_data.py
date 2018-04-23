@@ -43,3 +43,8 @@ image, label ,filename =read_one_example(tfrecord_path=test_normal_tfrecords , r
 print np.shape(image)
 print label
 print filename
+
+sess=tf.Session()
+init = tf.group(tf.global_variables_initializer() , tf.local_variables_initializer())
+sess.run(init)
+print np.shape(sess.run(image))
