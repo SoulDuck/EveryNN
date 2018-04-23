@@ -7,7 +7,7 @@ test_normal_tfrecords = './my_data/normal_test.tfrecord'
 test_abnormal_tfrecords = './my_data/abnormal_test.tfrecord'
 
 
-train_tfrecords=[train_normal_tfrecords  , train_abnormal_tfrecords , train_abnormal_tfrecords , train_abnormal_tfrecords]
+train_tfrecords=[train_normal_tfrecords  ]
 test_tfrecords = [test_normal_tfrecords , test_abnormal_tfrecords]
 
 
