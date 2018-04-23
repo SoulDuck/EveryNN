@@ -1,10 +1,10 @@
 import tensorflow as tf
 import Dataprovider
 import numpy as np
-train_normal_tfrecord = './my_data/normal_train.tfrecord'
-train_abnormal_tfrecord = './my_data/abnormal_train.tfrecord'
-test_normal_tfrecord = './my_data/normal_test.tfrecord'
-test_abnormal_tfrecord = './my_data/abnormal_test.tfrecord'
+train_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_train.tfrecord'
+train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_train.tfrecord'
+test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_test.tfrecord'
+test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_test.tfrecord'
 
 
 train_tfrecords=[train_normal_tfrecord  ]
