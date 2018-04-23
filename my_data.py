@@ -21,6 +21,8 @@ if '__main__' == __name__:
 
     images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=[test_normal_tfrecord],
                                                                              batch_size=10 , resize=(300,300) , num_epoch=10)
+
+
     sess=tf.Session()
     coord=tf.train.Coordinator()
     tf.train.start_queue_runners(sess=sess, coord = coord)
