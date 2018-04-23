@@ -20,6 +20,7 @@ def get_test_imgs_labs(resize):
         test_abnormal_tfrecord)
 
     normal_imgs=map(lambda img : Image.fromarray(img).resize(resize , Image.ANTIALIAS), normal_imgs)
+    print np.shape(normal_imgs)
     abnormal_imgs = map(lambda img: Image.fromarray(img).resize(resize, Image.ANTIALIAS), abnormal_imgs)
     test_imgs=np.vstack([normal_imgs , abnormal_imgs])
     test_labs=np.vstack([normal_labs, abnormal_labs])
