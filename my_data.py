@@ -7,7 +7,7 @@ test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_t
 test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_test.tfrecord'
 
 
-train_tfrecords=[train_normal_tfrecord] + [train_abnormal_tfrecord]*6
+train_tfrecords= [train_abnormal_tfrecord]*6
 test_tfrecords = [test_normal_tfrecord , test_abnormal_tfrecord]
 
 if '__main__' == __name__:
