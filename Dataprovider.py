@@ -233,7 +233,7 @@ class Dataprovider():
             print 'length of filenames : ', len(ret_filename_list)
         return ret_img, ret_lab, ret_filename_list
     @classmethod
-    def get_shuffled_batch(cls , tfrecord_paths, batch_size, resize , num_epoch):
+    def get_shuffled_batch(cls , tfrecord_paths, batch_size, resize , num_epoch , min_after_dequeue=10000):
         resize_height, resize_width = resize
         filename_queue = tf.train.string_input_producer(tfrecord_paths, num_epochs=num_epoch , name='filename_queue')
         reader = tf.TFRecordReader()
@@ -260,7 +260,7 @@ class Dataprovider():
                                                        target_width=resize_width)
         images, labels, fnames = tf.train.shuffle_batch([image, label, filename], batch_size=batch_size, capacity=30000,
                                                         num_threads=1,
-                                                        min_after_dequeue=100)
+                                                        min_after_dequeue=min_after_dequeue)
         return images, labels , fnames
     @classmethod
     def read_one_example(cls , tfrecord_path, resize):
