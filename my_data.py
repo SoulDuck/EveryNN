@@ -7,7 +7,7 @@ test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_t
 test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_test.tfrecord'
 
 
-train_tfrecords=[train_normal_tfrecord]
+train_tfrecords=[train_normal_tfrecord] + [train_abnormal_tfrecord]*6
 test_tfrecords = [test_normal_tfrecord , test_abnormal_tfrecord]
 
 if '__main__' == __name__:
@@ -15,8 +15,9 @@ if '__main__' == __name__:
     #print np.shape(images[0])
     #print labels
     #print fnames
-    images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=[test_normal_tfrecord],
-                                                                             batch_size=10 , resize=(300,300) , num_epoch=10)
+    images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(
+        tfrecord_paths=[train_normal_tfrecord, train_abnormal_tfrecord, train_abnormal_tfrecord,
+                        train_abnormal_tfrecord],batch_size=10 , resize=(300,300) , num_epoch=10)
     sess=tf.Session()
     init = tf.group(tf.global_variables_initializer() , tf.local_variables_initializer())
     sess.run(init)
