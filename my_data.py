@@ -24,11 +24,11 @@ if '__main__' == __name__:
 
 
     sess=tf.Session()
-    coord=tf.train.Coordinator()
-    tf.train.start_queue_runners(sess=sess, coord = coord)
 
     init = tf.group(tf.global_variables_initializer() , tf.local_variables_initializer())
     sess.run(init)
+    coord = tf.train.Coordinator()
+    tf.train.start_queue_runners(sess=sess, coord=coord)
     images=sess.run(images)
     print np.shape(images)
 
