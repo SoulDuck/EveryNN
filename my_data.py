@@ -23,6 +23,7 @@ def get_test_imgs_labs(resize):
     for img in normal_imgs:
         img=Image.fromarray(img).resize(resize, Image.ANTIALIAS)
         imgs.append(img)
+        print np.shape(img)
     imgs=np.asarray(imgs)
     print np.shape(imgs)
     normal_imgs=map(lambda img : Image.fromarray(img).resize(resize , Image.ANTIALIAS), normal_imgs)
