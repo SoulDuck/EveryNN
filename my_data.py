@@ -15,9 +15,9 @@ if '__main__' == __name__:
     #print np.shape(images[0])
     #print labels
     #print fnames
-    images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(
-        tfrecord_paths=[train_normal_tfrecord, train_abnormal_tfrecord, train_abnormal_tfrecord,
-                        train_abnormal_tfrecord],batch_size=10 , resize=(300,300) , num_epoch=10)
+    images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=train_tfrecords,
+                                                                             batch_size=10, resize=(300, 300),
+                                                                             num_epoch=10)
     sess=tf.Session()
     init = tf.group(tf.global_variables_initializer() , tf.local_variables_initializer())
     sess.run(init)
