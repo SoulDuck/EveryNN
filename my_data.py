@@ -24,3 +24,6 @@ if '__main__' == __name__:
 
     images=sess.run(images)
     print np.shape(images)
+
+
+    sess.close()
