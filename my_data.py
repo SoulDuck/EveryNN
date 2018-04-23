@@ -40,4 +40,4 @@ def read_one_example( tfrecord_path, resize):
                                                        target_width=resize_width)
     return image, label, filename
 image, label ,filename =read_one_example(tfrecord_path=test_normal_tfrecords , resize = (300,300))
-print np.shape(imgae)
+print np.shape(image)
