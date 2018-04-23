@@ -11,7 +11,7 @@ train_tfrecords= [train_normal_tfrecord]+[train_abnormal_tfrecord]*6
 test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
 
 
-def get_test_imgs():
+def get_test_imgs_labs():
     normal_imgs, normal_labs, normal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
         test_normal_tfrecord)
     abnormal_imgs, abnormal_labs, abnormal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
