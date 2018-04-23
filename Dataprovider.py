@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 import random
 import numpy as np
+import my_data
 import glob
 import os
 import aug
@@ -12,13 +13,16 @@ class Dataprovider():
     def __init__(self, datatype , batch_size ,resize , num_epoch=10 , onehot = True):
         self.resize = resize
         self.num_epoch = num_epoch
+        self.batch_size = batch_size
         if datatype == 'cifar_10' or datatype == 'cifar10':
-            self.batch_size = batch_size
+
             self.train_tfrecord = cifar.train_tfrecord
             self.test_tfrecord = cifar.test_tfrecord
-            self.sample_image , self.sample_label , _ = self.get_sample(self.test_tfrecord , onehot = True)
-            self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
             self.n_classes = 10
+            self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True,
+                                                                      n_classes=self.n_classes)
+            self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
+
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord, self.batch_size,
                                                                                   self.resize , self.num_epoch)
             if onehot:
@@ -32,19 +36,18 @@ class Dataprovider():
             raise NotImplementedError
         elif datatype == 'PASCAL' or datatype == 'pascal':
             raise NotImplementedError
-        elif datatype == 'KaggleFundus' or datatype == 'kagglefundus' or datatype == 'kaggle_fundus˜':
-            self.batch_size = batch_size
-            self.train_tfrecord = cifar.train_tfrecord
-            self.test_tfrecord = cifar.test_tfrecord
-            self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True)
-            self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
+        elif datatype == 'MyData' or datatype == 'mydata':
+
+            self.train_tfrecords = my_data.train_tfrecords
+            self.test_tfrecord = my_data.test_tfrecord
             self.n_classes = 2
+            self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True , n_classes=self.n_classes)
+            self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord,
                                                                                   self.batch_size,
                                                                                   self.resize, self.num_epoch)
             if onehot:
                 self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
-
         print 'Data Infomation'
         print 'Image Height  : {} Label Width : {} Image channel : {} '.format(self.img_h , self.img_w , self.img_ch)
         print 'N classes : {}'.format(self.n_classes)
@@ -89,6 +92,7 @@ class Dataprovider():
             x_ = tf.identity(x_, name='aug_')
 
         return x_
+
 
     @classmethod
     def make_tfrecord_rawdata(cls, tfrecord_path, img_sources, labels ):
@@ -172,7 +176,7 @@ class Dataprovider():
 
 
     @classmethod
-    def get_sample(cls , tfrecord_path , onehot):
+    def get_sample(cls , tfrecord_path , onehot , n_classes):
         record_iter = tf.python_io.tf_record_iterator(path=tfrecord_path)
         str_record=record_iter.next()
         example = tf.train.Example()
@@ -185,7 +189,7 @@ class Dataprovider():
         image = np.fromstring(raw_image, dtype=np.uint8)
         image = image.reshape((height, width, -1))
         if onehot:
-            label=cls.cls2onehot([label] ,10)
+            label = cls.cls2onehot([label], n_classes)
         return image , label , filename
 
     @classmethod
@@ -269,12 +273,16 @@ class Dataprovider():
                                                'height': tf.FixedLenFeature([], tf.int64),
                                                'width': tf.FixedLenFeature([], tf.int64),
                                                'raw_image': tf.FixedLenFeature([], tf.string),
-                                               'label': tf.FixedLenFeature([], tf.int64)
+                                               'label': tf.FixedLenFeature([], tf.int64),
+                                               'filename': tf.FixedLenFeature([], tf.string)
+
                                            })
         image = tf.decode_raw(features['raw_image'], tf.uint8)
         height = tf.cast(features['height'], tf.int32)
         width = tf.cast(features['width'], tf.int32)
         label = tf.cast(features['label'], tf.int32)
+        filename = tf.cast(features['filename'], tf.string)
+
         image_shape = tf.stack([height, width, 3])
         image = tf.reshape(image, image_shape)
         if not resize == None:
@@ -283,7 +291,7 @@ class Dataprovider():
             image = tf.image.resize_image_with_crop_or_pad(image=image,
                                                            target_height=resize_height,
                                                            target_width=resize_width)
-        return image, label
+        return image, label , filename
 
 if '__main__' == __name__:
     Dataprovider('cifar10' , 60 , (32,32))
