@@ -20,8 +20,8 @@ if '__main__' == __name__:
     coord = tf.train.Coordinator()
     for i in range(100):
         tf.train.start_queue_runners(sess=sess, coord=coord)
-        images=sess.run(images)
-        labels = sess.run(labels)
-        print labels
-        print np.shape(images)
+        imgs=sess.run(images)
+        labs = sess.run(labels)
+        print labs
+        print np.shape(imgs)
     sess.close()
