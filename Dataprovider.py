@@ -6,7 +6,7 @@ import glob
 import os
 import aug
 import tensorflow as tf
-import cifar
+import cifar , my_data
 import sys
 from PIL import Image
 class Dataprovider():
@@ -39,7 +39,7 @@ class Dataprovider():
         elif datatype == 'MyData' or datatype == 'mydata':
 
             self.train_tfrecords = my_data.train_tfrecords
-            self.test_tfrecord = my_data.test_tfrecord
+            self.test_tfrecord = my_data.test_tfrecords
             self.n_classes = 2
             self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True , n_classes=self.n_classes)
             self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
