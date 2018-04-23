@@ -41,7 +41,7 @@ class Dataprovider():
             self.train_tfrecords = my_data.train_tfrecords
             self.test_tfrecord = my_data.test_tfrecords
             self.n_classes = 2
-            self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True , n_classes=self.n_classes)
+            self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord[0], onehot=True , n_classes=self.n_classes)
             self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
             print self.img_h, self.img_w, self.img_ch
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord,
