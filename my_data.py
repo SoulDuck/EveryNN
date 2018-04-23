@@ -14,7 +14,7 @@ test_tfrecords = [test_normal_tfrecord , test_abnormal_tfrecord]
 
 if '__main__' == __name__:
     images , labels , fnames=Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(test_normal_tfrecord)
-    print np.shape(images)
+    print np.shape(images[0])
     print labels
     print fnames
 
