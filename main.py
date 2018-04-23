@@ -8,6 +8,7 @@ import tensorflow as tf
 import cifar
 train_imgs, train_labs ,test_imgs , test_labs =cifar.get_cifar_images_labels()
 
+
 model_name = 'vgg_11'
 vgg = VGG('sgd' , False , True,   model_name, 'gap'  , 'mydata' , 60 , resize=(300,300) , num_epoch=100)
 recorder = Recorder(folder_name=model_name)
