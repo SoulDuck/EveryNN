@@ -24,7 +24,7 @@ def get_test_imgs_labs():
 
 if '__main__' == __name__:
     test_imgs , test_labs=get_test_imgs_labs()
-    print np.shape(test_imgs)
+    print np.shape(np.asarray(test_imgs))
     print np.shape(test_labs)
     images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=test_tfrecords,
                                                                              batch_size=60, resize=(300, 300),
