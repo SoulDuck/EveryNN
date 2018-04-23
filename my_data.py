@@ -19,7 +19,7 @@ if '__main__' == __name__:
     #print fnames
 
 
-    images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=[test_normal_tfrecord],
+    images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=[[test_normal_tfrecord]],
                                                                              batch_size=10 , resize=(300,300) , num_epoch=10)
 
 
