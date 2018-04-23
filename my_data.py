@@ -30,7 +30,7 @@ def get_test_imgs_labs(resize):
     return test_imgs , test_labs
 
 if '__main__' == __name__:
-    test_imgs , test_labs=get_test_imgs_labs()
+    test_imgs , test_labs=get_test_imgs_labs((300,300))
     print np.shape(np.asarray(test_imgs))
     print np.shape(test_labs)
     images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=test_tfrecords,
