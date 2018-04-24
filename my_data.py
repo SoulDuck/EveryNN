@@ -31,7 +31,7 @@ def get_test_imgs_labs(resize):
     print 'Image shape : {}'.format(np.shape(test_imgs))
     print 'Label shape : {}'.format(np.shape(test_labs))
 
-    return test_imgs , test_labs
+    return test_imgs/255. , test_labs
 
 if '__main__' == __name__:
     test_imgs , test_labs=get_test_imgs_labs((300,300))

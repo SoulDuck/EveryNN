@@ -48,6 +48,7 @@ class Dataprovider():
                 self.img_h , self.img_w = self.resize
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecords, self.batch_size,
                                                                                   self.resize , self.num_epoch)
+            self.batch_xs=self.batch_xs/255.
             if onehot:
                 self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
         print 'Data Infomation'
