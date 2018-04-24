@@ -250,13 +250,10 @@ class Dataprovider():
         image = tf.reshape(image, image_shape)
         image = tf.image.resize_image_with_crop_or_pad(image=image, target_height=resize_height,
                                                        target_width=resize_width)
-
-
-
+        image=tf.cast(image , dtype=tf.float32)
         images, labels, fnames = tf.train.shuffle_batch([image, label, filename], batch_size=batch_size, capacity=30000,
                                                         num_threads=1,
                                                         min_after_dequeue=min_after_dequeue)
-
         return images, labels , fnames
     @classmethod
     def read_one_example(cls , tfrecord_path, resize):
@@ -289,27 +286,31 @@ class Dataprovider():
                                                            target_width=resize_width)
         return image, label , filename
     @classmethod
-    def augmentation(cls , image , randomCrop_aug , flipFlop_aug , color_aug):
-        tf.shape(image)
-        _ , img_h , img_w , img_ch =image.get_shape()
-        img_h, img_w, img_ch=map(int , [img_h , img_w , img_ch])
-        print img_h , img_w , img_ch
-        if randomCrop_aug:
-            image = tf.image.resize_image_with_crop_or_pad(image=image, target_height=img_h + int(img_h * 0.1),
-                                                           target_width=img_w + int(img_w * 0.1))
+    def augmentation(cls , images , randomCrop_aug , flipFlop_aug , color_aug):
+        def _fn(image):
+            img_h , img_w , img_ch =image.get_shape()
+            img_h, img_w, img_ch=map(int , [img_h , img_w , img_ch])
+            print img_h , img_w , img_ch
+            if randomCrop_aug:
+                image = tf.image.resize_image_with_crop_or_pad(image=image, target_height=img_h + int(img_h * 0.1),
+                                                               target_width=img_w + int(img_w * 0.1))
 
-        if flipFlop_aug:
-            image = tf.random_crop(image, [img_h , img_w , img_ch])
-            image = tf.image.random_flip_left_right(image)
-            image = tf.image.random_flip_up_down(image)
+            if flipFlop_aug:
+                image = tf.random_crop(image, [img_h , img_w , img_ch])
+                image = tf.image.random_flip_left_right(image)
+                image = tf.image.random_flip_up_down(image)
 
-        #Brightness / saturatio / constrast provides samll gains 2%~5% on cifar
-        if color_aug:
-            image = tf.image.random_brightness(image, max_delta=63. / 255.)
-            image = tf.image.random_saturation(image, lower=0.5, upper=1.8)
-            image = tf.image.per_image_standardization(image)
+            #Brightness / saturatio / constrast provides samll gains 2%~5% on cifar
+            if color_aug:
+                image = tf.image.random_brightness(image, max_delta=63. / 255.)
+                image = tf.image.random_saturation(image, lower=0.5, upper=1.8)
+                image = tf.image.per_image_standardization(image)
+            image = tf.minimum(image, 1.0)
+            image = tf.maximum(image, 0.0)
+            return image
+        images = tf.map_fn(lambda image:_fn(image), images)
 
-        return image
+        return images
 
 
 
