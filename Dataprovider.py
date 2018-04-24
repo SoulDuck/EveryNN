@@ -24,8 +24,6 @@ class Dataprovider():
             self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
             if not self.resize is None:
                 self.img_h , self.img_w = self.resize
-
-
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord, self.batch_size,
                                                                                   self.resize , self.num_epoch)
             if onehot:
@@ -50,6 +48,10 @@ class Dataprovider():
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecords,
                                                                                   self.batch_size,
                                                                                   self.resize, self.num_epoch)
+            if not self.resize is None:
+                self.img_h , self.img_w = self.resize
+            self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord, self.batch_size,
+                                                                                  self.resize , self.num_epoch)
             if onehot:
                 self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
         print 'Data Infomation'

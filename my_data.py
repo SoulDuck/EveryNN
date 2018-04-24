@@ -28,8 +28,8 @@ def get_test_imgs_labs(resize):
     #test_labs = test_labs.extend(abnormal_labs)
 
     test_labs=Dataprovider.Dataprovider.cls2onehot(test_labs, 2)
-    print 'Image shape : {}'.format(test_imgs)
-    print 'Label shaep : {}'.format(test_labs)
+    print 'Image shape : {}'.format(np.shape(test_imgs))
+    print 'Label shape : {}'.format(np.shape(test_labs))
 
     return test_imgs , test_labs
 
