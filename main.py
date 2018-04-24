@@ -6,7 +6,8 @@ from Trainer import Trainer
 from Tester import Tester
 import tensorflow as tf
 import cifar
-train_imgs, train_labs ,test_imgs , test_labs =cifar.get_cifar_images_labels()
+import my_data
+test_imgs , test_labs =my_data.get_test_imgs_labs()
 
 
 model_name = 'vgg_11'
