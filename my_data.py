@@ -68,6 +68,7 @@ if '__main__' == __name__:
     images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=test_tfrecords,
                                                                              batch_size=60, resize=(300, 300),
                                                                              num_epoch=120)
+
     sess=tf.Session()
     init = tf.group(tf.global_variables_initializer() , tf.local_variables_initializer())
     sess.run(init)
