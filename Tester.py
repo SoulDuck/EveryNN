@@ -102,6 +102,9 @@ class Tester(DNN):
             image = np.fromstring(raw_image, dtype=np.uint8)
             image = image.reshape((height, width, -1))
             image=np.expand_dims(image, axis=0)
+            if  np.max(image) > 1:
+                image=image/255.
+
             # Resize
             if not resize is None:
                 image = np.asarray(Image.fromarray(image).resize(resize, Image.ANTIALIAS))
