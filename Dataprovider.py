@@ -21,7 +21,12 @@ class Dataprovider():
             self.n_classes = 10
             self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True,
                                                                       n_classes=self.n_classes)
-            self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
+            if resize is None:
+                self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
+            else:
+                self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
+                self.img_h , self.img_w = self.resize
+
 
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord, self.batch_size,
                                                                                   self.resize , self.num_epoch)
