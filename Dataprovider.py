@@ -214,7 +214,7 @@ class Dataprovider():
             image = np.fromstring(raw_image, dtype=np.uint8)
             image = image.reshape((height, width, -1))
             if not resize is None:
-                image=Image.fromarray(image).resize(resize,Image.ANTIALIAS)
+                image=np.asarray(Image.fromarray(image).resize(resize,Image.ANTIALIAS))
             ret_img_list.append(image)
             ret_lab_list.append(label)
             ret_filename_list.append(filename)
