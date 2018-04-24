@@ -20,14 +20,15 @@ def resize_train_test_imgs(resize , save_folder):
     #그래서 이미지를 줄이고 그 이미지를 다시 tfrecord로 만드는 코드이다.
 
     tfrecord_paths = [train_normal_tfrecord , train_abnormal_tfrecord , test_normal_tfrecord , test_abnormal_tfrecord]
-    tfrecord_paths = [test_normal_tfrecord, test_abnormal_tfrecord,test_normal_tfrecord, test_abnormal_tfrecord]
+    #tfrecord_paths = [test_normal_tfrecord, test_abnormal_tfrecord,test_normal_tfrecord, test_abnormal_tfrecord]
     normal_train, abnormal_train, normal_test, abnormal_test = map(
         lambda path: Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(path, resize), tfrecord_paths)
-    print 'normal Train Image shape : {}'.format(np.shape(normal_train[1]))
+    print ''
+    print 'normal Train Image shape : {}'.format(np.shape(np.asarray(normal_train[1])))
     print 'normal Train label :', str(normal_train[1][:10])+'...'
     print 'abnormal Train label :', str(abnormal_train[1][:10])+'...'
-    print 'normal Test label :', str(normal_test[1])+'...'
-    print 'abnormal Test label :', str(abnormal_test[1])+'...'
+    print 'normal Test label :', str(normal_test[1][:10])+'...'
+    print 'abnormal Test label :', str(abnormal_test[1][:10])+'...'
     tfrecord_paths=map(lambda path : os.path.join(save_folder , os.path.split(path)[-1]) ,  tfrecord_paths)
 
     Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[0] , normal_train[0], normal_train[1])
