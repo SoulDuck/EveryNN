@@ -20,7 +20,7 @@ def resize_train_test_imgs(resize , save_folder):
     #그래서 이미지를 줄이고 그 이미지를 다시 tfrecord로 만드는 코드이다.
 
     tfrecord_paths = [train_normal_tfrecord , train_abnormal_tfrecord , test_normal_tfrecord , test_abnormal_tfrecord]
-    #tfrecord_paths = [test_normal_tfrecord, test_abnormal_tfrecord,test_normal_tfrecord, test_abnormal_tfrecord]
+    tfrecord_paths = [test_normal_tfrecord, test_abnormal_tfrecord,test_normal_tfrecord, test_abnormal_tfrecord]
     normal_train, abnormal_train, normal_test, abnormal_test = map(
         lambda path: Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(path, resize), tfrecord_paths)
     print ''
