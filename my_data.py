@@ -59,9 +59,30 @@ def get_test_imgs_labs(resize):
     return test_imgs/255. , test_labs
 
 if '__main__' == __name__:
+
+    img , lab , fname =Dataprovider.Dataprovider.get_sample(train_normal_tfrecord , None , n_classes=2)
+    print img
+    print lab
+    print fname
+
+    img , lab , fname =Dataprovider.Dataprovider.get_sample(test_normal_tfrecord , None , n_classes=2)
+    print img
+    print lab
+    print fname
+
+    img, lab, fname = Dataprovider.Dataprovider.get_sample(train_abnormal_tfrecord, None, n_classes=2)
+    print img
+    print lab
+    print fname
+
+    img, lab, fname = Dataprovider.Dataprovider.get_sample(test_abnormal_tfrecord, None, n_classes=2)
+    print img
+    print lab
+    print fname
+
     #원본 이미지를 줄인다.
 
-    #resize_train_test_imgs((350,350), './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350' )
+    resize_train_test_imgs((350,350), './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350' )
     test_imgs , test_labs=get_test_imgs_labs((300,300))
     print np.shape(np.asarray(test_imgs))
     print np.shape(test_labs)
