@@ -17,7 +17,7 @@ trainer = Trainer(recorder)
 tester=Tester(recorder)
 
 global_step=0
-for i in range(10):
+for i in range(1000):
     mean_acc, mean_loss, pred_all=tester.validate(test_imgs, test_labs , 60,global_step)
     print '\t Acc :{}  Loss :{} '.format(mean_acc , mean_loss)
     global_step = trainer.training(1000,global_step)
