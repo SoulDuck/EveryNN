@@ -30,7 +30,6 @@ class Dataprovider():
             self.train_tfrecords = my_data.train_tfrecords # list
             self.test_tfrecords = my_data.test_tfrecords # list
             self.n_classes = 2
-
         self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecords[0], onehot=True, #
                                                                   n_classes=self.n_classes)
         self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
@@ -38,6 +37,7 @@ class Dataprovider():
             self.img_h, self.img_w = self.resize
         self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecords, self.batch_size,
                                                                               self.resize, self.num_epoch)
+
 
         if onehot:
             self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
