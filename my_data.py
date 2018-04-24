@@ -1,8 +1,10 @@
+#-*- coding:utf-8 -*-
 import tensorflow as tf
 import Dataprovider
 import numpy as np
 from PIL import Image
 import os
+
 train_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_train.tfrecord'
 train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_train.tfrecord'
 test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_test.tfrecord'
@@ -14,6 +16,9 @@ test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
 
 
 def resize_train_test_imgs(resize , save_folder):
+    #원본 이미지를 바로 resize 하면 잘 학습이 너무 느리다.
+    #그래서 이미지를 줄이고 그 이미지를 다시 tfrecord로 만드는 코드이다.
+
     tfrecord_paths = [train_normal_tfrecord , train_abnormal_tfrecord , test_normal_tfrecord , test_abnormal_tfrecord]
     normal_train, abnormal_train, normal_test, abnormal_test = map(
         lambda path: Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(path, resize), tfrecord_paths)
