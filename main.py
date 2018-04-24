@@ -7,7 +7,7 @@ from Tester import Tester
 import tensorflow as tf
 import cifar
 import my_data
-test_imgs , test_labs =my_data.get_test_imgs_labs()
+test_imgs , test_labs =my_data.get_test_imgs_labs((300,300))
 
 
 model_name = 'vgg_11'
