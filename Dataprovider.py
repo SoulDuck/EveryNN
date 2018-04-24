@@ -15,18 +15,9 @@ class Dataprovider():
         self.num_epoch = num_epoch
         self.batch_size = batch_size
         if datatype == 'cifar_10' or datatype == 'cifar10':
-            self.train_tfrecord = cifar.train_tfrecord # str
-            self.test_tfrecord = cifar.test_tfrecord # str
+            self.train_tfrecords = cifar.train_tfrecords # list
+            self.test_tfrecords = cifar.test_tfrecords # list
             self.n_classes = 10
-            self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True,
-                                                                      n_classes=self.n_classes)
-            self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
-            if not self.resize is None:
-                self.img_h , self.img_w = self.resize
-            self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord, self.batch_size,
-                                                                                  self.resize , self.num_epoch)
-            if onehot:
-                self.batch_ys=tf.one_hot(self.batch_ys,self.n_classes)
         elif datatype == 'cifar_100' or datatype == 'cifar100':
             raise NotImplementedError
         elif datatype == 'SVNH' or datatype == 'svhn':
@@ -36,18 +27,21 @@ class Dataprovider():
         elif datatype == 'PASCAL' or datatype == 'pascal':
             raise NotImplementedError
         elif datatype == 'MyData' or datatype == 'mydata':
-
             self.train_tfrecords = my_data.train_tfrecords # list
             self.test_tfrecord = my_data.test_tfrecords # list
             self.n_classes = 2
-            self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord[0], onehot=True , n_classes=self.n_classes)
-            self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
-            if not self.resize is None:
-                self.img_h , self.img_w = self.resize
-            self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecords, self.batch_size,
-                                                                                  self.resize , self.num_epoch)
-            if onehot:
-                self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
+
+
+        self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True,
+                                                                  n_classes=self.n_classes)
+        self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
+        if not self.resize is None:
+            self.img_h, self.img_w = self.resize
+        self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecords, self.batch_size,
+                                                                              self.resize, self.num_epoch)
+        if onehot:
+            self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
+
         print 'Data Infomation'
         print 'Image Height  : {} Label Width : {} Image channel : {} '.format(self.img_h , self.img_w , self.img_ch)
         print 'N classes : {}'.format(self.n_classes)
