@@ -34,7 +34,7 @@ class Trainer(DNN):
             """ #### Traininig  ### """
             train_fetches = [self.train_op, self.accuracy_op, self.cost_op]
             batch_xs , batch_ys=self.sess.run([self.dataprovider.batch_xs ,self.dataprovider.batch_ys])
-            utils.plot_images(batch_xs)
+            #utils.plot_images(batch_xs)
             if np.max(batch_xs) > 1:
                 batch_xs=batch_xs/255.
 
