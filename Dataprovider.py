@@ -21,10 +21,8 @@ class Dataprovider():
             self.n_classes = 10
             self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True,
                                                                       n_classes=self.n_classes)
-            if resize is None:
-                self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
-            else:
-                self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
+            self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
+            if not self.resize is None:
                 self.img_h , self.img_w = self.resize
 
 
