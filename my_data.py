@@ -23,6 +23,7 @@ def resize_train_test_imgs(resize , save_folder):
     tfrecord_paths = [test_normal_tfrecord, test_abnormal_tfrecord,test_normal_tfrecord, test_abnormal_tfrecord]
     normal_train, abnormal_train, normal_test, abnormal_test = map(
         lambda path: Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(path, resize), tfrecord_paths)
+    print 'normal Train Image shape : {}'.format(np.shape(normal_train[1]))
     print 'normal Train label :', str(normal_train[1][:10])+'...'
     print 'abnormal Train label :', str(abnormal_train[1][:10])+'...'
     print 'normal Test label :', str(normal_test[1])+'...'
