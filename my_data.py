@@ -23,9 +23,9 @@ def get_test_imgs_labs(resize):
     abnormal_imgs = map(lambda img: np.asarray(Image.fromarray(img).resize(resize, Image.ANTIALIAS)), abnormal_imgs)
 
     test_imgs=np.vstack([normal_imgs , abnormal_imgs])
-    print normal_labs
-    test_labs = test_labs.extend(normal_labs)
-    test_labs = test_labs.extend(abnormal_labs)
+    test_labs=normal_labs + abnormal_labs
+    #test_labs = test_labs.extend(normal_labs)
+    #test_labs = test_labs.extend(abnormal_labs)
 
     test_labs=Dataprovider.Dataprovider.cls2onehot(test_labs, 2)
     print 'Image shape : {}'.format(test_imgs)
