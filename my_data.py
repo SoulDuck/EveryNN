@@ -2,7 +2,7 @@ import tensorflow as tf
 import Dataprovider
 import numpy as np
 from PIL import Image
-
+import os
 train_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_train.tfrecord'
 train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_train.tfrecord'
 test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_test.tfrecord'
@@ -11,6 +11,20 @@ test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnorm
 
 train_tfrecords= [train_normal_tfrecord]+[train_abnormal_tfrecord]*6
 test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
+
+
+def resize_train_test_imgs(resize , save_folder):
+    tfrecord_paths = [train_normal_tfrecord , train_abnormal_tfrecord , test_normal_tfrecord , test_abnormal_tfrecord]
+    normal_train, abnormal_train, normal_test, abnormal_test = map(
+        lambda path: Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(path, resize), tfrecord_paths)
+    tfrecord_paths=map(lambda path : os.path.join(save_folder , os.path.split(path)[-1]) ,  tfrecord_paths)
+
+    Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[0] , normal_train[0], normal_train[1])
+    Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[1], abnormal_train[0], abnormal_train[1])
+    Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[2], normal_test[0], normal_test[1])
+    Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[3], abnormal_test[0], normal_test[1])
+
+
 
 
 
