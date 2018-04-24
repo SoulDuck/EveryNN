@@ -61,22 +61,22 @@ def get_test_imgs_labs(resize):
 if '__main__' == __name__:
 
     img , lab , fname =Dataprovider.Dataprovider.get_sample(train_normal_tfrecord , None , n_classes=2)
-    print img
+    print np.shape(img)
     print lab
     print fname
 
     img , lab , fname =Dataprovider.Dataprovider.get_sample(test_normal_tfrecord , None , n_classes=2)
-    print img
+    print np.shape(img)
     print lab
     print fname
 
     img, lab, fname = Dataprovider.Dataprovider.get_sample(train_abnormal_tfrecord, None, n_classes=2)
-    print img
+    print np.shape(img)
     print lab
     print fname
 
     img, lab, fname = Dataprovider.Dataprovider.get_sample(test_abnormal_tfrecord, None, n_classes=2)
-    print img
+    print np.shape(img)
     print lab
     print fname
 
