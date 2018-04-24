@@ -42,9 +42,9 @@ def resize_train_test_imgs(resize , save_folder):
 def get_test_imgs_labs(resize):
     test_labs=[]
     normal_imgs, normal_labs, normal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
-        test_normal_tfrecord)
+        test_normal_tfrecord , None)
     abnormal_imgs, abnormal_labs, abnormal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
-        test_abnormal_tfrecord)
+        test_abnormal_tfrecord , None)
     normal_imgs=map(lambda img : np.asarray(Image.fromarray(img).resize(resize , Image.ANTIALIAS)), normal_imgs)
     abnormal_imgs = map(lambda img: np.asarray(Image.fromarray(img).resize(resize, Image.ANTIALIAS)), abnormal_imgs)
 
