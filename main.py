@@ -23,10 +23,15 @@ tester=Tester(recorder)
 
 
 global_step=0
-for i in range(1000):
-    mean_acc, mean_loss, pred_all=tester.validate_tfrecord(cifar.test_tfrecords[0] , None , None )
-    global_step = trainer.training(1000,global_step)
-    print '\t Acc :{}  Loss :{} '.format(mean_acc , mean_loss)
+for i in range(10000):
+    normal_acc, normal_loss, normal_preds=tester.validate_tfrecord(my_data.test_normal_tfrecord , None , None )
+    abnormal_acc, abnormal_loss, abnormal_preds= tester.validate_tfrecord(my_data.test_abnormal_tfrecord, None, None)
+    print 'normal Acc : {} | normal Loss : {}'.format(normal_acc , normal_loss)
+    print 'abnormal Acc : {} | abnormal Loss : {}'.format(abnormal_acc, abnormal_loss)
+    print 'Acc : {} Loss : {}'.format((normal_acc+abnormal_acc)/2. , (normal_loss+abnormal_loss)/2.)
+
+    global_step = trainer.training(100,global_step)
+
 
 
 
