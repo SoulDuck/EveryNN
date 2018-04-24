@@ -35,9 +35,6 @@ class Trainer(DNN):
             batch_xs , batch_ys=self.sess.run([self.dataprovider.batch_xs ,self.dataprovider.batch_ys])
             if np.max(batch_xs) >= 255:
                 batch_xs=batch_xs/255.
-
-
-
             train_feedDict = {self.x_: batch_xs, self.y_: batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
                               self.is_training: True}
             _, train_acc, train_loss = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)
