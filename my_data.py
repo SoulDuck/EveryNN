@@ -54,7 +54,7 @@ def get_test_imgs_labs(resize):
 if '__main__' == __name__:
     #원본 이미지를 줄인다.
 
-    resize_train_test_imgs('./my_data/tfrecord_normal_0_10_abnormal_100_inf/300_300')
+    resize_train_test_imgs((350,350), './my_data/tfrecord_normal_0_10_abnormal_100_inf/300_300' )
     test_imgs , test_labs=get_test_imgs_labs((300,300))
     print np.shape(np.asarray(test_imgs))
     print np.shape(test_labs)
