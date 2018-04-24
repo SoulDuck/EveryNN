@@ -15,7 +15,6 @@ class Dataprovider():
         self.num_epoch = num_epoch
         self.batch_size = batch_size
         if datatype == 'cifar_10' or datatype == 'cifar10':
-
             self.train_tfrecord = cifar.train_tfrecord # str
             self.test_tfrecord = cifar.test_tfrecord # str
             self.n_classes = 10
@@ -28,7 +27,6 @@ class Dataprovider():
                                                                                   self.resize , self.num_epoch)
             if onehot:
                 self.batch_ys=tf.one_hot(self.batch_ys,self.n_classes)
-
         elif datatype == 'cifar_100' or datatype == 'cifar100':
             raise NotImplementedError
         elif datatype == 'SVNH' or datatype == 'svhn':
@@ -195,13 +193,14 @@ class Dataprovider():
         return image , label , filename
 
     @classmethod
-    def reconstruct_tfrecord_rawdata(cls,tfrecord_path):
-        debug_flag_lv0 = True
-        debug_flag_lv1 = True
+    def reconstruct_tfrecord_rawdata(cls,tfrecord_path , resize):
+        debug_flag_lv0 = False
+        debug_flag_lv1 = False
         if __debug__ == debug_flag_lv0:
             print 'debug start | batch.py | class tfrecord_batch | reconstruct_tfrecord_rawdata '
 
         print 'now Reconstruct Image Data please wait a second'
+        print 'Resize {}'.format(resize)
         reconstruct_image = []
         # caution record_iter is generator
         record_iter = tf.python_io.tf_record_iterator(path=tfrecord_path)
@@ -223,9 +222,13 @@ class Dataprovider():
             filename = (example.features.feature['filename'].bytes_list.value[0])
             image = np.fromstring(raw_image, dtype=np.uint8)
             image = image.reshape((height, width, -1))
+            if not resize is None:
+                image=Image.fromarray(image).resize(resize,Image.ANTIALIAS)
             ret_img_list.append(image)
             ret_lab_list.append(label)
             ret_filename_list.append(filename)
+
+
         ret_img = np.asarray(ret_img_list)
         ret_lab = np.asarray(ret_lab_list)
         if debug_flag_lv1 == True:

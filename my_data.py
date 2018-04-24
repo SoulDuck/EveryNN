@@ -13,6 +13,7 @@ train_tfrecords= [train_normal_tfrecord]+[train_abnormal_tfrecord]*6
 test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
 
 
+
 def get_test_imgs_labs(resize):
     test_labs=[]
     normal_imgs, normal_labs, normal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
@@ -24,8 +25,6 @@ def get_test_imgs_labs(resize):
 
     test_imgs=np.vstack([normal_imgs , abnormal_imgs])
     test_labs=normal_labs + abnormal_labs
-    #test_labs = test_labs.extend(normal_labs)
-    #test_labs = test_labs.extend(abnormal_labs)
 
     test_labs=Dataprovider.Dataprovider.cls2onehot(test_labs, 2)
     print 'Image shape : {}'.format(np.shape(test_imgs))
