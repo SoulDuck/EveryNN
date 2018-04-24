@@ -51,7 +51,7 @@ def get_test_imgs_labs(resize):
 
     test_imgs=np.vstack([normal_imgs , abnormal_imgs])
     test_labs=normal_labs + abnormal_labs
-
+    print test_labs
     test_labs=Dataprovider.Dataprovider.cls2onehot(test_labs, 2)
     print 'Image shape : {}'.format(np.shape(test_imgs))
     print 'Label shape : {}'.format(np.shape(test_labs))
@@ -61,7 +61,7 @@ def get_test_imgs_labs(resize):
 if '__main__' == __name__:
     #원본 이미지를 줄인다.
 
-    resize_train_test_imgs((350,350), './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350' )
+    #resize_train_test_imgs((350,350), './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350' )
     test_imgs , test_labs=get_test_imgs_labs((300,300))
     print np.shape(np.asarray(test_imgs))
     print np.shape(test_labs)

@@ -11,7 +11,7 @@ import my_data
 import utils
 
 test_imgs , test_labs =my_data.get_test_imgs_labs((350,350))
-utils.plot_images(test_imgs[:30])
+
 print test_labs
 
 model_name = 'vgg_11'
