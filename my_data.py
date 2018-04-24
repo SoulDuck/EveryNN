@@ -4,16 +4,21 @@ import Dataprovider
 import numpy as np
 from PIL import Image
 import os
-
+# original Image
+"""
 train_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_train.tfrecord'
 train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_train.tfrecord'
 test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_test.tfrecord'
 test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_test.tfrecord'
-
+"""
+# Resize fundus 350 x 350
+train_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/normal_train.tfrecord'
+train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/abnormal_train.tfrecord'
+test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/normal_test.tfrecord'
+test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/abnormal_test.tfrecord'
 
 train_tfrecords= [train_normal_tfrecord]+[train_abnormal_tfrecord]*6
 test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
-
 
 def resize_train_test_imgs(resize , save_folder):
     #원본 이미지를 바로 resize 하면 잘 학습이 너무 느리다.
@@ -34,10 +39,6 @@ def resize_train_test_imgs(resize , save_folder):
     Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[1], abnormal_train[0], abnormal_train[1])
     Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[2], normal_test[0], normal_test[1])
     Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[3], abnormal_test[0], abnormal_test[1])
-
-
-
-
 
 def get_test_imgs_labs(resize):
     test_labs=[]
@@ -60,7 +61,7 @@ def get_test_imgs_labs(resize):
 if '__main__' == __name__:
     #원본 이미지를 줄인다.
 
-    resize_train_test_imgs((350,350), './my_data/tfrecord_normal_0_10_abnormal_100_inf/300_300' )
+    resize_train_test_imgs((350,350), './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350' )
     test_imgs , test_labs=get_test_imgs_labs((300,300))
     print np.shape(np.asarray(test_imgs))
     print np.shape(test_labs)
