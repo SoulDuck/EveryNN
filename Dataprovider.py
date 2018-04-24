@@ -31,7 +31,7 @@ class Dataprovider():
             self.test_tfrecords = my_data.test_tfrecords # list
             self.n_classes = 2
 
-        self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord[0], onehot=True,
+        self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecords[0], onehot=True, #
                                                                   n_classes=self.n_classes)
         self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
         if not self.resize is None:
