@@ -2,6 +2,9 @@
 from DNN import DNN
 import numpy as np
 import tensorflow as tf
+import sys
+import utils
+from PIL import Image
 class Tester(DNN):
 
     def __init__(self , recorder):
@@ -31,7 +34,7 @@ class Tester(DNN):
         self.x_ = tf.get_default_graph().get_tensor_by_name('x_:0')
         self.y_ = tf.get_default_graph().get_tensor_by_name('y_:0')
         self.pred_ = tf.get_default_graph().get_tensor_by_name('softmax:0')
-        self.is_training_ = tf.get_default_graph().get_tensor_by_name('is_training:0')
+        self.is_training = tf.get_default_graph().get_tensor_by_name('is_training:0')
         self.top_conv = tf.get_default_graph().get_tensor_by_name('top_conv:0')
         self.logits_ = tf.get_default_graph().get_tensor_by_name('logits:0')
         self.cam_ = tf.get_default_graph().get_tensor_by_name('classmap:0')
@@ -71,3 +74,98 @@ class Tester(DNN):
         self.recorder.write_acc_loss(prefix='Test' , loss=mean_loss , acc= mean_loss , step= step)
 
         return mean_acc, mean_loss, pred_all
+
+    def validate_tfrecord(self , tfrecord_path , preprocessing , resize):
+        """
+        Validate 이용해 데이터를 꺼내옵니다. generators 임으로 하나하나 씩 꺼내 옵니다.
+        callback 함수로 aug 함수를 전달합니다
+        :return:
+        """
+        record_iter = tf.python_io.tf_record_iterator(path= tfrecord_path)
+        fetches = [self.cost_op, self.pred_op]
+
+        loss_all, pred_all , labels = [],[],[]
+
+
+        for i , str_record in enumerate(record_iter):
+            msg = '\r -progress {0}'.format(i)
+            sys.stdout.write(msg)
+            sys.stdout.flush()
+            example = tf.train.Example()
+            example.ParseFromString(str_record)
+            height = int(example.features.feature['height'].int64_list.value[0])
+            width = int(example.features.feature['width'].int64_list.value[0])
+            raw_image = (example.features.feature['raw_image'].bytes_list.value[0])
+            label = int(example.features.feature['label'].int64_list.value[0])
+            filename = (example.features.feature['filename'].bytes_list.value[0])
+            # Reconstruct Image
+            image = np.fromstring(raw_image, dtype=np.uint8)
+            image = image.reshape((height, width, -1))
+            image=np.expand_dims(image, axis=0)
+            # Resize
+            if not resize is None:
+                image = np.asarray(Image.fromarray(image).resize(resize, Image.ANTIALIAS))
+            # Preprocessing
+            if not preprocessing is None:
+                image = preprocessing(image)
+            # CLS ==> One Hot encoding
+            label=utils.cls2onehot([label] ,self.n_classes)
+            labels.extend(label)
+
+
+            # Run Test
+            test_feedDict = {self.x_: image, self.y_: label, self.is_training: False}
+            loss , pred = self.sess.run(fetches=fetches, feed_dict=test_feedDict)
+            loss_all.append(loss)
+            pred_all.extend(pred)
+        loss_mean=np.mean(loss_all)
+        return self.get_acc(labels , pred_all) ,loss_mean , pred_all
+"""
+    @classmethod
+    def reconstruct_tfrecord_rawdata(cls, tfrecord_path, resize):
+        debug_flag_lv0 = False
+        debug_flag_lv1 = False
+        if __debug__ == debug_flag_lv0:
+            print 'debug start | batch.py | class tfrecord_batch | reconstruct_tfrecord_rawdata '
+
+        print 'now Reconstruct Image Data please wait a second'
+        print 'Resize {}'.format(resize)
+        reconstruct_image = []
+        # caution record_iter is generator
+        record_iter = tf.python_io.tf_record_iterator(path=tfrecord_path)
+
+        ret_img_list = []
+        ret_lab_list = []
+        ret_filename_list = []
+        for i, str_record in enumerate(record_iter):
+            msg = '\r -progress {0}'.format(i)
+            sys.stdout.write(msg)
+            sys.stdout.flush()
+            example = tf.train.Example()
+            example.ParseFromString(str_record)
+
+            height = int(example.features.feature['height'].int64_list.value[0])
+            width = int(example.features.feature['width'].int64_list.value[0])
+            raw_image = (example.features.feature['raw_image'].bytes_list.value[0])
+            label = int(example.features.feature['label'].int64_list.value[0])
+            filename = (example.features.feature['filename'].bytes_list.value[0])
+            
+            image = np.fromstring(raw_image, dtype=np.uint8)
+            image = image.reshape((height, width, -1))
+            if not resize is None:
+                image=np.asarray(Image.fromarray(image).resize(resize,Image.ANTIALIAS))
+            ret_img_list.append(image)
+            ret_lab_list.append(label)
+            ret_filename_list.append(filename)
+
+
+        ret_img = np.asarray(ret_img_list)
+        ret_lab = np.asarray(ret_lab_list)
+        if debug_flag_lv1 == True:
+            print ''
+            print 'images shape : ', np.shape(ret_img)
+            print 'labels shape : ', np.shape(ret_lab)
+            print 'length of filenames : ', len(ret_filename_list)
+        return ret_img, ret_lab, ret_filename_list
+"""
+

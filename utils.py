@@ -1,6 +1,14 @@
 import sys , math
 import matplotlib.pyplot as plt
 import random
+import numpy as np
+
+def cls2onehot(cls , depth):
+
+    labs=np.zeros([len(cls) , depth])
+    for i,c in enumerate(cls):
+        labs[i,c]=1
+    return labs
 def show_progress(step, max_iter):
     msg = '\r progress {}/{}'.format(step, max_iter)
     sys.stdout.write(msg)

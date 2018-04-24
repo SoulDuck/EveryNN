@@ -90,7 +90,7 @@ class Dataprovider():
 
 
     @classmethod
-    def make_tfrecord_rawdata(cls, tfrecord_path, img_sources, labels , resize):
+    def make_tfrecord_rawdata(cls, tfrecord_path, img_sources, labels , resize=None):
         """
         img source 에는 두가지 형태로 존재합니다 . str type 의 path 와
         numpy 형태의 list 입니다.
@@ -189,7 +189,7 @@ class Dataprovider():
         return image , label , filename
 
     @classmethod
-    def reconstruct_tfrecord_rawdata(cls,tfrecord_path , resize):
+    def reconstruct_tfrecord_rawdata(cls, tfrecord_path, resize):
         debug_flag_lv0 = False
         debug_flag_lv1 = False
         if __debug__ == debug_flag_lv0:
@@ -293,6 +293,7 @@ class Dataprovider():
                                                            target_height=resize_height,
                                                            target_width=resize_width)
         return image, label , filename
+
 
 if '__main__' == __name__:
     Dataprovider('cifar10' , 60 , (32,32))
