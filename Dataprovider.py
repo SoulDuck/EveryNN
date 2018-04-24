@@ -90,7 +90,7 @@ class Dataprovider():
 
 
     @classmethod
-    def make_tfrecord_rawdata(cls, tfrecord_path, img_sources, labels ):
+    def make_tfrecord_rawdata(cls, tfrecord_path, img_sources, labels , resize):
         """
         img source 에는 두가지 형태로 존재합니다 . str type 의 path 와
         numpy 형태의 list 입니다.
@@ -134,7 +134,8 @@ class Dataprovider():
                     filename = str(ind)
                 else:
                     raise AssertionError , "img_sources's element should path(str) or numpy"
-
+                if not resize is None:
+                    np_img=np.asarray(Image.fromarray(np_img).resize(resize, Image.ANTIALIAS))
                 raw_img = np_img.tostring() # ** Image to String **
 
                 if __debug__ == debug_flag_lv1:

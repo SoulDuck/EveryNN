@@ -11,12 +11,11 @@ train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnor
 test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_test.tfrecord'
 test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_test.tfrecord'
 """
-# Resize fundus 350 x 350
+# Resize fundus 350 x 350 - Calcium Score & Fundus
 train_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/normal_train.tfrecord'
 train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/abnormal_train.tfrecord'
 test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/normal_test.tfrecord'
 test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/abnormal_test.tfrecord'
-
 train_tfrecords= [train_normal_tfrecord]+[train_abnormal_tfrecord]*6
 test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
 
@@ -60,11 +59,8 @@ def get_test_imgs_labs(resize):
     return test_imgs/255. , test_labs
 
 if '__main__' == __name__:
-
-
     #원본 이미지를 줄인다.
     test_imgs, test_labs = get_test_imgs_labs((350, 350))
-    exit()
     resize_train_test_imgs((350,350), './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350' )
     #test_imgs , test_labs=get_test_imgs_labs((300,300))
     print np.shape(np.asarray(test_imgs))
