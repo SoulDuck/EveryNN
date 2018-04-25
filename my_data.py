@@ -26,8 +26,8 @@ train_normal_tfrecord =  '../fundus_data/cropped_original_fundus_300x300/tfrecor
 train_abnormal_1_tfrecord =  '../fundus_data/cropped_original_fundus_300x300/tfrecords/retina.tfrecord'
 train_abnormal_2_tfrecord =  '../fundus_data/kaggle/tfrecords/cropped_margin_kaggle/tfrecord/abnormal.tfrecord' #Kaggle Data
 
-test_normal_tfrecord = './fundus_data/cropped_original_fundus_300x300/tfrecords/normal_test.tfrecord'
-test_abnormal_tfrecord = './fundus_data/cropped_original_fundus_300x300/tfrecords/retina_test.tfrecord'
+test_normal_tfrecord = '../fundus_data/cropped_original_fundus_300x300/tfrecords/normal_test.tfrecord'
+test_abnormal_tfrecord = '../fundus_data/cropped_original_fundus_300x300/tfrecords/retina_test.tfrecord'
 
 
 train_tfrecords= [train_normal_tfrecord , train_abnormal_1_tfrecord ,train_abnormal_2_tfrecord ]
