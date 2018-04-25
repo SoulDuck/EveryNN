@@ -27,9 +27,10 @@ class Trainer(DNN):
     def training(self, max_iter , global_step):
         max_acc=0
         min_loss=0
-        for step in range(global_step , global_step+max_iter):
+        max_iter = global_step+max_iter
+        for step in range(global_step , max_iter ):
 
-            show_progress(step , max_iter)
+            show_progress(step , max_iter )
             learning_rate = self._lr_scheduler(step)
             #### learning rate schcedule
             """ #### Traininig  ### """
