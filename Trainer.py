@@ -28,7 +28,7 @@ class Trainer(DNN):
         max_acc=0
         min_loss=0
         for step in range(global_step , global_step+max_iter):
-            print step
+
             show_progress(step , max_iter)
             learning_rate = self._lr_scheduler(step)
             #### learning rate schcedule
@@ -44,5 +44,5 @@ class Trainer(DNN):
             _, train_acc, train_loss = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)
             # print 'train acc : {} loss : {}'.format(train_acc, train_loss)
             self.recorder.write_acc_loss('Train' , train_loss , train_acc , step)
-        return global_step
+        return step
 
