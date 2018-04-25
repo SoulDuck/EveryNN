@@ -44,9 +44,6 @@ class Trainer(DNN):
             train_feedDict = {self.x_: batch_xs, self.y_: batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
                               self.is_training: True}
             _, train_acc, train_loss = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)
-            print train_acc , train_loss
-            print batch_ys
-
             # print 'train acc : {} loss : {}'.format(train_acc, train_loss)
             self.recorder.write_acc_loss('Train' , train_loss , train_acc , step)
         return step
