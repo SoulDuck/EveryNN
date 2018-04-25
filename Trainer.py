@@ -37,8 +37,6 @@ class Trainer(DNN):
             train_fetches = [self.train_op, self.accuracy_op, self.cost_op]
             batch_xs , batch_ys=self.sess.run([self.dataprovider.batch_xs ,self.dataprovider.batch_ys])
 
-            print train_acc , train_loss
-            print batch_ys
             #utils.plot_images(batch_xs)
             if np.max(batch_xs) > 1:
                 batch_xs=batch_xs/255.
@@ -46,6 +44,9 @@ class Trainer(DNN):
             train_feedDict = {self.x_: batch_xs, self.y_: batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
                               self.is_training: True}
             _, train_acc, train_loss = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)
+            print train_acc , train_loss
+            print batch_ys
+
             # print 'train acc : {} loss : {}'.format(train_acc, train_loss)
             self.recorder.write_acc_loss('Train' , train_loss , train_acc , step)
         return step
