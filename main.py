@@ -24,8 +24,8 @@ tester=Tester(recorder)
 
 global_step=0
 for i in range(10000):
-    normal_acc, normal_loss, normal_preds = tester.validate_tfrecords(my_data.test_normal_tfrecord, None, None,)
-    abnormal_acc, abnormal_loss, abnormal_preds=tester.validate_tfrecords(my_data.test_abnormal_tfrecord , None , None )
+    normal_acc, normal_loss, normal_preds = tester.validate_tfrecords([my_data.test_normal_tfrecord], None, None,)
+    abnormal_acc, abnormal_loss, abnormal_preds=tester.validate_tfrecords([my_data.test_abnormal_tfrecord ], None , None )
     recorder.write_acc_loss('normal test' , normal_loss , normal_acc , global_step)
     recorder.write_acc_loss('abnormal test', abnormal_loss, abnormal_acc, global_step)
 
