@@ -15,7 +15,7 @@ import utils
 #print test_labs
 
 model_name = 'vgg_11'
-vgg = VGG('sgd' , False , True,   model_name, 'gap'  , 'mydata' , 60 , resize=(300,300) , num_epoch=100)
+vgg = VGG('sgd' , False , True,   model_name, 'gap'  , 'mydata' , 60 , resize=(350,350) , num_epoch=100)
 # 350x350 이미지를 random crop 해 300x300 으로 학습 합니다.
 recorder = Recorder(folder_name=model_name)
 trainer = Trainer(recorder)
