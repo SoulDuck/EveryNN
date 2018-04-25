@@ -75,50 +75,50 @@ class Tester(DNN):
 
         return mean_acc, mean_loss, pred_all
 
-    def validate_tfrecords(self , tfrecord_paths , preprocessing , resize):
+    def validate_tfrecords(self , tfrecord_path , preprocessing , resize):
         """
         Validate 이용해 데이터를 꺼내옵니다. generators 임으로 하나하나 씩 꺼내 옵니다.
         callback 함수로 aug 함수를 전달합니다
         :return:
         """
         loss_all, pred_all, labels = [], [], []
-        for tfrecord_path in tfrecord_paths:
-            record_iter = tf.python_io.tf_record_iterator(path= tfrecord_path)
-            fetches = [self.cost_op, self.pred_op]
-            for i , str_record in enumerate(record_iter):
-                msg = '\r -progress {0}'.format(i)
-                sys.stdout.write(msg)
-                sys.stdout.flush()
-                example = tf.train.Example()
-                example.ParseFromString(str_record)
-                height = int(example.features.feature['height'].int64_list.value[0])
-                width = int(example.features.feature['width'].int64_list.value[0])
-                raw_image = (example.features.feature['raw_image'].bytes_list.value[0])
-                label = int(example.features.feature['label'].int64_list.value[0])
-                filename = (example.features.feature['filename'].bytes_list.value[0])
-                # Reconstruct Image
-                image = np.fromstring(raw_image, dtype=np.uint8)
-                image = image.reshape((height, width, -1))
-                image=np.expand_dims(image, axis=0)
-                if  np.max(image) > 1:
-                    image=image/255.
 
-                # Resize
-                if not resize is None:
-                    image = np.asarray(Image.fromarray(image).resize(resize, Image.ANTIALIAS))
-                # Preprocessing
-                if not preprocessing is None:
-                    image = preprocessing(image)
-                # CLS ==> One Hot encoding
-                label=utils.cls2onehot([label] ,self.n_classes)
-                labels.extend(label)
+        record_iter = tf.python_io.tf_record_iterator(path= tfrecord_path)
+        fetches = [self.cost_op, self.pred_op]
+        for i , str_record in enumerate(record_iter):
+            msg = '\r -progress {0}'.format(i)
+            sys.stdout.write(msg)
+            sys.stdout.flush()
+            example = tf.train.Example()
+            example.ParseFromString(str_record)
+            height = int(example.features.feature['height'].int64_list.value[0])
+            width = int(example.features.feature['width'].int64_list.value[0])
+            raw_image = (example.features.feature['raw_image'].bytes_list.value[0])
+            label = int(example.features.feature['label'].int64_list.value[0])
+            filename = (example.features.feature['filename'].bytes_list.value[0])
+            # Reconstruct Image
+            image = np.fromstring(raw_image, dtype=np.uint8)
+            image = image.reshape((height, width, -1))
+            image=np.expand_dims(image, axis=0)
+            if  np.max(image) > 1:
+                image=image/255.
+
+            # Resize
+            if not resize is None:
+                image = np.asarray(Image.fromarray(image).resize(resize, Image.ANTIALIAS))
+            # Preprocessing
+            if not preprocessing is None:
+                image = preprocessing(image)
+            # CLS ==> One Hot encoding
+            label=utils.cls2onehot([label] ,self.n_classes)
+            labels.extend(label)
 
 
-                # Run Test
-                test_feedDict = {self.x_: image, self.y_: label, self.is_training: False}
-                loss , pred = self.sess.run(fetches=fetches, feed_dict=test_feedDict)
-                loss_all.append(loss)
-                pred_all.extend(pred)
+            # Run Test
+            test_feedDict = {self.x_: image, self.y_: label, self.is_training: False}
+            loss , pred = self.sess.run(fetches=fetches, feed_dict=test_feedDict)
+            loss_all.append(loss)
+            pred_all.extend(pred)
         mean_loss = np.mean(loss_all)
         mean_acc = self.get_acc(labels, pred_all)
         return mean_acc , mean_loss , pred_all
