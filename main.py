@@ -25,7 +25,8 @@ tester=Tester(recorder)
 global_step=0
 for i in range(10000):
     normal_acc, normal_loss, normal_preds=tester.validate_tfrecord(my_data.test_normal_tfrecord , None , None , global_step )
-    abnormal_acc, abnormal_loss, abnormal_preds= tester.validate_tfrecord(my_data.test_abnormal_tfrecord, None, None)
+    abnormal_acc, abnormal_loss, abnormal_preds= tester.validate_tfrecord(my_data.test_abnormal_tfrecord, None, None ,global_step )
+
     print ''
     print 'normal Acc : {} | normal Loss : {}'.format(normal_acc , normal_loss)
     print 'abnormal Acc : {} | abnormal Loss : {}'.format(abnormal_acc, abnormal_loss)
