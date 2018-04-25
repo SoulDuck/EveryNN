@@ -12,12 +12,28 @@ test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_t
 test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_test.tfrecord'
 """
 # Resize fundus 350 x 350 - Calcium Score & Fundus
+"""
 train_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/normal_train.tfrecord'
 train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/abnormal_train.tfrecord'
 test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/normal_test.tfrecord'
 test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/abnormal_test.tfrecord'
 train_tfrecords= [train_normal_tfrecord]+[train_abnormal_tfrecord]*6
 test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
+"""
+
+#Kaggle Retina + Original Retina Vs Orivinal Normal Fundus Data | Image Size [300,300]
+train_normal_tfrecord =  '../fundus_data/cropped_original_fundus_300x300/tfrecords/normal_0.tfrecord'
+train_abnormal_1_tfrecord =  '../fundus_data/cropped_original_fundus_300x300/tfrecords/retina.tfrecord'
+train_abnormal_2_tfrecord =  '../fundus_data/kaggle/tfrecords/cropped_margin_kaggle/tfrecord/abnormal.tfrecord' #Kaggle Data
+
+test_normal_tfrecord = ['./fundus_data/cropped_original_fundus_300x300/tfrecords/normal_test.tfrecord']
+test_abnormal_tfrecord = ['./fundus_data/cropped_original_fundus_300x300/tfrecords/retina_test.tfrecord']
+
+
+train_tfrecords= [train_normal_tfrecord , train_abnormal_1_tfrecord ,train_abnormal_2_tfrecord ]
+test_tfrecords = [test_abnormal_tfrecord]+[test_normal_tfrecord]
+
+
 
 def resize_train_test_imgs(resize , save_folder):
     #원본 이미지를 바로 resize 하면 잘 학습이 너무 느리다.
