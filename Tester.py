@@ -71,11 +71,11 @@ class Tester(DNN):
 
         mean_loss=np.mean(loss_all)
         mean_acc = self.get_acc(labs,  pred_all)
-        self.recorder.write_acc_loss(prefix='Test' , loss=mean_loss , acc= mean_loss , step= step)
+        self.recorder.write_acc_loss(prefix='Test' , loss=mean_loss , acc= mean_acc , step= step)
 
         return mean_acc, mean_loss, pred_all
 
-    def validate_tfrecord(self , tfrecord_path , preprocessing , resize):
+    def validate_tfrecord(self , tfrecord_path , preprocessing , resize , step):
         """
         Validate 이용해 데이터를 꺼내옵니다. generators 임으로 하나하나 씩 꺼내 옵니다.
         callback 함수로 aug 함수를 전달합니다
@@ -121,8 +121,10 @@ class Tester(DNN):
             loss , pred = self.sess.run(fetches=fetches, feed_dict=test_feedDict)
             loss_all.append(loss)
             pred_all.extend(pred)
-        loss_mean=np.mean(loss_all)
-        return self.get_acc(labels , pred_all) ,loss_mean , pred_all
+        mean_loss = np.mean(loss_all)
+        mean_acc = self.get_acc(labels, pred_all)
+        self.recorder.write_acc_loss(prefix='Test', loss=mean_loss, acc=mean_acc, step=step)
+        return mean_acc , mean_loss , pred_all
 """
     @classmethod
     def reconstruct_tfrecord_rawdata(cls, tfrecord_path, resize):
