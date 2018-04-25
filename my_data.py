@@ -31,7 +31,7 @@ test_abnormal_tfrecord = ['./fundus_data/cropped_original_fundus_300x300/tfrecor
 
 
 train_tfrecords= [train_normal_tfrecord , train_abnormal_1_tfrecord ,train_abnormal_2_tfrecord ]
-test_tfrecords = [test_abnormal_tfrecord]+[test_normal_tfrecord]
+test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
 
 
 
