@@ -28,6 +28,7 @@ class Trainer(DNN):
         max_acc=0
         min_loss=0
         for step in range(global_step , global_step+max_iter):
+            print step
             show_progress(step , max_iter)
             learning_rate = self._lr_scheduler(step)
             #### learning rate schcedule
