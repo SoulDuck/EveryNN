@@ -12,15 +12,14 @@ test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_t
 test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_test.tfrecord'
 """
 # Resize fundus 350 x 350 - Calcium Score & Fundus
-"""
-train_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/normal_train.tfrecord'
-train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/abnormal_train.tfrecord'
-test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/normal_test.tfrecord'
-test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/abnormal_test.tfrecord'
-train_tfrecords= [train_normal_tfrecord]+[train_abnormal_tfrecord]*6
-test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
-"""
 
+#항상 이런형태로 train , test tfrecords 형태로 해야한다.
+train_tfrecord= './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/train.tfrecord'
+test_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/test.tfrecord'
+
+
+
+"""
 #Kaggle Retina + Original Retina Vs Orivinal Normal Fundus Data | Image Size [300,300]
 train_normal_tfrecord =  '../fundus_data/cropped_original_fundus_300x300/tfrecords/normal_0.tfrecord'
 train_abnormal_1_tfrecord =  '../fundus_data/cropped_original_fundus_300x300/tfrecords/retina.tfrecord'
@@ -32,6 +31,7 @@ test_abnormal_tfrecord = '../fundus_data/cropped_original_fundus_300x300/tfrecor
 
 train_tfrecords= [train_normal_tfrecord , train_abnormal_1_tfrecord ,train_abnormal_2_tfrecord ]
 test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
+"""
 
 
 
@@ -81,7 +81,7 @@ if '__main__' == __name__:
     #test_imgs , test_labs=get_test_imgs_labs((300,300))
     print np.shape(np.asarray(test_imgs))
     print np.shape(test_labs)
-    images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=test_tfrecords,
+    images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=test_tfrecord,
                                                                              batch_size=60, resize=(300, 300),
                                                                              num_epoch=120)
 
