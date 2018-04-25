@@ -29,7 +29,6 @@ class Dataprovider():
         elif datatype == 'MyData' or datatype == 'mydata':
             self.train_tfrecord = my_data.train_tfrecord
             self.test_tfrecord = my_data.test_tfrecord
-            print self.test_tfrecord
             self.n_classes = 2
         self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True, #
                                                                   n_classes=self.n_classes)
@@ -226,7 +225,7 @@ class Dataprovider():
     @classmethod
     def get_shuffled_batch(cls , tfrecord_path, batch_size, resize , num_epoch , min_after_dequeue=10000):
         resize_height, resize_width = resize
-        filename_queue = tf.train.string_input_producer(tfrecord_path, num_epochs=num_epoch , name='filename_queue')
+        filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=num_epoch , name='filename_queue')
         reader = tf.TFRecordReader()
         _, serialized_example = reader.read(filename_queue)
         features = tf.parse_single_example(serialized_example,
