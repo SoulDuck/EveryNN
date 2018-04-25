@@ -15,8 +15,8 @@ class Dataprovider():
         self.num_epoch = num_epoch
         self.batch_size = batch_size
         if datatype == 'cifar_10' or datatype == 'cifar10':
-            self.train_tfrecords = cifar.train_tfrecords # list
-            self.test_tfrecords = cifar.test_tfrecords # list
+            self.train_tfrecord = cifar.train_tfrecord # str
+            self.test_tfrecord = cifar.test_tfrecord # str
             self.n_classes = 10
         elif datatype == 'cifar_100' or datatype == 'cifar100':
             raise NotImplementedError
@@ -29,7 +29,7 @@ class Dataprovider():
         elif datatype == 'MyData' or datatype == 'mydata':
             self.train_tfrecord = my_data.train_tfrecord
             self.test_tfrecord = my_data.test_tfrecord
-            print self.test_tfrecords
+            print self.test_tfrecord
             self.n_classes = 2
         self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True, #
                                                                   n_classes=self.n_classes)
