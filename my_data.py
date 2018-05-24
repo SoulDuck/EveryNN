@@ -8,10 +8,10 @@ import random
 # original Image
 
 #항상 이런형태로 train , test tfrecords 형태로 해야한다.
+
 train_tfrecord_path= './my_data/train.tfrecord'
 test_tfrecord_path = './my_data/test.tfrecord'
-cac_dir='/home/mediwhale-5/PythonProjects/fundus_data/cacs/imgSize_350/nor_0_10_abnor_300_inf/1/seoulfundus/'
-cac_dir='./my_data/tmp.tfrecord'
+
 
 def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs):
     """
@@ -89,7 +89,8 @@ def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs):
     writer.close()
 
 if '__main__' == __name__:
-    nor_imgs=np.load('/Users/seongjungkim/PycharmProjects/everyNN/my_data/normal_test.npy')
-    abnor_imgs = np.load('/Users/seongjungkim/PycharmProjects/everyNN/my_data/abnormal_test.npy')
+    cac_dir = '~/PythonProjects/fundus_data/cacs/imgSize_350/nor_0_10_abnor_300_inf/1/seoulfundus'
+    nor_imgs=np.load(os.path.join(cac_dir , 'normal_test.npy'))
+    abnor_imgs = np.load(os.path.join(cac_dir, 'abnormal_test.npy'))
     make_tfrecord(train_tfrecord_path,None , nor_imgs , abnor_imgs) # Train TF Recorder
     make_tfrecord(test_tfrecord_path, None, nor_imgs, abnor_imgs) # Test TF Recorder
