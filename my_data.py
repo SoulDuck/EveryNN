@@ -72,7 +72,7 @@ def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs):
 
         height, width = np.shape(np_img)[:2]
 
-        msg = '\r-Progress : {0}'.format(str(ind) + '/' + str(n_normal*2))
+        msg = '\r-Progress : {0}'.format(str(normal_count + abnormal_count) + '/' + str(n_normal*2))
         sys.stdout.write(msg)
         sys.stdout.flush()
         if not resize is None:
