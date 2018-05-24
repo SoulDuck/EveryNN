@@ -29,6 +29,7 @@ trainer = Trainer(recorder ,train_iter= 100)
 tester=Tester(recorder)
 test_imgs, test_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.test_tfrecord_path , None)
 test_labs=utils.cls2onehot(test_labs, 2)
+test_imgs=test_imgs/255.
 
 print np.shape(test_imgs)
 print np.shape(test_labs)
