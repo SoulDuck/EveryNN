@@ -51,6 +51,7 @@ class Tester(DNN):
         if not step is None:
             print 'Step : {}'.format(step)
         print 'Validation Acc : {} | Loss : {}'.format(self.acc, self.loss)
+        print 'Max Valication Acc : {} | Min Loss {}'.format(self.max_acc, self.min_loss)
         print ''
 
     def validate(self , imgs , labs , batch_size , step):
@@ -93,7 +94,7 @@ class Tester(DNN):
             self.recorder.saver.save(sess = DNN.sess ,save_path = self.recorder.models_path)
 
         if self.loss < self.min_loss:
-            self.loss = self.min_loss
+            self.min_loss = self.loss
 
 
 
