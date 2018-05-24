@@ -3,96 +3,93 @@ import tensorflow as tf
 import Dataprovider
 import numpy as np
 from PIL import Image
-import os
+import os ,sys
+import random
 # original Image
-"""
-train_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_train.tfrecord'
-train_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_train.tfrecord'
-test_normal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/normal_test.tfrecord'
-test_abnormal_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/abnormal_test.tfrecord'
-"""
-# Resize fundus 350 x 350 - Calcium Score & Fundus
 
 #항상 이런형태로 train , test tfrecords 형태로 해야한다.
-train_tfrecord= './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/train.tfrecord'
-test_tfrecord = './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350/test.tfrecord'
+train_tfrecord_path= './my_data/train.tfrecord'
+test_tfrecord_path = './my_data/test.tfrecord'
+cac_dir='/home/mediwhale-5/PythonProjects/fundus_data/cacs/imgSize_350/nor_0_10_abnor_300_inf/1/seoulfundus/'
+cac_dir='./my_data/tmp.tfrecord'
 
+def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs):
+    """
+    img source 에는 두가지 형태로 존재합니다 . str type 의 path 와
+    numpy 형태의 list 입니다.
+    :param tfrecord_path: e.g) './tmp.tfrecord'
+    :param img_sources: e.g)[./pic1.png , ./pic2.png] or list flatted_imgs
+    img_sources could be string , or numpy
+    :param labels: 3.g) [1,1,1,1,1,0,0,0,0]
+    :return:
+    """
+    debug_flag_lv0 = False
+    debug_flag_lv1 = False
+    if __debug__ == debug_flag_lv0:
+        print 'debug start | batch.py | class : tfrecord_batch | make_tfrecord_rawdata'
 
+    if os.path.exists(tfrecord_path):
+        print tfrecord_path + 'is exists'
+        return
 
-"""
-#Kaggle Retina + Original Retina Vs Orivinal Normal Fundus Data | Image Size [300,300]
-train_normal_tfrecord =  '../fundus_data/cropped_original_fundus_300x300/tfrecords/normal_0.tfrecord'
-train_abnormal_1_tfrecord =  '../fundus_data/cropped_original_fundus_300x300/tfrecords/retina.tfrecord'
-train_abnormal_2_tfrecord =  '../fundus_data/kaggle/cropped_margin_kaggle/tfrecord/abnormal.tfrecord' #Kaggle Data
+    def _bytes_feature(value):
+        return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
-test_normal_tfrecord = '../fundus_data/cropped_original_fundus_300x300/tfrecords/normal_test.tfrecord'
-test_abnormal_tfrecord = '../fundus_data/cropped_original_fundus_300x300/tfrecords/retina_test.tfrecord'
+    def _int64_feature(value):
+        return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
+    writer = tf.python_io.TFRecordWriter(tfrecord_path)
+    n_abnormal = len(abnormal_imgs)
+    n_normal = len(normal_imgs)
+    n_train = len(normal_imgs)*2
 
-train_tfrecords= [train_normal_tfrecord , train_abnormal_1_tfrecord ,train_abnormal_2_tfrecord ]
-test_tfrecords = [test_abnormal_tfrecord , test_normal_tfrecord]
-"""
+    NORMAL =0
+    ABNORMAL = 1
 
+    total_count =0
+    normal_count=0
+    abnormal_count =0
+    flag=True
+    while(flag):
+        label=random.randint(0, 1)
+        if label == NORMAL and normal_count < n_normal:
 
+            np_img=normal_imgs[normal_count]
+            normal_count +=1
+            ind = normal_count
 
-def resize_train_test_imgs(resize , save_folder):
-    #원본 이미지를 바로 resize 하면 잘 학습이 너무 느리다.
-    #그래서 이미지를 줄이고 그 이미지를 다시 tfrecord로 만드는 코드이다.
+        elif label == ABNORMAL and abnormal_count < n_normal:
+            np_img = abnormal_imgs[abnormal_count % n_abnormal]
+            abnormal_count +=1
+            ind = abnormal_count
 
-    tfrecord_paths = [test_normal_tfrecord, test_abnormal_tfrecord,test_normal_tfrecord, test_abnormal_tfrecord]
-    tfrecord_paths = [train_normal_tfrecord , train_abnormal_tfrecord , test_normal_tfrecord , test_abnormal_tfrecord]
-    normal_train, abnormal_train, normal_test, abnormal_test = map(
-        lambda path: Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(path, resize), tfrecord_paths)
-    print ''
-    print 'normal Train Image shape : {}'.format(np.shape(np.asarray(normal_train[1])))
-    print 'normal Train label :', str(normal_train[1][:10])+'...'
-    print 'abnormal Train label :', str(abnormal_train[1][:10])+'...'
-    print 'normal Test label :', str(normal_test[1][:10])+'...'
-    print 'abnormal Test label :', str(abnormal_test[1][:10])+'...'
-    tfrecord_paths=map(lambda path : os.path.join(save_folder , os.path.split(path)[-1]) ,  tfrecord_paths)
-    Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[0] , normal_train[0], normal_train[1])
-    Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[1], abnormal_train[0], abnormal_train[1])
-    Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[2], normal_test[0], normal_test[1])
-    Dataprovider.Dataprovider.make_tfrecord_rawdata(tfrecord_paths[3], abnormal_test[0], abnormal_test[1])
+        elif normal_count + abnormal_count == n_normal*2:
+            print normal_count
+            print abnormal_count
+            flag = False
+        else:
+            continue;
 
-def get_test_imgs_labs(resize):
-    test_labs=[]
-    normal_imgs, normal_labs, normal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
-        test_normal_tfrecord , None)
-    abnormal_imgs, abnormal_labs, abnormal_fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(
-        test_abnormal_tfrecord , None)
-    normal_imgs=map(lambda img : np.asarray(Image.fromarray(img).resize(resize , Image.ANTIALIAS)), normal_imgs)
-    abnormal_imgs = map(lambda img: np.asarray(Image.fromarray(img).resize(resize, Image.ANTIALIAS)), abnormal_imgs)
+        height, width = np.shape(np_img)[:2]
 
-    test_imgs=np.vstack([normal_imgs , abnormal_imgs])
-    test_labs.extend(normal_labs )
-    test_labs.extend(abnormal_labs)
-    print test_labs
-    test_labs=Dataprovider.Dataprovider.cls2onehot(test_labs, 2)
-    print 'Image shape : {}'.format(np.shape(test_imgs))
-    print 'Label shape : {}'.format(np.shape(test_labs))
-
-    return test_imgs/255. , test_labs
+        msg = '\r-Progress : {0}'.format(str(ind) + '/' + str(n_normal*2))
+        sys.stdout.write(msg)
+        sys.stdout.flush()
+        if not resize is None:
+            np_img = np.asarray(Image.fromarray(np_img).resize(resize, Image.ANTIALIAS))
+        raw_img = np_img.tostring()  # ** Image to String **
+        example = tf.train.Example(features=tf.train.Features(feature={
+            'height': _int64_feature(height),
+            'width': _int64_feature(width),
+            'raw_image': _bytes_feature(raw_img),
+            'label': _int64_feature(label),
+            'filename': _bytes_feature(tf.compat.as_bytes(str(ind)))
+        }))
+        writer.write(example.SerializeToString())
+    writer.close()
 
 if '__main__' == __name__:
-    #원본 이미지를 줄인다.
-    test_imgs, test_labs = get_test_imgs_labs((350, 350))
-    resize_train_test_imgs((350,350), './my_data/tfrecord_normal_0_10_abnormal_100_inf/350_350' )
-    #test_imgs , test_labs=get_test_imgs_labs((300,300))
-    print np.shape(np.asarray(test_imgs))
-    print np.shape(test_labs)
-    images, labels, filenames = Dataprovider.Dataprovider.get_shuffled_batch(tfrecord_paths=test_tfrecord,
-                                                                             batch_size=60, resize=(300, 300),
-                                                                             num_epoch=120)
-
-    sess=tf.Session()
-    init = tf.group(tf.global_variables_initializer() , tf.local_variables_initializer())
-    sess.run(init)
-    coord = tf.train.Coordinator()
-    for i in range(10):
-        tf.train.start_queue_runners(sess=sess, coord=coord)
-        imgs=sess.run(images)
-        labs = sess.run(labels)
-        print labs
-        print np.shape(imgs)
-    sess.close()
+    nor_imgs=np.load('/Users/seongjungkim/PycharmProjects/everyNN/my_data/normal_test.npy')
+    abnor_imgs = np.load('/Users/seongjungkim/PycharmProjects/everyNN/my_data/abnormal_test.npy')
+    make_tfrecord(train_tfrecord_path,None , nor_imgs , abnor_imgs) # Train TF Recorder
+    make_tfrecord(test_tfrecord_path, None, nor_imgs, abnor_imgs) # Test TF Recorder

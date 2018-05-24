@@ -5,7 +5,9 @@ import tensorflow as tf
 from tensorflow.contrib.layers.python.layers import batch_norm as batch_norm
 
 class DNN(object):
+
     #define class variable
+    #share variable
     x_=None
     y_=None
     cam_ind = None
@@ -17,6 +19,14 @@ class DNN(object):
     train_op=None
     correct_pred=None
     accuracy=None
+    global_step=None
+    n_classes=None
+    optimizer_name = None
+    init_lr=None
+    lr_decay_step=None
+    l2_weight_decay=None
+    num_epoch=None
+    max_iter = None
 
 
     def weight_variable_msra(self, shape, name):
@@ -164,7 +174,6 @@ class DNN(object):
             b = tf.Variable(tf.constant(0.1), n_classes , name='b')
         logits = tf.matmul(layer, w, name='logits') +b
         return logits
-
     """
     다른 버전의 batch norm
     @classmethod
@@ -174,7 +183,7 @@ class DNN(object):
         return output
     """
     @classmethod
-    def algorithm(cls, logits , optimizer='GradientDescentOptimizer'):
+    def algorithm(cls, logits):
         """
         :param y_conv: logits
         :param y_: labels
@@ -185,20 +194,41 @@ class DNN(object):
         print "############################################################"
         print "#                     Optimizer                            #"
         print "############################################################"
-        print 'optimizer option : GradientDescentOptimizer(default) | AdamOptimizer | moment | '
-        print 'selected optimizer : ', optimizer
+        print 'optimizer option : sgd | adam | momentum | '
+        print 'selected optimizer : ', cls.optimizer_name
         print 'logits tensor Shape : {}'.format(logits.get_shape())
         print 'Preds tensor Shape : {}'.format(cls.y_.get_shape())
-        optimizer_dic = {'GradientDescentOptimizer': tf.train.GradientDescentOptimizer,
-                         'AdamOptimizer': tf.train.AdamOptimizer}
+        print 'Learning Rate initial Value : {}'.format(cls.init_lr)
+        print 'Learning Decay: {}'.format(cls.lr_decay_step)
+        print '# max_iter : {}'.format(cls.max_iter)
+        print 'L2 Weight Decay : {} '.format(cls.l2_weight_decay)
+
+
+        optimizer_dic = {'sgd': tf.train.GradientDescentOptimizer, 'adam': tf.train.AdamOptimizer,
+                         'momentum': tf.train.MomentumOptimizer}
 
         cls.pred_op = tf.nn.softmax(logits, name='softmax')
         cls.pred_cls_op = tf.argmax(cls.pred_op, axis=1, name='pred_cls')
         cls.cost_op= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=cls.y_), name='cost')
-        cls.train_op = optimizer_dic[optimizer](cls.lr_).minimize(cls.cost_op)
+        cls.lr_op = tf.train.exponential_decay(cls.init_lr, cls.global_step, decay_steps=int(cls.max_iter / cls.lr_decay_step),
+                                               decay_rate=0.96,
+                                               staircase=False)
+
+        # L2 Loss
+        if not cls.l2_weight_decay is None:
+            l2_loss = tf.add_n([tf.nn.l2_loss(var) for var in tf.trainable_variables()], name='l2_loss')
+            total_cost=cls.cost_op + l2_loss * cls.l2_weight_decay
+        else:
+            total_cost = cls.cost_op
+        # Select Optimizer
+        if cls.optimizer_name == 'momentum':
+            cls.train_op = optimizer_dic[cls.optimizer_name](cls.lr_op, use_nesterov=True).minimize(total_cost,
+                                                                                                    name='train_op')
+        else:
+            cls.train_op = optimizer_dic[cls.optimizer_name](cls.lr_op).minimize(total_cost,name='train_op')
+        # Prediction Op , Accuracy Op
         cls.correct_pred_op = tf.equal(tf.argmax(logits, 1), tf.argmax(cls.y_, 1), name='correct_pred')
         cls.accuracy_op = tf.reduce_mean(tf.cast(cls.correct_pred_op, dtype=tf.float32), name='accuracy')
-
 
     @classmethod
     def _define_input(cls, shape):
@@ -207,6 +237,7 @@ class DNN(object):
         cls.cam_ind = tf.placeholder(tf.int32, shape=[], name='cam_ind')
         cls.lr_ = tf.placeholder(tf.float32, shape=[], name='learning_rate')
         cls.is_training = tf.placeholder(tf.bool, shape=[], name='is_training')
+        cls.global_step = tf.placeholder(tf.int32, shape=[], name='global_step')
 
     @classmethod
     def sess_start(cls):
@@ -221,14 +252,23 @@ class DNN(object):
         cls.coord.join(cls.threads)
         cls.sess.close()
     @classmethod
-    def initialize(cls, optimizer_name, use_BN, use_l2_loss, logit_type, datatype , batch_size, resize , num_epoch ):
+    def initialize(cls, optimizer_name, use_BN, l2_weight_decay ,logit_type, datatype, batch_size, resize, num_epoch,
+                   init_lr, lr_decay_step):
+
         cls.optimizer_name = optimizer_name
         cls.use_BN = use_BN
-        cls.use_l2_loss = use_l2_loss
+
         cls.logit_type = logit_type
+        cls.num_epoch = num_epoch
+
+        cls.l2_weight_decay = l2_weight_decay
+        cls.init_lr = init_lr
+        cls.lr_decay_step = lr_decay_step
+
         ## input pipeline
         # why cls? dataprovider was used in *Train , *Test class
         cls.dataprovider = Dataprovider(datatype, batch_size, resize, num_epoch)
+        cls.max_iter =cls.dataprovider.n_train * num_epoch
         cls.n_classes = cls.dataprovider.n_classes
         cls._define_input(shape=[None, cls.dataprovider.img_h, cls.dataprovider.img_w, cls.dataprovider.img_ch])#
 
