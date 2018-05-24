@@ -95,5 +95,5 @@ if '__main__' == __name__:
     nor_train_imgs=np.load(os.path.join(cac_dir , 'normal_train.npy'))
     abnor_train_imgs = np.load(os.path.join(cac_dir, 'abnormal_train.npy'))
 
-    make_tfrecord(train_tfrecord_path,None , nor_test_imgs , abnor_test_imgs) # Train TF Recorder
-    make_tfrecord(test_tfrecord_path, None, nor_train_imgs, abnor_train_imgs) # Test TF Recorder
+    make_tfrecord(test_tfrecord_path,None , nor_test_imgs , abnor_test_imgs) # Train TF Recorder
+    make_tfrecord(train_tfrecord_path, None, nor_train_imgs, abnor_train_imgs) # Test TF Recorder
