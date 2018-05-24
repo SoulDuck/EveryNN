@@ -174,6 +174,17 @@ class DNN(object):
             b = tf.Variable(tf.constant(0.1), n_classes , name='b')
         logits = tf.matmul(layer, w, name='logits') +b
         return logits
+
+    def count_trainable_params(self):
+        total_parameters = 0
+        for variable in tf.trainable_variables():
+            shape = variable.get_shape()
+            variable_parametes = 1
+            for dim in shape:
+                variable_parametes *= dim.value
+            total_parameters += variable_parametes
+        print("Total training params: %.1fM" % (total_parameters / 1e6))
+
     """
     다른 버전의 batch norm
     @classmethod

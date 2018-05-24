@@ -39,7 +39,5 @@ for i in range(1):
     tester.validate(test_imgs[:2] ,test_labs[:2] ,batch_size , trainer.train_step)
     recorder.write_acc_loss('Validation test', tester.loss, tester.acc, trainer.train_step)
     tester.show_acc_loss(trainer.train_step)
-    #abnormal_acc, abnormal_loss, abnormal_preds= tester.validate_tfrecord(my_data.test_abnormal_tfrecord, None, None ,global_step )
-    #print 'Acc : {} Loss : {}'.format((normal_acc+abnormal_acc)/2. , (normal_loss+abnormal_loss)/2.)
     global_step = trainer.training()
 resnet_v1.sess_stop()

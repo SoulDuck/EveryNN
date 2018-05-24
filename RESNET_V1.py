@@ -18,12 +18,14 @@ class RESNET_V1(DNN):
         """
         DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
                        init_lr, lr_decay_step)
+
         ### bottlenect setting  ###
         """
         building model
         """
         self.model = model
         self.build_graph()
+        self.count_trainable_params()
         DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
         DNN.sess_start()
 

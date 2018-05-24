@@ -37,7 +37,6 @@ class Recorder(DNN):
             try:
                 os.makedirs(logs_root_path)
             except Exception as e :
-                print e
                 pass;
             self.logs_path=os.path.join( logs_root_path , str(log_count))
             if not os.path.isdir(self.logs_path):
@@ -56,7 +55,6 @@ class Recorder(DNN):
             try:
                 os.makedirs(models_root_path)
             except Exception as e:
-                print e
                 pass;
             self.models_path=os.path.join(models_root_path , str(model_count))
             if not os.path.isdir(self.models_path):
