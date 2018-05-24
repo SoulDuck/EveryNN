@@ -1,3 +1,5 @@
+#-*- coding:utf-8 -*-
+
 import os
 from DNN import DNN
 import tensorflow as tf

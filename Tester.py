@@ -12,6 +12,10 @@ class Tester(DNN):
         print '#                   Tester                         #'
         print '####################################################'
         self.recorder = recorder
+        self.val_acc=0
+        self.val_loss=0
+        self.max_acc=0
+        self.min_loss=10000000
 
 
     def get_acc(self,trues, preds):
@@ -42,6 +46,13 @@ class Tester(DNN):
             cam_ind = tf.get_default_graph().get_tensor_by_name('cam_ind:0')
         except Exception as e :
             print "CAM 이 구현되어 있지 않은 모델입니다."
+    def show_acc_loss(self , step ):
+        print ''
+        if not step is None:
+            print 'Step : {}'.format(step)
+        print 'Validation Acc : {} | Loss : {}'.format(self.acc, self.loss)
+        print ''
+
     def validate(self , imgs , labs , batch_size , step):
 
         """
@@ -72,8 +83,19 @@ class Tester(DNN):
         mean_loss=np.mean(loss_all)
         mean_acc = self.get_acc(labs,  pred_all)
         self.recorder.write_acc_loss(prefix='Test' , loss=mean_loss , acc= mean_acc , step= step)
+        self.acc = mean_acc
+        self.loss = mean_loss
 
-        return mean_acc, mean_loss, pred_all
+        if self.acc > self.max_acc:
+            self.max_acc = self.acc
+            print '###### Model Saved ######'
+            print 'Max Acc : {}'.format(self.max_acc)
+            self.recorder.saver.save(sess = DNN.sess ,save_path = self.recorder.models_path)
+
+        if self.loss < self.min_loss:
+            self.loss = self.min_loss
+
+
 
     def validate_tfrecords(self , tfrecord_path , preprocessing , resize):
         """
@@ -112,7 +134,6 @@ class Tester(DNN):
             # CLS ==> One Hot encoding
             label=utils.cls2onehot([label] ,self.n_classes)
             labels.extend(label)
-
 
             # Run Test
             test_feedDict = {self.x_: image, self.y_: label, self.is_training: False}

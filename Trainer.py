@@ -4,7 +4,7 @@ import Dataprovider
 import numpy as np
 import utils
 class Trainer(DNN):
-    def __init__(self , recorder):
+    def __init__(self , recorder , train_iter):
         print '####################################################'
         print '#                   Trainer                        #'
         print '####################################################'
