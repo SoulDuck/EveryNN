@@ -82,8 +82,7 @@ class Tester(DNN):
         :return:
         """
         loss_all, pred_all, labels = [], [], []
-
-        record_iter = tf.python_io.tf_record_iterator(path= tfrecord_path)
+        record_iter = tf.python_io.tf_record_iterator(path = tfrecord_path)
         fetches = [self.cost_op, self.pred_op]
         for i , str_record in enumerate(record_iter):
             msg = '\r -progress {0}'.format(i)
@@ -96,6 +95,7 @@ class Tester(DNN):
             raw_image = (example.features.feature['raw_image'].bytes_list.value[0])
             label = int(example.features.feature['label'].int64_list.value[0])
             filename = (example.features.feature['filename'].bytes_list.value[0])
+
             # Reconstruct Image
             image = np.fromstring(raw_image, dtype=np.uint8)
             image = image.reshape((height, width, -1))

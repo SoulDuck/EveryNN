@@ -87,31 +87,32 @@ class DNN(object):
                 print 'layer shape :', layer.get_shape()
         return layer
 
-    def batch_norm_layer(self,x, train_phase, scope_bn):
-        bn_train = batch_norm(x, decay=0.999, center=True, scale=True,
-                              updates_collections=None,
-                              is_training=True,
-                              reuse=None,  # is this right?
-                              trainable=True,
-                              scope=scope_bn)
-        bn_inference = batch_norm(x, decay=0.999, center=True, scale=True,
-                                  updates_collections=None,
-                                  is_training=False,
-                                  reuse=True,  # is this right?
-                                  trainable=True,
-                                  scope=scope_bn)
-        z = tf.cond(train_phase, lambda: bn_train, lambda: bn_inference)
-        return z
+    def batch_norm_layer(self , x, phase_train, scope_bn):
+        with tf.variable_scope(scope_bn):
+            n_out = int(x.get_shape()[-1])
+            beta = tf.Variable(tf.constant(0.0, shape=[n_out]),
+                               name='beta', trainable=True)
+            gamma = tf.Variable(tf.constant(1.0, shape=[n_out]),
+                                name='gamma', trainable=True)
+            if len(x.get_shape()) == 4:  # for convolution Batch Normalization
+                print 'BN for Convolution was applied'
+                batch_mean, batch_var = tf.nn.moments(x, [0, 1, 2], name='moments')
+            if len(x.get_shape()) == 2:  # for Fully Convolution Batch Normalization:
+                print 'BN for FC was applied'
+                batch_mean, batch_var = tf.nn.moments(x, [0], name='moments')
+            ema = tf.train.ExponentialMovingAverage(decay=0.5)
 
+            def mean_var_with_update():
+                ema_apply_op = ema.apply([batch_mean, batch_var])
+                with tf.control_dependencies([ema_apply_op]):
+                    return tf.identity(batch_mean), tf.identity(batch_var)
 
-    """
-    다른 버전의 batch norm
-    @classmethod
-    def batch_norm(_input, is_training):
-        output = tf.contrib.layers.batch_norm(_input, scale=True, \
-                                              is_training=is_training, updates_collections=None)
-        return output
-    """
+            mean, var = tf.cond(phase_train,
+                                mean_var_with_update,
+                                lambda: (ema.average(batch_mean), ema.average(batch_var)))
+            normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
+        return normed
+
     def dropout(self, _input, is_training, keep_prob=0.5):
         if keep_prob < 1:
             output = tf.cond(is_training, lambda: tf.nn.dropout(_input, keep_prob), lambda: _input)

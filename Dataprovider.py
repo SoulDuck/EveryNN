@@ -15,8 +15,8 @@ class Dataprovider():
         self.num_epoch = num_epoch
         self.batch_size = batch_size
         if datatype == 'cifar_10' or datatype == 'cifar10':
-            self.train_tfrecord = cifar.train_tfrecord # str
-            self.test_tfrecord = cifar.test_tfrecord # str
+            self.train_tfrecords = cifar.train_tfrecords # list
+            self.test_tfrecords = cifar.test_tfrecords # list
             self.n_classes = 10
         elif datatype == 'cifar_100' or datatype == 'cifar100':
             raise NotImplementedError
@@ -27,17 +27,18 @@ class Dataprovider():
         elif datatype == 'PASCAL' or datatype == 'pascal':
             raise NotImplementedError
         elif datatype == 'MyData' or datatype == 'mydata':
-            self.train_tfrecord = my_data.train_tfrecord
-            self.test_tfrecord = my_data.test_tfrecord
+            self.train_tfrecords = my_data.train_tfrecords # list
+            self.test_tfrecords = my_data.test_tfrecords # list
             self.n_classes = 2
-        self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord, onehot=True, #
+        self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecords[0], onehot=True, #
                                                                   n_classes=self.n_classes)
         self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
         if not self.resize is None:
             self.img_h, self.img_w = self.resize
-        self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord, self.batch_size,
+        self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecords, self.batch_size,
                                                                               self.resize, self.num_epoch)
         self.batch_xs=self.augmentation(self.batch_xs , True , True , True )
+
         if onehot:
             self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
         print 'Data Infomation'
@@ -223,9 +224,9 @@ class Dataprovider():
             print 'length of filenames : ', len(ret_filename_list)
         return ret_img, ret_lab, ret_filename_list
     @classmethod
-    def get_shuffled_batch(cls , tfrecord_path, batch_size, resize , num_epoch , min_after_dequeue=10000):
+    def get_shuffled_batch(cls , tfrecord_paths, batch_size, resize , num_epoch , min_after_dequeue=10000):
         resize_height, resize_width = resize
-        filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=num_epoch , name='filename_queue')
+        filename_queue = tf.train.string_input_producer(tfrecord_paths, num_epochs=num_epoch , name='filename_queue')
         reader = tf.TFRecordReader()
         _, serialized_example = reader.read(filename_queue)
         features = tf.parse_single_example(serialized_example,

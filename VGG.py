@@ -1,12 +1,6 @@
 #-*- coding:utf-8 -*-
-import cnn
-import tensorflow
-import numpy as np
-import cam
-import aug
 import tensorflow as tf
 from DNN import DNN
-from Recorder import Recorder
 
 """
 def conv2d_with_bias(_input, out_feature, kernel_size, strides, padding):

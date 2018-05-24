@@ -1,6 +1,11 @@
 import os
 from DNN import DNN
 import tensorflow as tf
+# Missing Functions
+"""
+
+
+"""
 class Recorder(DNN):
     def __init__(self ,folder_name):
         print '####################################################'

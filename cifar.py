@@ -61,7 +61,6 @@ def get_images_labels(*filenames):
 
 
 def cls2onehot(cls , depth):
-
     labs=np.zeros([len(cls) , depth])
     for i,c in enumerate(cls):
         labs[i,c]=1
@@ -94,9 +93,9 @@ if '__main__' == __name__:
     test_filenames=glob.glob(os.path.join(data_dir, 'test_batch*'))
     train_imgs , train_labs = get_images_labels(*train_filenames)
     test_imgs, test_labs = get_images_labels(*test_filenames)
-    Dataprovider.Dataprovider.make_tfrecord_rawdata( train_tfrecord, train_imgs , train_labs)
-    Dataprovider.Dataprovider.make_tfrecord_rawdata(test_tfrecord, test_imgs, test_labs)
-    print np.shape(Dataprovider.Dataprovider.get_sample(train_tfrecord , True , 10)[0])
+    Dataprovider.Dataprovider.make_tfrecord_rawdata( train_tfrecords, train_imgs , train_labs)
+    Dataprovider.Dataprovider.make_tfrecord_rawdata(test_tfrecords, test_imgs, test_labs)
+    print np.shape(Dataprovider.Dataprovider.get_sample(train_tfrecords , True , 10)[0])
     print 'train imgs shape : {}'.format(np.shape(train_imgs))
     print 'train labs shape : {}'.format(np.shape(train_labs))
     print 'test imgs shape : {}'.format(np.shape(test_imgs))
