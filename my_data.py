@@ -90,10 +90,10 @@ def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs):
 
 if '__main__' == __name__:
     cac_dir = '/home/mediwhale-5/PythonProjects/fundus_data/cacs/imgSize_350/nor_0_10_abnor_300_inf/1/seoulfundus'
-    nor_test_imgs=np.load(os.path.join(cac_dir , 'normal_test_imgs.npy'))
-    abnor_test_imgs = np.load(os.path.join(cac_dir, 'abnormal_test_imgs.npy'))
-    nor_train_imgs=np.load(os.path.join(cac_dir , 'normal_train_imgs.npy'))
-    abnor_train_imgs = np.load(os.path.join(cac_dir, 'abnormal_train_imgs.npy'))
+    nor_test_imgs=np.load(os.path.join(cac_dir , 'normal_test.npy'))
+    abnor_test_imgs = np.load(os.path.join(cac_dir, 'abnormal_test.npy'))
+    nor_train_imgs=np.load(os.path.join(cac_dir , 'normal_train.npy'))
+    abnor_train_imgs = np.load(os.path.join(cac_dir, 'abnormal_train.npy'))
 
     make_tfrecord(train_tfrecord_path,None , nor_test_imgs , abnor_test_imgs) # Train TF Recorder
     make_tfrecord(test_tfrecord_path, None, nor_train_imgs, abnor_train_imgs) # Test TF Recorder
