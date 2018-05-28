@@ -162,7 +162,7 @@ class DNN(object):
         return layer
 
     def gap(self, x):
-        gap = tf.reduce_mean(x, (1, 2) , 'gap')
+        gap = tf.reduce_mean(x, (1, 2) , name='gap')
         return gap
     def fc_layer_to_clssses(self, layer , n_classes):
         #layer should be flatten
