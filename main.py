@@ -61,7 +61,8 @@ tester=Tester(recorder)
 test_imgs, test_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.test_tfrecord_path , None)
 print np.shape(test_labs)
 test_labs=utils.cls2onehot(test_labs, resnet_v1.n_classes)
-test_imgs=test_imgs/255.
+if np.max(test_imgs) > 1 :
+    test_imgs=test_imgs/255.
 
 print np.shape(test_imgs)
 print np.shape(test_labs)
