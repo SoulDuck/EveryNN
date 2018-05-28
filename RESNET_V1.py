@@ -50,9 +50,9 @@ class RESNET_V1(DNN):
             self.n_blocks_per_box = [3, 8, 36, 3]
         elif self.model == 'resnet_cifar':
             self.bottlenect_factor = 1
-            self.n_filters_per_box = [64, 128, 256, 512]
-            self.stride_per_box = [2, 2, 1, 2]
-            self.n_blocks_per_box = [2, 2, 2, 2]
+            self.n_filters_per_box = [64, 128, 256]
+            self.stride_per_box = [2, 2, 2]
+            self.n_blocks_per_box = [2, 2, 2]
 
         else:
             raise AssertionError
