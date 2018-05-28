@@ -255,7 +255,6 @@ class DNN(object):
 
     @classmethod
     def sess_start(cls):
-
         cls.sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=False))
         init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
         cls.sess.run(init)

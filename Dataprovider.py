@@ -49,7 +49,7 @@ class Dataprovider():
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord_path, self.batch_size,
                                                                                               self.resize, self.num_epoch)
             # Augmentation
-            # self.batch_xs=self.augmentation(self.batch_xs , True , True , True )
+            # self.batch_xs=self.augmentation( self.batch_xs , True , True , True)
 
             # One Hot
             if onehot:
@@ -318,7 +318,6 @@ class Dataprovider():
             image = tf.maximum(image, 0.0)
             return image
         images = tf.map_fn(lambda image:_fn(image), images)
-
         return images
 
 if '__main__' == __name__:

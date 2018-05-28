@@ -1,9 +1,10 @@
 #-*- coding:utf-8 -*-
 import tensorflow as tf
 from DNN import DNN
+from aug import aug_lv0
 class RESNET_V1(DNN):
     def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
-                       init_lr, lr_decay_step , model):
+                       init_lr, lr_decay_step , model , aug_level):
         """
         :param n_filters_per_box: [32, 64, 64, 128 , 256 ]  , type = list
         :param n_blocks_per_box:  [3, 5 , 4, 3, 2 ]  , type = list
@@ -24,6 +25,14 @@ class RESNET_V1(DNN):
         building model
         """
         self.model = model
+        self.aug_level = aug_level
+        # Augmentation
+        if self.aug_level == 'aug_lv0' :
+            self.input = aug_lv0(self.x_ , self.is_training ,(resize ,resize) )
+        else:
+            self.input = self.x_
+
+        # Build Model
         self.logits = self.build_graph()
 
         DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
@@ -62,7 +71,7 @@ class RESNET_V1(DNN):
 
         with tf.variable_scope('stem'):
             # conv filters out = 64
-            layer = self.convolution2d('conv_0', out_ch= 32,  x=self.x_, k=7, s=2)
+            layer = self.convolution2d('conv_0', out_ch= 32,  x=self.input, k=7, s=2)
             layer = self.batch_norm_layer(layer, phase_train = self.is_training, scope_bn='bn')
             #layer = self.activation(layer)
             # BN을 activation 후에 하는게 좋은지 앞에서 하는게 좋은지는 토론중이다. 난 개인적으로 weight 을 앞에다 하는게 성능을 높일거라 생각한다.
