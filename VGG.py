@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import tensorflow as tf
 from DNN import DNN
-
+from aug import aug_lv0
 """
 def conv2d_with_bias(_input, out_feature, kernel_size, strides, padding):
     in_feature = int(_input.get_shape()[-1])
@@ -43,14 +43,25 @@ def fc_layer_to_clssses(_input, n_classes):
 """
 
 class VGG(DNN):
-    def __init__(self, optimizer_name, use_bn, use_l2Loss, model, logit_type, datatype, batch_size, resize, num_epoch):
-        DNN.initialize(optimizer_name , use_bn, use_l2Loss, logit_type, datatype ,batch_size ,resize ,num_epoch)
+    def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
+                       init_lr, lr_decay_step , model , aug_level):
+        DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
+                       init_lr, lr_decay_step)
+
         self.model = model
-        self.build_graph()
-        DNN.algorithm(self.logits) # 이걸 self 로 바꾸면 안된다.
+        self.aug_level = aug_level
+        # Augmentation
+        if self.aug_level == 'aug_lv0' :
+            self.input = aug_lv0(self.x_ , self.is_training ,(resize ,resize) )
+        else:
+            self.input = self.x_
+
+        # Build Model
+        self.logits = self.build_graph()
+
+        DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
+        self.count_trainable_params()
         DNN.sess_start()
-
-
 
 
     def build_graph(self):
@@ -119,7 +130,7 @@ class VGG(DNN):
         print '###############################################################'
         print '#                            {}'.format(self.model),'                          #'
         print '###############################################################'
-        layer = DNN.x_
+        layer = self.input
         for i in range(len(conv_out_features)):
             with tf.variable_scope('conv_{}'.format(str(i))) as scope:
                 # Apply Batch Norm
