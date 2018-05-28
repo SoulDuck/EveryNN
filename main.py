@@ -53,7 +53,7 @@ vgg = VGG('sgd' , False , True,   model_name, 'gap'  , 'cifar10' , 60 , resize=(
 resize=(args.resize ,args.resize)
 model_name = 'resnet_18'
 batch_size = args.batch_size
-resnet_v1=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.data ,args.batch_size, resize,\
+resnet_v1=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, resize,\
                     args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name )
 recorder = Recorder(folder_name=args.model_name)
 trainer = Trainer(recorder ,train_iter= 100)
