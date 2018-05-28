@@ -74,4 +74,7 @@ for i in range(10):
     global_step = trainer.training()
     if i ==0 :
         utils.plot_images(trainer.batch_xs)
+        print np.shape(trainer.batch_xs)
+        print trainer.batch_ys
+
 resnet_v1.sess_stop()
