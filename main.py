@@ -77,5 +77,6 @@ for i in range(10):
         print np.max(trainer.batch_xs)
         print np.shape(trainer.batch_xs)
         print trainer.batch_ys
+        print np.save('tmp_batch.npy' , trainer.batch_xs)
 
 resnet_v1.sess_stop()
