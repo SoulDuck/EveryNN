@@ -26,7 +26,6 @@ parser.add_argument('--resize' , type=int)
 parser.add_argument('--opt' , type=str)
 parser.add_argument('--init_lr' , type=float)
 parser.add_argument('--lr_decay_step' ,type=int)
-parser.add_argument('')
 
 args=parser.parse_args()
 print 'batch_size : ' , args.batch_size
