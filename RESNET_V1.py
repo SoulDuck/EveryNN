@@ -63,7 +63,7 @@ class RESNET_V1(DNN):
         with tf.variable_scope('stem'):
             # conv filters out = 64
             layer = self.convolution2d('conv_0', out_ch= 32,  x=self.x_, k=7, s=2)
-            layer = self.batch_norm_layer(layer, phase_train = self.is_training, scope_bn='bn_0')
+            layer = self.batch_norm_layer(layer, phase_train = self.is_training, scope_bn='bn')
             #layer = self.activation(layer)
             # BN을 activation 후에 하는게 좋은지 앞에서 하는게 좋은지는 토론중이다. 난 개인적으로 weight 을 앞에다 하는게 성능을 높일거라 생각한다.
         for box_idx in range(len(self.n_filters_per_box)):
