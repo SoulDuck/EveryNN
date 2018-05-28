@@ -66,8 +66,8 @@ if np.max(test_imgs) > 1 :
 print np.shape(test_imgs)
 print np.shape(test_labs)
 print np.shape(fnames)
-
-for i in range(10):
+max_step=int(resnet_v1.max_iter*args.num_epoch/args.batch_size)
+for i in range(max_step):
     #val_acc, val_loss, val_preds = tester.validate_tfrecords(my_data.test_tfrecord_path, None, None)
     tester.validate(test_imgs[:] ,test_labs[:] ,args.batch_size , trainer.train_step)
     tester.show_acc_loss(trainer.train_step)
