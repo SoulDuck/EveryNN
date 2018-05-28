@@ -70,7 +70,6 @@ print np.shape(fnames)
 for i in range(10):
     #val_acc, val_loss, val_preds = tester.validate_tfrecords(my_data.test_tfrecord_path, None, None)
     tester.validate(test_imgs[:] ,test_labs[:] ,batch_size , trainer.train_step)
-    recorder.write_acc_loss('Validation test', tester.loss, tester.acc, trainer.train_step)
     tester.show_acc_loss(trainer.train_step)
     global_step = trainer.training()
 resnet_v1.sess_stop()
