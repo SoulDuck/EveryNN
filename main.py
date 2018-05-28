@@ -17,7 +17,8 @@ parser=argparse.ArgumentParser()
 parser.add_argument('--batch_size', type=int)
 parser.add_argument('--datatype', type=str)
 parser.add_argument('--model_name', type=str)
-parser.add_argument('--use_bn', )
+parser.add_argument('--BN',dest='use_bn', action='store_true')
+parser.add_argument('--no_BN',dest='use_bn', action='store_false')
 parser.add_argument('--l2_weight_decay', type=float)
 parser.add_argument('--logit_type', type=str)
 parser.add_argument('--num_epoch' , type=int)
@@ -55,7 +56,7 @@ model_name = 'resnet_18'
 batch_size = args.batch_size
 resnet_v1=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.data ,args.batch_size, resize,\
                     args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name )
-recorder = Recorder(folder_name=model_name)
+recorder = Recorder(folder_name=args.model_name)
 trainer = Trainer(recorder ,train_iter= 100)
 tester=Tester(recorder)
 
