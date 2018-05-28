@@ -53,6 +53,7 @@ def aug_lv0(image_ , is_training , image_size):
 
     def aug_with_train(image, image_size):
         ch=int(image.get_shape()[-1])
+        print ch
 
         pad_size = int(image_size * 0.1)
         image = tf.image.resize_image_with_crop_or_pad(image, image_size+pad_size , image_size+pad_size )
