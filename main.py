@@ -28,16 +28,17 @@ parser.add_argument('--lr_decay_step' ,type=int)
 parser.add_argument('')
 
 args=parser.parse_args()
-print args.batch_size
-print args.datatype
-print args.model_name
-print args.use_bn
-print args.l2_weight_decay
-print args.logit_type
-print args.data
-print args.num_epoch
-print args.resize
-print args.opt
+print 'batch_size : ' , args.batch_size
+print 'datatype : ' , args.datatype
+print 'model_name : ,',args.model_name
+print 'use bn : , ',args.use_bn
+print 'L2 weight Decay : ' , args.l2_weight_decay
+print 'Logit Type : ' , args.logit_type
+print 'Num Epoch  : ', args.num_epoch
+print 'Resize :' , args.resize
+print 'Optimzer : ',args.opt
+print 'Inital Learning Rate : ',args.init_lr
+print 'Learning Rage Decay Step : ' , args.lr_decay_step
 
 
 
@@ -53,7 +54,7 @@ resize=(args.resize ,args.resize)
 model_name = 'resnet_18'
 batch_size = args.batch_size
 resnet_v1=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.data ,args.batch_size, resize,\
-                    args.num_epoch ,args.init_lr, args.lr_decay_step, args.model )
+                    args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name )
 recorder = Recorder(folder_name=model_name)
 trainer = Trainer(recorder ,train_iter= 100)
 tester=Tester(recorder)
