@@ -64,8 +64,6 @@ test_labs=utils.cls2onehot(test_labs, resnet_v1.n_classes)
 if np.max(test_imgs) > 1 :
     test_imgs=test_imgs/255.
 
-
-
 print np.shape(test_imgs)
 print np.shape(test_labs)
 print np.shape(fnames)
