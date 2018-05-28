@@ -35,11 +35,9 @@ class Dataprovider():
             self.n_classes = 2
 
         assert self.n_train is not None and self.n_test is not None , ' ** n_train : {} \t n_test : {} **'.format(self.n_train ,self.n_test)
-
         self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord_path, onehot=True,
                                                                   n_classes=self.n_classes)
         self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
-
         # Resize
         if not self.resize is None:
             self.img_h, self.img_w = self.resize
@@ -56,9 +54,6 @@ class Dataprovider():
         print 'Image Height  : {} Label Width : {} Image channel : {} '.format(self.img_h , self.img_w , self.img_ch)
         print 'N classes : {}'.format(self.n_classes)
         print 'N epoch : {}'.format(self.num_epoch)
-
-
-
 
     @classmethod
     def next_batch(cls, batch_size , train_imgs , train_labs , train_fnames):
@@ -321,10 +316,6 @@ class Dataprovider():
         images = tf.map_fn(lambda image:_fn(image), images)
 
         return images
-
-
-
-
 
 if '__main__' == __name__:
     Dataprovider('cifar10' , 60 , (32,32))
