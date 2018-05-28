@@ -162,7 +162,7 @@ class DNN(object):
         return layer
 
     def gap(self, x):
-        gap = tf.reduce_mean(x, (1, 2))
+        gap = tf.reduce_mean(x, (1, 2) , 'gap')
         return gap
     def fc_layer_to_clssses(self, layer , n_classes):
         #layer should be flatten
@@ -172,7 +172,7 @@ class DNN(object):
             w = tf.get_variable('w', shape=[in_ch, n_classes], initializer=tf.random_normal_initializer(0, 0.01),
                                     trainable=True)
             b = tf.Variable(tf.constant(0.1), n_classes , name='b')
-        logits = tf.matmul(layer, w, name='logits') +b
+            logits = tf.matmul(layer, w, name='matmul') +b
         return logits
 
     def count_trainable_params(self):
@@ -253,7 +253,7 @@ class DNN(object):
     @classmethod
     def sess_start(cls):
 
-        cls.sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=False, log_device_placement=True))
+        cls.sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=False))
         init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
         cls.sess.run(init)
         cls.coord = tf.train.Coordinator()

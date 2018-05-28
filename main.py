@@ -21,7 +21,7 @@ vgg = VGG('sgd' , False , True,   model_name, 'gap'  , 'cifar10' , 60 , resize=(
 """
 
 model_name = 'resnet_18'
-batch_size = 60
+batch_size = 30
 resnet_v1=RESNET_V1('adam' , True , True , logit_type='gap' , datatype= 'my_data' ,batch_size=batch_size , resize=(350,350), num_epoch=10\
           ,init_lr = 0.0001, lr_decay_step= 100 ,model = model_name)
 recorder = Recorder(folder_name=model_name)
