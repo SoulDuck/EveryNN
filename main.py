@@ -10,6 +10,20 @@ import tensorflow as tf
 import cifar
 import my_data
 import utils
+import argparse
+
+
+parser=argparse.ArgumentParser()
+parser.add_argument('--batch_size', type=int)
+parser.add_argument('--model_name', type=str)
+parser.add_argument('--use_bn', )
+parser.add_argument('--l2_weight_decay', type=float)
+parser.add_argument('--logit_type', type=str)
+parser.add_argument('--datatype' , type=str)
+parser.add_argument('--num_epoch' , type=int)
+parser.add_argument('--resize' , type=int)
+
+
 
 #test_imgs , test_labs =my_data.get_test_imgs_labs((350,350))
 
