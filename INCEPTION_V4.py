@@ -13,7 +13,7 @@ class INCEPTION_V4(DNN):
         self.aug_level = aug_level
         # Augmentation
         if self.aug_level == 'aug_lv0' :
-            self.input = aug_lv0(self.x_ , self.is_training ,(resize ,resize) )
+            self.input = aug_lv0(self.x_ , self.is_training ,resize )
         else:
             self.input = self.x_
 
