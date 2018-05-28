@@ -1,20 +1,35 @@
 #-*- coding:utf-8 -*-
 from DNN import DNN
 import tensorflow as tf
+from aug import aug_lv0
 #ef convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
 class INCEPTION_V4(DNN):
-    def __init__(self, optimizer_name, use_bn, use_l2Loss, model, logit_type, datatype, batch_size, resize, num_epoch):
-        DNN.initialize(optimizer_name, use_bn, use_l2Loss, logit_type, datatype, batch_size, resize, num_epoch)
+    def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
+                       init_lr, lr_decay_step , model , aug_level):
+        DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
+                       init_lr, lr_decay_step)
+
         self.model = model
-        self.build_graph()
+        self.aug_level = aug_level
+        # Augmentation
+        if self.aug_level == 'aug_lv0' :
+            self.input = aug_lv0(self.x_ , self.is_training ,(resize ,resize) )
+        else:
+            self.input = self.x_
+
+        # Build Model
+        self.logits = self.build_graph()
+
         DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
+        self.count_trainable_params()
         DNN.sess_start()
+
 
     def build_graph(self):
         if self.model == 'A':
-            self.top_conv = self.structure_A(self.x_)
+            self.top_conv = self.structure_A(self.input)
         elif self.model == 'B':
-            self.top_conv = self.structure_B(self.x_)
+            self.top_conv = self.structure_B(self.input)
         else:
             raise AssertionError
 
