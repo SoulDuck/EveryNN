@@ -36,12 +36,13 @@ class Trainer(DNN):
             #### learning rate schcedule
             """ #### Traininig  ### """
             train_fetches = [self.train_op, self.accuracy_op, self.cost_op , self.lr_op]
-            batch_xs , batch_ys=self.sess.run([self.dataprovider.batch_xs ,self.dataprovider.batch_ys])
-            #utils.plot_images(batch_xs)
-            if np.max(batch_xs) > 1:
-                batch_xs=batch_xs/255.
+            self.batch_xs , self.batch_ys=self.sess.run([self.dataprovider.batch_xs ,self.dataprovider.batch_ys])
 
-            train_feedDict = {self.x_: batch_xs, self.y_: batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
+            #utils.plot_images(batch_xs)
+            if np.max(self.batch_xs) > 1:
+                self.batch_xs=self.batch_xs/255.
+
+            train_feedDict = {self.x_: self.batch_xs, self.y_: self.batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
                               self.is_training: True , self.global_step : step}
 
             _, self.train_acc, self.train_loss  , self.learning_rate = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)
@@ -49,4 +50,3 @@ class Trainer(DNN):
             self.recorder.write_acc_loss('Train' , self.train_loss , self.train_acc , step)
             self.recorder.write_lr(self.learning_rate , step)
             self.train_step = step
-        utils.plot_images(batch_xs)

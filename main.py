@@ -72,4 +72,6 @@ for i in range(10):
     tester.validate(test_imgs[:] ,test_labs[:] ,args.batch_size , trainer.train_step)
     tester.show_acc_loss(trainer.train_step)
     global_step = trainer.training()
+    if i ==0 :
+        utils.plot_images(trainer.batch_xs)
 resnet_v1.sess_stop()
