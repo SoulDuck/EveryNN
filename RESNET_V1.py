@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import tensorflow as tf
 from DNN import DNN
-from aug import aug_lv0
+from aug import aug_lv0 , apply_aug
 class RESNET_V1(DNN):
     def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
                        init_lr, lr_decay_step , model , aug_level):
@@ -28,7 +28,7 @@ class RESNET_V1(DNN):
         self.aug_level = aug_level
         # Augmentation
         if self.aug_level == 'aug_lv0' :
-            self.input = aug_lv0(self.x_ , self.is_training ,resize )
+            self.input = apply_aug(self.x_ ,  aug_lv0 , self.is_training ,resize )
         else:
             self.input = self.x_
 
