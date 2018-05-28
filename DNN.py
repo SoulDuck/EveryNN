@@ -168,11 +168,12 @@ class DNN(object):
         #layer should be flatten
         assert len(layer.get_shape()) ==2
         in_ch=int(layer.get_shape()[-1])
-        with tf.variable_scope('logits') as scope:
+        with tf.variable_scope('final') as scope:
             w = tf.get_variable('w', shape=[in_ch, n_classes], initializer=tf.random_normal_initializer(0, 0.01),
                                     trainable=True)
             b = tf.Variable(tf.constant(0.1), n_classes , name='b')
             logits = tf.matmul(layer, w, name='matmul') +b
+        logits=tf.identity(logits , name='logits')
         return logits
 
     def count_trainable_params(self):

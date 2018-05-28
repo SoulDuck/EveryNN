@@ -27,6 +27,7 @@ resnet_v1=RESNET_V1('adam' , True , True , logit_type='gap' , datatype= 'my_data
 recorder = Recorder(folder_name=model_name)
 trainer = Trainer(recorder ,train_iter= 100)
 tester=Tester(recorder)
+
 test_imgs, test_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.test_tfrecord_path , None)
 test_labs=utils.cls2onehot(test_labs, 2)
 test_imgs=test_imgs/255.

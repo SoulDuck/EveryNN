@@ -48,5 +48,5 @@ class Trainer(DNN):
             _, self.train_acc, self.train_loss = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)
             # print 'train acc : {} loss : {}'.format(train_acc, train_loss)
             self.recorder.write_acc_loss('Train' , self.train_loss , self.train_acc , self.train_step)
-        self.train_step = step
+            self.train_step = step
 
