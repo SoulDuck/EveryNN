@@ -8,7 +8,7 @@ class Trainer(DNN):
         print '####################################################'
         print '#                   Trainer                        #'
         print '####################################################'
-        self.train_iter = 100
+        self.train_iter = train_iter
         self.train_step = 0
         self.recorder = recorder
         self.train_acc=0
