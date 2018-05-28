@@ -47,7 +47,7 @@ class Dataprovider():
         with tf.device('/cpu:0'):
             # tf.image.resize_image_with_crop_or_pad is used in 'get_shuffled_batch'
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord_path, self.batch_size,
-                                                                                              self.resize, self.num_epoch)
+                                                                                  (self.img_h, self.img_w) , self.num_epoch)
             # Augmentation
             # self.batch_xs=self.augmentation(self.batch_xs , True , True , True )
 
