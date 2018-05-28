@@ -24,9 +24,10 @@ class RESNET_V1(DNN):
         building model
         """
         self.model = model
-        self.build_graph()
-        self.count_trainable_params()
+        self.logits = self.build_graph()
+
         DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
+        self.count_trainable_params()
         DNN.sess_start()
 
     def build_graph(self):
@@ -84,8 +85,8 @@ class RESNET_V1(DNN):
         else:
             print 'only ["fc", "gap"]'
             raise AssertionError
-        self.logits = self.fc_layer_to_clssses(layer, self.n_classes)
-        return self.logits
+        logits = self.fc_layer_to_clssses(layer, self.n_classes)
+        return logits
 
     def _box(self, x,n_block , block_out_ch , block_stride):
         """
