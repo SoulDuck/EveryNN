@@ -228,9 +228,11 @@ class DNN(object):
 
         # L2 Loss
         if not cls.l2_weight_decay is 0:
+            print 'L2 Loss is Applied'
             l2_loss = tf.add_n([tf.nn.l2_loss(var) for var in tf.trainable_variables()], name='l2_loss')
             total_cost=cls.cost_op + l2_loss * cls.l2_weight_decay
         else:
+            print 'L2 Loss is Not Applied'
             total_cost = cls.cost_op
         # Select Optimizer
         if cls.optimizer_name == 'momentum':
