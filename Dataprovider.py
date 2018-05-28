@@ -43,13 +43,13 @@ class Dataprovider():
         self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
         # Resize
         if not self.resize is None:
-            self.img_h, self.img_w = self.resize
+            self.img_h, self.img_w = self.resize  , self.resize
         with tf.device('/cpu:0'):
             # tf.image.resize_image_with_crop_or_pad is used in 'get_shuffled_batch'
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord_path, self.batch_size,
                                                                                               self.resize, self.num_epoch)
             # Augmentation
-            # self.batch_xs=self.augmentation( self.batch_xs , True , True , True)
+            # self.batch_xs=self.augmentation(self.batch_xs , True , True , True )
 
             # One Hot
             if onehot:

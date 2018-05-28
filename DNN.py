@@ -255,6 +255,7 @@ class DNN(object):
 
     @classmethod
     def sess_start(cls):
+
         cls.sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=False))
         init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
         cls.sess.run(init)
@@ -278,7 +279,6 @@ class DNN(object):
         cls.l2_weight_decay = l2_weight_decay
         cls.init_lr = init_lr
         cls.lr_decay_step = lr_decay_step
-
         ## input pipeline
         # why cls? dataprovider was used in *Train , *Test class
         cls.dataprovider = Dataprovider(datatype, batch_size, resize, num_epoch)
