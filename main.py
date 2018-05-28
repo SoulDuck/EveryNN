@@ -15,13 +15,29 @@ import argparse
 
 parser=argparse.ArgumentParser()
 parser.add_argument('--batch_size', type=int)
+parser.add_argument('--datatype', type=str)
 parser.add_argument('--model_name', type=str)
 parser.add_argument('--use_bn', )
 parser.add_argument('--l2_weight_decay', type=float)
 parser.add_argument('--logit_type', type=str)
-parser.add_argument('--datatype' , type=str)
 parser.add_argument('--num_epoch' , type=int)
 parser.add_argument('--resize' , type=int)
+parser.add_argument('--opt' , type=str)
+parser.add_argument('--init_lr' , type=float)
+parser.add_argument('--lr_decay_step' ,type=int)
+parser.add_argument('')
+
+args=parser.parse_args()
+print args.batch_size
+print args.datatype
+print args.model_name
+print args.use_bn
+print args.l2_weight_decay
+print args.logit_type
+print args.data
+print args.num_epoch
+print args.resize
+print args.opt
 
 
 
@@ -33,11 +49,11 @@ parser.add_argument('--resize' , type=int)
 model_name = 'vgg_11'
 vgg = VGG('sgd' , False , True,   model_name, 'gap'  , 'cifar10' , 60 , resize=(350,350) , num_epoch=100)
 """
-
+resize=(args.resize ,args.resize)
 model_name = 'resnet_18'
-batch_size = 30
-resnet_v1=RESNET_V1('adam' , True , True , logit_type='gap' , datatype= 'my_data' ,batch_size=batch_size , resize=(350,350), num_epoch=10\
-          ,init_lr = 0.0001, lr_decay_step= 100 ,model = model_name)
+batch_size = args.batch_size
+resnet_v1=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.data ,args.batch_size, resize,\
+                    args.num_epoch ,args.init_lr, args.lr_decay_step, args.model )
 recorder = Recorder(folder_name=model_name)
 trainer = Trainer(recorder ,train_iter= 100)
 tester=Tester(recorder)
