@@ -8,6 +8,7 @@ import cifar , my_data
 import sys
 from PIL import Image
 class Dataprovider():
+
     def __init__(self, datatype , batch_size ,resize , num_epoch=10 , onehot = True):
         self.resize = resize
         self.num_epoch = num_epoch
@@ -42,15 +43,15 @@ class Dataprovider():
         # Resize
         if not self.resize is None:
             self.img_h, self.img_w = self.resize
-
-        # tf.image.resize_image_with_crop_or_pad is used in 'get_shuffled_batch'
-        self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord_path, self.batch_size,
-                                                                                      self.resize, self.num_epoch)
-        # Augmentation
-        self.batch_xs=self.augmentation(self.batch_xs , True , True , True )
-        # One Hot
-        if onehot:
-            self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
+        with tf.device('/cpu:0'):
+            # tf.image.resize_image_with_crop_or_pad is used in 'get_shuffled_batch'
+            self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord_path, self.batch_size,
+                                                                                              self.resize, self.num_epoch)
+            # Augmentation
+            self.batch_xs=self.augmentation(self.batch_xs , True , True , True )
+            # One Hot
+            if onehot:
+                self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
         print 'Data Infomation'
         print 'Image Height  : {} Label Width : {} Image channel : {} '.format(self.img_h , self.img_w , self.img_ch)
         print 'N classes : {}'.format(self.n_classes)
