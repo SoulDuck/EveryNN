@@ -57,9 +57,7 @@ def aug_lv0(image_ , is_training , image_size):
 
         pad_size = int(image_size * 0.1)
         image = tf.image.resize_image_with_crop_or_pad(image, image_size+pad_size , image_size+pad_size )
-        print image
         image = tf.random_crop(image, [image_size, image_size, ch])
-        print image
         image = tf.image.random_flip_left_right(image)
         image = tf.image.random_flip_up_down(image)
 
@@ -82,6 +80,9 @@ def aug_lv0(image_ , is_training , image_size):
 
     return image
 
+def apply_aug(images, aug_fn , is_training , resize ):
+    images=tf.map_fn(lambda image : aug_fn(image , is_training , resize  ) ,  images )
+    return images
 
 
 
