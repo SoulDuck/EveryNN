@@ -256,7 +256,7 @@ class Dataprovider():
         image = tf.image.resize_image_with_crop_or_pad(image=image, target_height=resize_height,
                                                        target_width=resize_width)
         image=tf.cast(image , dtype=tf.float32)
-        images, labels, fnames = tf.train.shuffle_batch([image, label, filename], batch_size=batch_size, capacity=15000,
+        images, labels, fnames = tf.train.shuffle_batch([image, label, filename], batch_size=batch_size, capacity=10000,
                                                         num_threads=1,
                                                         min_after_dequeue=min_after_dequeue)
         return images, labels , fnames
