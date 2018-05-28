@@ -50,6 +50,7 @@ class Trainer(DNN):
 
             _, self.train_acc, self.train_loss  , self.learning_rate = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)
             # print 'train acc : {} loss : {}'.format(train_acc, train_loss)
-            self.recorder.write_acc_loss('Train' , self.train_loss , self.train_acc , self.train_step)
-            self.recorder.write_lr(self.learning_rate , self.train_step)
+            self.recorder.write_acc_loss('Train' , self.train_loss , self.train_acc , step)
+            self.recorder.write_lr(self.learning_rate , step)
             self.train_step = step
+        utils.plot_images(batch_xs)

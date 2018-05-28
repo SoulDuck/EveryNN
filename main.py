@@ -55,7 +55,7 @@ model_name = 'resnet_18'
 resnet_v1=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, resize,\
                     args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name )
 recorder = Recorder(folder_name=args.model_name)
-trainer = Trainer(recorder ,train_iter= 100)
+trainer = Trainer(recorder ,train_iter = 100)
 tester=Tester(recorder)
 
 test_imgs, test_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.test_tfrecord_path , None)
