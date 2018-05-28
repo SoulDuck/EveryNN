@@ -16,8 +16,11 @@ class Dataprovider():
         n_train=None
         n_test=None
         if datatype == 'cifar_10' or datatype == 'cifar10':
-            self.train_tfrecords = cifar.train_tfrecords # list
-            self.test_tfrecords = cifar.test_tfrecords # list
+            self.train_tfrecord_path = cifar.train_tfrecords # list
+            self.test_tfrecord_path = cifar.test_tfrecords # list
+            self.n_train =  50000 # DNN 에서 max iter 을 추정하는데 사용됩니다
+            self.n_test = 10000
+
             self.n_classes = 10
         elif datatype == 'cifar_100' or datatype == 'cifar100':
             raise NotImplementedError
