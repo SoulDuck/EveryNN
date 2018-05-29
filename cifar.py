@@ -84,7 +84,7 @@ def get_cifar_images_labels(onehot=True , data_dir =data_dir):
 
 
 if '__main__' == __name__:
-    download_data_url(url , './cifar_10') # Download Dataset
+    #download_data_url(url , './cifar_10') # Download Dataset
     train_filenames=glob.glob(os.path.join(data_dir,'data_batch*'))
     test_filenames=glob.glob(os.path.join(data_dir, 'test_batch*'))
     test_imgs, test_labs = get_images_labels(*test_filenames)

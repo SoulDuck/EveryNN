@@ -11,6 +11,6 @@ function to add
 + Transfer Model
 + Fine Tuning
 + L1 Loss
-
++ 왜 utils.plot_images 에서 255 로 나누지 않으면 보이지 않는거지?
 
 

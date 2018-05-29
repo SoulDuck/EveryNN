@@ -28,7 +28,7 @@ class Trainer(DNN):
             learning_rate = 0.00001
             ####
         return learning_rate
-    def training(self , aug_list):
+    def training(self ):
 
         max_iter = self.train_step+self.train_iter
         for step in range(self.train_step, max_iter):
@@ -44,7 +44,6 @@ class Trainer(DNN):
             #utils.plot_images(batch_xs)
             if np.max(self.batch_xs) > 1:
                 self.batch_xs=self.batch_xs/255.
-
             train_feedDict = {self.x_: self.batch_xs, self.y_: self.batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
                               self.is_training: True , self.global_step : step}
 

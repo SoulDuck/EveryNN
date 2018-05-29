@@ -67,5 +67,5 @@ for i in range(max_step):
     #val_acc, val_loss, val_preds = tester.validate_tfrecords(my_data.test_tfrecord_path, None, None)
     tester.validate(test_imgs[:] ,test_labs[:] ,args.batch_size , trainer.train_step)
     tester.show_acc_loss(trainer.train_step)
-    global_step = trainer.training(args.aug_list)
+    global_step = trainer.training()
 resnet_v1.sess_stop()
