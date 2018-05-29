@@ -49,16 +49,15 @@ def histo_equalized(img):
 
 
 
-def aug_lv0(image_ , is_training , image_size):
+def aug_lv0(image_ , is_training , crop_h , crop_w):
 
-    def aug_with_train(image, image_size):
-        ch=int(image.get_shape()[-1])
+    def aug_with_train(image, crop_h , crop_w):
+        img_h,img_w,ch=map(int , image.get_shape()[1:])
 
-
-        pad_w = int(image_size[0] * 0.1)
-        pad_h = int(image_size[1] * 0.1)
-        image = tf.image.resize_image_with_crop_or_pad(image, image_size+pad_h , image_size+pad_w )
-        image = tf.random_crop(image, [image_size, image_size, ch])
+        pad_w = int(img_h * 0.1)
+        pad_h = int(img_w * 0.1)
+        image = tf.image.resize_image_with_crop_or_pad(image, img_h+pad_h , img_w+pad_w )
+        image = tf.random_crop(image, [crop_h, crop_w, ch])
         image = tf.image.random_flip_left_right(image)
         image = tf.image.random_flip_up_down(image)
 
@@ -69,20 +68,20 @@ def aug_lv0(image_ , is_training , image_size):
         image = tf.image.per_image_standardization(image)
         return image
 
-    def aug_with_test(image , image_size):
+    def aug_with_test(image , crop_h , crop_w):
 
-        image = tf.image.resize_image_with_crop_or_pad(image, image_size, image_size)
+        image = tf.image.resize_image_with_crop_or_pad(image, crop_h, crop_w)
         image = tf.image.per_image_standardization(image)
         return image
 
-    image=tf.cond(is_training , lambda : aug_with_train(image_ , image_size=image_size)  , \
-                  lambda  : aug_with_test(image_ , image_size=image_size) )
+    image=tf.cond(is_training , lambda : aug_with_train(image_ , crop_h, crop_w )  , \
+                  lambda  : aug_with_test(image_ , crop_h, crop_w ))
 
 
     return image
 
-def apply_aug(images, aug_fn , is_training , cropped_size ):
-    images=tf.map_fn(lambda image : aug_fn(image , is_training , (cropped_size , cropped_size )) ,  images )
+def apply_aug(images, aug_fn , is_training , crop_h , crop_w ):
+    images=tf.map_fn(lambda image : aug_fn(image , is_training , crop_h , crop_w) ,  images )
     return images
 
 
