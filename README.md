@@ -14,3 +14,15 @@ function to add
 + 왜 utils.plot_images 에서 255 로 나누지 않으면 보이지 않는거지?
 
 
+###
+Opinion
+
+
+
+
+### should to fix
++ augmentation 을 input pipe line 에 넣어서 (py_func 사용 ) 한번에 처리하는 코드
++ validation 의 generation 확인하는 법
+
+
+

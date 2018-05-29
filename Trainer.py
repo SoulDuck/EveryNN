@@ -4,6 +4,7 @@ import Dataprovider
 import numpy as np
 import utils
 from aug import random_rotate_90
+
 class Trainer(DNN):
     def __init__(self , recorder , train_iter):
         print '####################################################'
@@ -40,11 +41,11 @@ class Trainer(DNN):
             self.batch_xs , self.batch_ys=self.sess.run([self.dataprovider.batch_xs ,self.dataprovider.batch_ys])
             if 'aug_rotate' in aug_list:
                 self.batch_xs=random_rotate_90(self.batch_xs)
+
             if np.max(self.batch_xs) > 1:
                 self.batch_xs=self.batch_xs/255.
             train_feedDict = {self.x_: self.batch_xs, self.y_: self.batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
                               self.is_training: True , self.global_step : step}
-
             _, self.train_acc, self.train_loss  , self.learning_rate = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)
             # print 'train acc : {} loss : {}'.format(train_acc, train_loss)
             self.recorder.write_acc_loss('Train' , self.train_loss , self.train_acc , step)

@@ -9,6 +9,8 @@ import numpy as np
 import cv2
 import utils
 import time
+import imgaug as ia
+from imgaug import augmenters as iaa
 def clahe_equalized(img):
     if len(img.shape) == 2:
         img=np.reshape(img, list(np.shape(img)) +[1])

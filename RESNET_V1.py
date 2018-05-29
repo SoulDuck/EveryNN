@@ -30,15 +30,15 @@ class RESNET_V1(DNN):
         self.input = self.x_
         #  The augmentation order must be fellowed aug_rotate => aug_lv0
         if 'aug_lv0' in self.aug_list :
-            self.input = apply_aug_lv0(self.input,  aug_lv0 ,  self.is_training , cropped_size , cropped_size )
+            print 'Augmentation Level 0 is applied'
+            self.input = apply_aug_lv0(self.input,  aug_lv0 ,  self.is_training , cropped_size , cropped_size)
         #if 'aug_rotate' in self.aug_list:
         #    self.input=tf_random_rotate_90(self.input)
         # Build Model
         self.logits = self.build_graph()
-
         DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
-        self.count_trainable_params()
         DNN.sess_start()
+        self.count_trainable_params()
 
     def build_graph(self):
         self.n_filters_per_box = [64, 128, 256, 512]
