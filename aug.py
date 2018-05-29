@@ -84,8 +84,6 @@ def apply_aug(images, aug_fn , is_training , crop_h , crop_w ):
     images=tf.map_fn(lambda image : aug_fn(image , is_training , crop_h , crop_w) ,  images )
     return images
 
-
-
 if __name__ == '__main__':
     img=Image.open('tmp/abnormal_actmap.png').convert('L')
     fig = plt.figure()

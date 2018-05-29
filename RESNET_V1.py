@@ -28,7 +28,7 @@ class RESNET_V1(DNN):
         self.aug_level = aug_level
         # Augmentation
         if self.aug_level == 'aug_lv0' :
-            self.input = apply_aug(self.x_ ,  aug_lv0 ,  self.is_training , (cropped_size , cropped_size ))
+            self.input = apply_aug(self.x_ ,  aug_lv0 ,  self.is_training , cropped_size , cropped_size )
         else:
             self.input = self.x_
 
