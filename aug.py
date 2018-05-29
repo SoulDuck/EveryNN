@@ -27,7 +27,7 @@ def random_rotate_90(images):
     start_time=time.time()
     k=np.random.randint(0,4)
     images=np.rot90(images , k , axes =(1,2))
-    print 'Consume Time : ',time.time()-start_time
+    #print 'Consume Time : ',time.time()-start_time
     return images
 
 
