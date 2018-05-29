@@ -45,8 +45,6 @@ class Trainer(DNN):
 
             if np.max(self.batch_xs) > 1:
                 self.batch_xs=self.batch_xs/255.
-                print utils.plot_images(self.batch_xs , savepath='tmp.png')
-                exit()
             train_feedDict = {self.x_: self.batch_xs, self.y_: self.batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
                               self.is_training: True , self.global_step : step}
             _, self.train_acc, self.train_loss  , self.learning_rate = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)
