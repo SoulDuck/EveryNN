@@ -89,7 +89,7 @@ def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs):
     writer.close()
 
 if '__main__' == __name__:
-    cac_dir = '../fundus_data/cacs/imgSize_350/nor_0_10_abnor_300_inf/1/seoulfundus'
+    cac_dir = '../../fundus_data/cacs/imgSize_350/nor_0_10_abnor_300_inf/1/seoulfundus'
     nor_test_imgs=np.load(os.path.join(cac_dir , 'normal_test.npy'))
     abnor_test_imgs = np.load(os.path.join(cac_dir, 'abnormal_test.npy'))
     nor_train_imgs=np.load(os.path.join(cac_dir , 'normal_train.npy'))
