@@ -11,7 +11,8 @@ function to add
 + Transfer Model
 + Fine Tuning
 + L1 Loss
-+ 왜 utils.plot_images 에서 255 로 나누지 않으면 보이지 않는거지?
++ 왜 utils.plot_images 에서 255 로 나누지 않으면 보이지 않는거지? -->uint8로 바꾸어야 한다.
++ imgaug 을 사용할때도 uint8로 바꾸어야 한다.
 
 
 ###
