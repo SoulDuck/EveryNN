@@ -52,7 +52,7 @@ def histo_equalized(img):
 def aug_lv0(image_ , is_training , crop_h , crop_w):
 
     def aug_with_train(image, crop_h , crop_w):
-        img_h,img_w,ch=map(int , image.get_shape()[1:])
+        img_h,img_w,ch=map(int , image.get_shape()[:])
 
         pad_w = int(img_h * 0.1)
         pad_h = int(img_w * 0.1)
