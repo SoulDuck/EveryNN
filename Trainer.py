@@ -3,8 +3,7 @@ from DNN import DNN
 import Dataprovider
 import numpy as np
 import utils
-from aug import random_rotate_90
-
+from aug import aug_lv1
 class Trainer(DNN):
     def __init__(self , recorder , train_iter):
         print '####################################################'
@@ -39,11 +38,15 @@ class Trainer(DNN):
             """ #### Traininig  ### """
             train_fetches = [self.train_op, self.accuracy_op, self.cost_op , self.lr_op]
             self.batch_xs , self.batch_ys=self.sess.run([self.dataprovider.batch_xs ,self.dataprovider.batch_ys])
-            if 'aug_rotate' in aug_list:
-                self.batch_xs=random_rotate_90(self.batch_xs)
+
+            if 'aug_lv1' in aug_list:
+                self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
+                self.batch_xs = aug_lv1(self.batch_xs)
 
             if np.max(self.batch_xs) > 1:
                 self.batch_xs=self.batch_xs/255.
+                print utils.plot_images(self.batch_xs , savepath='tmp.png')
+                exit()
             train_feedDict = {self.x_: self.batch_xs, self.y_: self.batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
                               self.is_training: True , self.global_step : step}
             _, self.train_acc, self.train_loss  , self.learning_rate = self.sess.run(fetches=train_fetches, feed_dict=train_feedDict)

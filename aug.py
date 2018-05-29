@@ -123,9 +123,71 @@ def apply_aug_lv0(images, aug_fn , is_training , crop_h , crop_w  ):
     return images
 
 
+def aug_lv1(images):
+    seq = iaa.Sequential([
+        iaa.OneOf([
+            iaa.ContrastNormalization((0.5, 1.5)),
+            iaa.ContrastNormalization((0.5, 1.5), per_channel=0.5),
+        ]),
+        iaa.Affine(scale=(0.8, 1.2), translate_percent={"x": (-0.1, 0.1), "y": (-0.1, 0.1)}, rotate=(-30, 30)),
+        iaa.OneOf([
+            iaa.AdditiveGaussianNoise(loc=0, scale=(0.0, 0.05 * 255), per_channel=0.5),
+            iaa.Dropout((0.01, 0.1), per_channel=0.5),
+            iaa.CoarseDropout((0.03, 0.15), size_percent=(0.02, 0.05), per_channel=0.2),
+        ]),
+    ])
+    augimgs = seq.augment_images(images)
+    return augimgs
+
+def aug_lv3(images):
+    seq = iaa.Sequential([
+        # Blur
+        iaa.OneOf([
+            iaa.GaussianBlur(sigma=(0, 0.5)),
+            iaa.AverageBlur(k=(2, 7)),
+            iaa.MedianBlur((3, 11))
+        ]), iaa.OneOf([
+            iaa.AdditiveGaussianNoise(loc=0, scale=(0.0, 0.05 * 255), per_channel=0.5),
+            iaa.Dropout((0.01, 0.1), per_channel=0.5),
+            iaa.CoarseDropout((0.03, 0.15), size_percent=(0.02, 0.05), per_channel=0.2),
+        ]), iaa.OneOf([
+            iaa.Sharpen(alpha=(0.0, 1.0), lightness=(0.75, 2.0)),
+            iaa.Emboss(alpha=(0.0, 1.0), strength=(0.5, 1.5)),
+            # iaa.EdgeDetect(alpha=(0.0 , 0.2))
+        ]), iaa.SomeOf(2, [
+            iaa.Add((-40, 40), per_channel=0.5),
+            iaa.AddElementwise((-40, 40), per_channel=0.5),
+            iaa.Multiply((0.5, 1.5)),
+            iaa.Multiply((0.5, 1.5), per_channel=0.5),
+        ], random_order=True),
+        iaa.SomeOf((0, None), [
+            iaa.OneOf([
+                iaa.ContrastNormalization((0.5, 1.5)),
+                iaa.ContrastNormalization((0.5, 1.5), per_channel=0.5),
+            ]),
+        ]),
+        iaa.Affine(scale=(0.8, 1.2), translate_percent={"x": (-0.1, 0.1), "y": (-0.1, 0.1)}, rotate=(-30, 30)),
+        iaa.OneOf([
+            iaa.Affine(shear=(0.01, 0.05)),
+            iaa.PiecewiseAffine((0.01, 0.05))
+        ]),
+    ], random_order=True)
+    augimgs = seq.augment_images(images)
+    return augimgs
 
 
 if __name__ == '__main__':
+    img = Image.open('/Users/seongjungkim/PycharmProjects/everyNN/3445147_20140625_L.png').resize((350, 350),
+                                                                                                  Image.ANTIALIAS)
+    img = np.asarray(img)
+    imgs = []
+    for i in range(32):
+        imgs.append(img)
+    augimgs=aug_lv1(imgs)
+    utils.plot_images(augimgs , savepath='tmp.png')
+
+
+    """
     is_training = tf.placeholder(tf.bool)
     path = 'tmp.png'
     imgs=[]
@@ -139,13 +201,13 @@ if __name__ == '__main__':
 
     #tf_imgs = apply_aug_rotate(imgs, is_training ,[90, 180, 270])
     # Rotate 90 180 270
-    tf_imgs = tf_random_rotate_90(imgs)
+    tf_imgs = aug_lv1(imgs)
 
     sess=tf.Session()
     output =sess.run(tf_imgs , feed_dict={is_training : True})
     output=np.squeeze(output)
     utils.plot_images(output , savepath = 'tmp_output.png')
-
+"""
 
 """
 def anchor_target_layer(rpn_cls_score, gt_boxes, im_dims, _feat_stride, anchor_scales):
