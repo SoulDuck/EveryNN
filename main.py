@@ -22,7 +22,7 @@ parser.add_argument('--no_BN',dest='use_bn', action='store_false')
 parser.add_argument('--l2_weight_decay', type=float)
 parser.add_argument('--logit_type', type=str)
 parser.add_argument('--num_epoch' , type=int)
-parser.add_argument('--resize' , type=int)
+parser.add_argument('--cropped_size' , type=int)
 parser.add_argument('--opt' , type=str)
 parser.add_argument('--init_lr' , type=float)
 parser.add_argument('--lr_decay_step' ,type=int)
@@ -36,7 +36,7 @@ print 'use bn : , ',args.use_bn
 print 'L2 weight Decay : ' , args.l2_weight_decay
 print 'Logit Type : ' , args.logit_type
 print 'Num Epoch  : ', args.num_epoch
-print 'Resize :' , args.resize
+print 'cropped_size:' , args.cropped_size
 print 'Optimzer : ',args.opt
 print 'Inital Learning Rate : ',args.init_lr
 print 'Learning Rage Decay Step : ' , args.lr_decay_step
