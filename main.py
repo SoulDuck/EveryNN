@@ -52,7 +52,7 @@ model_name = 'vgg_11'
 vgg = VGG('sgd' , False , True,   model_name, 'gap'  , 'cifar10' , 60 , resize=(350,350) , num_epoch=100)
 """
 
-resnet_v1=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.resize,\
+resnet_v1=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.cropped_size,\
                     args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name ,args.aug_level)
 
 recorder = Recorder(folder_name=args.model_name)
