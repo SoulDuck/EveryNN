@@ -28,7 +28,7 @@ class Trainer(DNN):
             learning_rate = 0.00001
             ####
         return learning_rate
-    def training(self ):
+    def training(self , aug_list):
 
         max_iter = self.train_step+self.train_iter
         for step in range(self.train_step, max_iter):
@@ -38,10 +38,8 @@ class Trainer(DNN):
             """ #### Traininig  ### """
             train_fetches = [self.train_op, self.accuracy_op, self.cost_op , self.lr_op]
             self.batch_xs , self.batch_ys=self.sess.run([self.dataprovider.batch_xs ,self.dataprovider.batch_ys])
-            #if 'aug_rotate' in aug_list:
-            #    self.batch_xs=random_rotate_90(self.batch_xs)
-
-            #utils.plot_images(batch_xs)
+            if 'aug_rotate' in aug_list:
+                self.batch_xs=random_rotate_90(self.batch_xs)
             if np.max(self.batch_xs) > 1:
                 self.batch_xs=self.batch_xs/255.
             train_feedDict = {self.x_: self.batch_xs, self.y_: self.batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
