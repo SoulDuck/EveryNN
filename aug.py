@@ -55,8 +55,9 @@ def aug_lv0(image_ , is_training , image_size):
         ch=int(image.get_shape()[-1])
 
 
-        pad_size = int(image_size * 0.1)
-        image = tf.image.resize_image_with_crop_or_pad(image, image_size+pad_size , image_size+pad_size )
+        pad_w = int(image_size[0] * 0.1)
+        pad_h = int(image_size[1] * 0.1)
+        image = tf.image.resize_image_with_crop_or_pad(image, image_size+pad_h , image_size+pad_w )
         image = tf.random_crop(image, [image_size, image_size, ch])
         image = tf.image.random_flip_left_right(image)
         image = tf.image.random_flip_up_down(image)
