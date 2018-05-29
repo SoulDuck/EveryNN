@@ -80,8 +80,8 @@ def aug_lv0(image_ , is_training , image_size):
 
     return image
 
-def apply_aug(images, aug_fn , is_training , resize ):
-    images=tf.map_fn(lambda image : aug_fn(image , is_training , resize  ) ,  images )
+def apply_aug(images, aug_fn , is_training , cropped_size ):
+    images=tf.map_fn(lambda image : aug_fn(image , is_training , cropped_size  ) ,  images )
     return images
 
 

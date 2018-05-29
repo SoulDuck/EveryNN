@@ -4,16 +4,16 @@ import tensorflow as tf
 from aug import aug_lv0
 #ef convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
 class INCEPTION_V4(DNN):
-    def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
+    def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, croppped_size, num_epoch,
                        init_lr, lr_decay_step , model , aug_level):
-        DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
+        DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, num_epoch,
                        init_lr, lr_decay_step)
 
         self.model = model
         self.aug_level = aug_level
         # Augmentation
         if self.aug_level == 'aug_lv0' :
-            self.input = aug_lv0(self.x_ , self.is_training ,resize )
+            self.input = aug_lv0(self.x_ , self.is_training ,(croppped_size , croppped_size))
         else:
             self.input = self.x_
 

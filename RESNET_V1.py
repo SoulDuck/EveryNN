@@ -3,7 +3,7 @@ import tensorflow as tf
 from DNN import DNN
 from aug import aug_lv0 , apply_aug
 class RESNET_V1(DNN):
-    def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
+    def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, cropped_size, num_epoch,
                        init_lr, lr_decay_step , model , aug_level):
         """
         :param n_filters_per_box: [32, 64, 64, 128 , 256 ]  , type = list
@@ -17,7 +17,7 @@ class RESNET_V1(DNN):
         customizing 을 함수를 추가한다.
         n_filters_per_box , n_blocks_per_box  , stride_per_box , bottlenect_factor =4
         """
-        DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, resize, num_epoch,
+        DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, num_epoch,
                        init_lr, lr_decay_step)
 
         ### bottlenect setting  ###
@@ -28,7 +28,7 @@ class RESNET_V1(DNN):
         self.aug_level = aug_level
         # Augmentation
         if self.aug_level == 'aug_lv0' :
-            self.input = apply_aug(self.x_ ,  aug_lv0 ,  self.is_training ,resize )
+            self.input = apply_aug(self.x_ ,  aug_lv0 ,  self.is_training , (cropped_size , cropped_size ))
         else:
             self.input = self.x_
 

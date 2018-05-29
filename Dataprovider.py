@@ -9,8 +9,7 @@ import sys
 from PIL import Image
 class Dataprovider():
 
-    def __init__(self, datatype , batch_size ,resize , num_epoch=10 , onehot = True):
-        self.resize = resize
+    def __init__(self, datatype , batch_size , num_epoch=10 , onehot = True):
         self.num_epoch = num_epoch
         self.batch_size = batch_size
         n_train=None
@@ -42,8 +41,6 @@ class Dataprovider():
                                                                   n_classes=self.n_classes)
         self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
         # Resize
-        if not self.resize is None:
-            self.img_h, self.img_w = self.resize  , self.resize
         with tf.device('/cpu:0'):
             # tf.image.resize_image_with_crop_or_pad is used in 'get_shuffled_batch'
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord_path, self.batch_size,

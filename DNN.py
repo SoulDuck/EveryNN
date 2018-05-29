@@ -267,7 +267,7 @@ class DNN(object):
         cls.coord.join(cls.threads)
         cls.sess.close()
     @classmethod
-    def initialize(cls, optimizer_name, use_BN, l2_weight_decay ,logit_type, datatype, batch_size, resize, num_epoch,
+    def initialize(cls, optimizer_name, use_BN, l2_weight_decay ,logit_type, datatype, batch_size, num_epoch,
                    init_lr, lr_decay_step):
 
         cls.optimizer_name = optimizer_name
@@ -281,7 +281,7 @@ class DNN(object):
         cls.lr_decay_step = lr_decay_step
         ## input pipeline
         # why cls? dataprovider was used in *Train , *Test class
-        cls.dataprovider = Dataprovider(datatype, batch_size, resize, num_epoch)
+        cls.dataprovider = Dataprovider(datatype, batch_size, num_epoch)
         cls.max_iter =cls.dataprovider.n_train * num_epoch
         cls.n_classes = cls.dataprovider.n_classes
         cls._define_input(shape=[None, cls.dataprovider.img_h, cls.dataprovider.img_w, cls.dataprovider.img_ch])#
