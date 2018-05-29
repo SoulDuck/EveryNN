@@ -91,7 +91,8 @@ class Tester(DNN):
             self.max_acc = self.acc
             print '###### Model Saved ######'
             print 'Max Acc : {}'.format(self.max_acc)
-            self.recorder.saver.save(sess = DNN.sess ,save_path = os.path.join(self.recorder.models_path , 'model'))
+            self.recorder.saver.save(sess = DNN.sess ,save_path = os.path.join(self.recorder.models_path , 'model') , global_step = step)
+
 
         if self.loss < self.min_loss:
             self.min_loss = self.loss
