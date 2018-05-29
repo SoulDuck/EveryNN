@@ -26,7 +26,7 @@ parser.add_argument('--cropped_size' , type=int)
 parser.add_argument('--opt' , type=str)
 parser.add_argument('--init_lr' , type=float)
 parser.add_argument('--lr_decay_step' ,type=int)
-parser.add_argument('--aug_list' ,nargs='+', type=str, default=['aug_lv0' ] )
+parser.add_argument('--aug_list' ,nargs='+', type=str, default=['aug_lv0' , 'aug_rotate'] )
 
 args=parser.parse_args()
 print 'batch_size : ' , args.batch_size
