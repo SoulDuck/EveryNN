@@ -2,7 +2,7 @@
 from DNN import DNN
 import numpy as np
 import tensorflow as tf
-import sys
+import sys , os
 import utils
 from PIL import Image
 class Tester(DNN):
@@ -91,7 +91,7 @@ class Tester(DNN):
             self.max_acc = self.acc
             print '###### Model Saved ######'
             print 'Max Acc : {}'.format(self.max_acc)
-            self.recorder.saver.save(sess = DNN.sess ,save_path = self.recorder.models_path)
+            self.recorder.saver.save(sess = DNN.sess ,save_path = os.path.join(self.recorder.models_path , 'model')
 
         if self.loss < self.min_loss:
             self.min_loss = self.loss

@@ -57,9 +57,11 @@ class Recorder(DNN):
             except Exception as e:
                 pass;
             self.models_path=os.path.join(models_root_path , str(model_count))
+
             if not os.path.isdir(self.models_path):
                 os.mkdir(self.models_path)
                 break; #
             else:
                 model_count+=1
+
         print 'folder where models is saved : {} '.format(self.models_path)

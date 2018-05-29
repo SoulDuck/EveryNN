@@ -73,13 +73,4 @@ for i in range(max_step):
     tester.validate(test_imgs[:] ,test_labs[:] ,args.batch_size , trainer.train_step)
     tester.show_acc_loss(trainer.train_step)
     global_step = trainer.training()
-    if i ==0 :
-        utils.plot_images(trainer.batch_xs)
-        print np.max(trainer.batch_xs)
-        print np.shape(trainer.batch_xs)
-        print trainer.batch_ys
-        print np.save('tmp_batch.npy' , trainer.batch_xs)
-        print np.max(test_imgs)
-        print np.save('tmp_test.npy', test_imgs)
-
 resnet_v1.sess_stop()
