@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import tensorflow as tf
 from DNN import DNN
-from aug import aug_lv0
+from aug import aug_lv0 , apply_aug_lv0 , apply_aug_rotate
 """
 def conv2d_with_bias(_input, out_feature, kernel_size, strides, padding):
     in_feature = int(_input.get_shape()[-1])
@@ -44,18 +44,19 @@ def fc_layer_to_clssses(_input, n_classes):
 
 class VGG(DNN):
     def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, cropped_size, num_epoch,
-                       init_lr, lr_decay_step , model , aug_level):
+                       init_lr, lr_decay_step , model , aug_list):
         DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, num_epoch,
                        init_lr, lr_decay_step)
 
         self.model = model
-        self.aug_level = aug_level
-
         # Augmentation
-        if self.aug_level == 'aug_lv0' :
-            self.input = aug_lv0(self.x_ , self.is_training ,(cropped_size ,cropped_size  ))
-        else:
-            self.input = self.x_
+        self.aug_list = aug_list
+        self.input = self.x_
+        if 'aug_lv0' in self.aug_list :
+            self.input = apply_aug_lv0(self.input,  aug_lv0 ,  self.is_training , cropped_size , cropped_size )
+        if 'aug_rotate' in self.aug_list:
+            self.input = apply_aug_rotate(self.input, self.is_training , rotate_range=[90,180,270])
+
 
         # Build Model
         self.logits = self.build_graph()

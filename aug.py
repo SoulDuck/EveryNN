@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 import matplotlib as mpl
 mpl.use('Agg')
 import tensorflow as tf
@@ -6,6 +7,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
+import utils
+import time
 def clahe_equalized(img):
     if len(img.shape) == 2:
         img=np.reshape(img, list(np.shape(img)) +[1])
@@ -19,35 +22,68 @@ def clahe_equalized(img):
         img = clahe.apply(np.array(img, dtype = np.uint8))
     return img
 
-
+# Rotate 90 , 180 , 270
 def random_rotate_90(images):
+    start_time=time.time()
     k=np.random.randint(0,4)
     images=np.rot90(images , k , axes =(1,2))
+    print 'Consume Time : ',time.time()-start_time
     return images
 
 
+def tf_random_rotate_90(images):
+    images = tf.py_func(random_rotate_90, [images], [tf.float64])
+    return tf.convert_to_tensor(images)
 
-def random_rotate_with_PIL(image):
+
+# Rotate Image Manually
+def random_rotate_with_PIL(image , rotate_angles = None):
+
+    start_time=time.time()
 
     ### usage: map(random_rotate , images) ###
+    if not np.max(image) > 1 : # if image is normalized
+        image = (image * 255).astype('uint8')
+
     image=Image.fromarray(image)
-    ind=random.randint(0,180)
+
+    if rotate_angles is None:
+        ind = random.randint(0, 180)
+    else:
+        random.shuffle(rotate_angles)
+        ind = rotate_angles[0]
+
     minus = random.randint(0,1)
     minus=bool(minus)
     if minus==True:
         ind=ind*-1
     img = image.rotate(ind)
-    if __debug__ == True:
-        print ind
-    return np.asarray(img)
+    img=np.asarray(img)
+    consume_time = time.time() - start_time
+    print consume_time
+    return img
+
+def tf_random_rotate_with_PIL(image , rotate_angles):
+    image=tf.py_func(random_rotate_with_PIL , [image , rotate_angles], [tf.uint8])
+    return image
+
+def tf_aug_rotate(image , is_training , rotate_angles):
+    def train(image , rotate_angles):
+        image=tf_random_rotate_with_PIL(image ,rotate_angles)
+        return image
+    def test(image):
+        return image
+    image =tf.cond( is_training , lambda : train(image , rotate_angles) , lambda : test(image))
+    return image
+
+def apply_aug_rotate(images , is_training , rotate_range):
+    images=tf.map_fn(lambda image : tf_aug_rotate(image , is_training , rotate_range) , images)
+    return tf.convert_to_tensor(images)
 
 #==== histogram equalization
 def histo_equalized(img):
     assert (len(np.shape(img))==2)  ,' image shape : {} '.format(np.shape(img)) #4D arrays
     return cv2.equalizeHist(np.array(img, dtype = np.uint8))
-
-
-
 
 def aug_lv0(image_ , is_training , crop_h , crop_w):
 
@@ -80,17 +116,60 @@ def aug_lv0(image_ , is_training , crop_h , crop_w):
 
     return image
 
-def apply_aug(images, aug_fn , is_training , crop_h , crop_w ):
-    images=tf.map_fn(lambda image : aug_fn(image , is_training , crop_h , crop_w) ,  images )
+def apply_aug_lv0(images, aug_fn , is_training , crop_h , crop_w  ):
+    images=tf.map_fn(lambda image : aug_fn(image , is_training , crop_h , crop_w) ,  images)
     return images
 
+
+
+
 if __name__ == '__main__':
-    img=Image.open('tmp/abnormal_actmap.png').convert('L')
-    fig = plt.figure()
-    ax=fig.add_subplot(132)
-    HE_img = histo_equalized(img)
-    ax.imshow(HE_img)
-    ax = fig.add_subplot(133)
-    rotated_img=random_rotate_with_PIL(img)
-    ax.imshow(rotated_img)
-    plt.show()
+    is_training = tf.placeholder(tf.bool)
+    path = 'tmp.png'
+    imgs=[]
+    img=np.asarray(Image.open(path)).astype('uint8')
+    #img=img
+    for i in range(20):
+        imgs.append(np.asarray(img))
+    imgs=np.asarray(imgs).astype('uint8') # numpy 로 안만들면 에러가 난다
+    imgs = imgs / 255.
+
+
+    #tf_imgs = apply_aug_rotate(imgs, is_training ,[90, 180, 270])
+    # Rotate 90 180 270
+    tf_imgs = tf_random_rotate_90(imgs)
+
+    sess=tf.Session()
+    output =sess.run(tf_imgs , feed_dict={is_training : True})
+    output=np.squeeze(output)
+    utils.plot_images(output , savepath = 'tmp_output.png')
+
+
+"""
+def anchor_target_layer(rpn_cls_score, gt_boxes, im_dims, _feat_stride, anchor_scales):
+    '''
+    Make Python version of _anchor_target_layer_py below Tensorflow compatible
+    '''
+    rpn_labels, rpn_bbox_targets, rpn_bbox_inside_weights, rpn_bbox_outside_weights = \
+        tf.py_func(_anchor_target_layer_py, [rpn_cls_score, gt_boxes, im_dims, _feat_stride, anchor_scales],
+                   [tf.float32, tf.float32, tf.float32, tf.float32])
+
+    rpn_labels = tf.convert_to_tensor(tf.cast(rpn_labels, tf.int32), name='rpn_labels')
+    rpn_bbox_targets = tf.convert_to_tensor(rpn_bbox_targets, name='rpn_bbox_targets')
+    rpn_bbox_inside_weights = tf.convert_to_tensor(rpn_bbox_inside_weights, name='rpn_bbox_inside_weights')
+    rpn_bbox_outside_weights = tf.convert_to_tensor(rpn_bbox_outside_weights, name='rpn_bbox_outside_weights')
+
+    return rpn_labels, rpn_bbox_targets, rpn_bbox_inside_weights, rpn_bbox_outside_weights
+
+def _anchor_target_layer_py(rpn_cls_score, gt_boxes, im_dims, _feat_stride, anchor_scales):
+
+    #
+    # for each (H, W) location i
+    #   generate 9 anchor boxes centered on cell i
+    #   apply predicted bbox deltas at cell i to each of the 9 anchors
+    # filter out-of-image anchors
+    # measure GT overlap
+    im_dims = im_dims[0]
+    # _anchors shape : ( 9, 4 ) anchor coordinate type : x1,y1,x2,y2
+
+"""

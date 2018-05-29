@@ -1,10 +1,10 @@
 #-*- coding:utf-8 -*-
 import tensorflow as tf
 from DNN import DNN
-from aug import aug_lv0 , apply_aug
+from aug import aug_lv0 , apply_aug_lv0 , apply_aug_rotate , tf_random_rotate_90
 class RESNET_V1(DNN):
     def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, cropped_size, num_epoch,
-                       init_lr, lr_decay_step , model , aug_level):
+                       init_lr, lr_decay_step , model , aug_list):
         """
         :param n_filters_per_box: [32, 64, 64, 128 , 256 ]  , type = list
         :param n_blocks_per_box:  [3, 5 , 4, 3, 2 ]  , type = list
@@ -25,13 +25,14 @@ class RESNET_V1(DNN):
         building model
         """
         self.model = model
-        self.aug_level = aug_level
+        self.aug_list = aug_list
         # Augmentation
-        if self.aug_level == 'aug_lv0' :
-            self.input = apply_aug(self.x_ ,  aug_lv0 ,  self.is_training , cropped_size , cropped_size )
-        else:
-            self.input = self.x_
-
+        self.input = self.x_
+        #  The augmentation order must be fellowed aug_rotate => aug_lv0
+        if 'aug_lv0' in self.aug_list :
+            self.input = apply_aug_lv0(self.input,  aug_lv0 ,  self.is_training , cropped_size , cropped_size )
+        #if 'aug_rotate' in self.aug_list:
+        #    self.input=tf_random_rotate_90(self.input)
         # Build Model
         self.logits = self.build_graph()
 

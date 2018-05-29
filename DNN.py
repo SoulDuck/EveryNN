@@ -225,7 +225,6 @@ class DNN(object):
         cls.lr_op = tf.train.exponential_decay(cls.init_lr, cls.global_step, decay_steps=int(cls.max_iter / cls.lr_decay_step),
                                                decay_rate=0.96,
                                                staircase=False)
-
         # L2 Loss
         if not cls.l2_weight_decay is 0.0:
             print 'L2 Loss is Applied'
