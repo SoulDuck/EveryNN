@@ -49,7 +49,6 @@ class Trainer(DNN):
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
                 self.batch_xs = random_rotate_90_180_270(self.batch_xs)
 
-
             if np.max(self.batch_xs) > 1:
                 self.batch_xs=self.batch_xs/255.
             train_feedDict = {self.x_: self.batch_xs, self.y_: self.batch_ys, self.cam_ind: 0, self.lr_: learning_rate,
