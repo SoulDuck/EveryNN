@@ -7,11 +7,12 @@ import utils
 from PIL import Image
 class Tester(DNN):
 
-    def __init__(self , recorder):
+    def __init__(self , recorder ):
         print '####################################################'
         print '#                   Tester                         #'
         print '####################################################'
-        self.recorder = recorder
+        if recorder == None:
+            self.recorder = recorder
         self.val_acc=0
         self.val_loss=0
         self.max_acc=0
@@ -37,11 +38,13 @@ class Tester(DNN):
         #Naming Rule  : tensor 뒤에는 _ undersocre 을 붙입니다.
         self.x_ = tf.get_default_graph().get_tensor_by_name('x_:0')
         self.y_ = tf.get_default_graph().get_tensor_by_name('y_:0')
-        self.pred_ = tf.get_default_graph().get_tensor_by_name('softmax:0')
+        self.pred_op = tf.get_default_graph().get_tensor_by_name('softmax:0')
+        self.cost_op = tf.get_default_graph().get_tensor_by_name('cost:0')
         self.is_training = tf.get_default_graph().get_tensor_by_name('is_training:0')
         self.top_conv = tf.get_default_graph().get_tensor_by_name('top_conv:0')
         self.logits_ = tf.get_default_graph().get_tensor_by_name('logits:0')
-        self.cam_ = tf.get_default_graph().get_tensor_by_name('classmap:0')
+
+        #self.cam_ = tf.get_default_graph().get_tensor_by_name('classmap:0')
         try:
             cam_ind = tf.get_default_graph().get_tensor_by_name('cam_ind:0')
         except Exception as e :
@@ -88,9 +91,10 @@ class Tester(DNN):
         self.pred_all = pred_all
         self.loss = np.mean(loss_all)
         self.acc = self.get_acc(labs,  self.pred_all)
-        self.recorder.write_acc_loss(prefix='Test' , loss=self.loss, acc= self.acc , step= step)
+
 
         if save_model:
+            self.recorder.write_acc_loss(prefix='Test', loss=self.loss, acc=self.acc, step=step)
             if self.acc > self.max_acc:
                 self.max_acc = self.acc
                 print '###### Model Saved ######'
@@ -149,7 +153,10 @@ class Tester(DNN):
         mean_acc = self.get_acc(labels, pred_all)
         return mean_acc , mean_loss , pred_all
 
-
+    def eval(self, model_path, test_imgs, test_labs, batch_size):
+        self._reconstruct_model(model_path)
+        self.validate(test_imgs , test_labs , batch_size , step=0 , save_model = False)
+        return self.pred_all , self.acc , self.loss
 
 """
     @classmethod
@@ -200,3 +207,23 @@ class Tester(DNN):
         return ret_img, ret_lab, ret_filename_list
 """
 
+if __name__ =='__main__':
+    model_path = 'models/resnet_18/0/model-37620'
+    test_imgs=np.load('normal_test.npy')[:]
+    test_imgs=test_imgs/255.
+    test_labs=np.zeros([len(test_imgs) , 2])
+    test_labs[:,0]=1
+    batch_size = 60
+    tester=Tester(None)
+    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size)
+    print acc
+
+    tf.reset_default_graph()
+    test_imgs=np.load('abnormal_test.npy')[:]
+    test_imgs=test_imgs/255.
+    test_labs=np.zeros([len(test_imgs) , 2])
+    test_labs[:,1]=1
+    batch_size = 60
+    tester=Tester(None)
+    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size)
+    print acc
