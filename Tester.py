@@ -6,6 +6,7 @@ import sys , os
 import utils
 from PIL import Image
 import matplotlib.pyplot as plt
+import copy
 class Tester(DNN):
 
     def __init__(self , recorder ):
@@ -171,8 +172,22 @@ class Tester(DNN):
 
             exit()
 
-    def black_box(self):
-        pass;
+    def black_box(self , oriimg ,box_size):
+        ret_coord = []
+
+        height , width=np.shape(oriimg)[:2]
+        skip_pix=30
+        count=0
+        for h_ind in range(0,height-box_size+1,skip_pix):
+            for w_ind in range(0,width-box_size+1,skip_pix):
+                img = copy.deepcopy(np.asarray(oriimg))
+                img[h_ind * box_size : (h_ind+1)*box_size , w_ind * box_size : (w_ind+1)*box_size ] =0
+                print np.shape(img)
+                plt.imsave('tmp_blackbox/tmp_blackbox_{}.png'.format(count) , img )
+                count += 1
+
+
+
 
     def eval(self, model_path, test_imgs, test_labs, batch_size , actmap_dir):
         self._reconstruct_model(model_path)
@@ -234,10 +249,24 @@ class Tester(DNN):
 """
 
 if __name__ =='__main__':
+    imgs = []
+    for dirpath , subdir , files in os.walk('./my_data/abnormal'):
+        for f in files:
+            img = np.asarray(Image.open(os.path.join(dirpath , f)))
+            imgs.append(img)
+    # Black Box Test
+    test_imgs = np.asarray(imgs)
+    tester = Tester(None)
+    tester.black_box(img , 150)
 
+
+
+
+
+"""
     model_path = 'models/resnet_18/0/model-37620'
 
-    test_imgs=np.load('my_data/abnormal_test.npy')[:2]
+    #test_imgs=np.load('my_data/abnormal_test.npy')[:2]
     test_imgs=test_imgs/255.
     test_labs=np.zeros([len(test_imgs) , 2])
     test_labs[:,1]=1
@@ -246,6 +275,8 @@ if __name__ =='__main__':
     pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size ,'tmp_actmap')
     print acc
     tf.reset_default_graph()
+"""
+"""
 
     test_imgs=np.load('my_data/normal_test.npy')[:2]
     test_imgs=test_imgs/255.
@@ -257,3 +288,4 @@ if __name__ =='__main__':
 
     print acc
 
+"""

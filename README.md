@@ -68,3 +68,8 @@ label_w = tf.gather(tf.transpose(tf.get_variable('w')), cam_ind)
 
 
 #### CAM 을 얻으려면 bias 을 빼야 하나 마지막 부분에서 ?
+#### CAM 을 얻으려면 한장씩 해야 한다  , 복수장씩 할려면
+#### CAM 에서 바로 큰 activation map 을 얻을수 있다
+#### cam_ind 는 필요없다
+
+#### Tester에서 eval 을 추가하고 block box 을 추가했다 , Tester 하수에 None 을 넣은게 잘한걸까 , 어떻게 짜야 더 잘 짰다고 할수 있을까
