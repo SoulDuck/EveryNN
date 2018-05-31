@@ -5,7 +5,6 @@ import tensorflow as tf
 import sys , os
 import utils
 from PIL import Image
-import cam
 class Tester(DNN):
 
     def __init__(self , recorder):
@@ -170,30 +169,7 @@ class Tester(DNN):
         mean_loss = np.mean(loss_all)
         mean_acc = self.get_acc(labels, pred_all)
         return mean_acc , mean_loss , pred_all
-    def eval(self , sess, model_path  ,batch_size , test_imgs , test_labs = None ,actmap_savedir):
 
-        # Restore Model
-        self._reconstruct_model(model_path)
-
-        if not actmap_savedir is None:
-            if not os.path.isdir(actmap_savedir):
-                os.makedirs(actmap_savedir)
-            cam.eval_inspect_cam(sess, cam_, cam_ind ,top_conv, test_imgs[:], x_, y_, is_training_, logits,actmap_savedir)
-
-        share=len(test_imgs)/batch_size
-        remainder=len(test_imgs)%batch_size
-        predList=[]
-        for s in range(share):
-            pred = sess.run(pred_ , feed_dict={x_ : test_imgs[s*batch_size:(s+1)*batch_size],is_training_:False})
-            predList.extend(pred)
-        if not remainder == 0:
-            pred = sess.run(pred_, feed_dict={x_: test_imgs[-1*remainder:], is_training_: False})
-            predList.extend(pred)
-        assert len(predList) == len(test_imgs), '# pred : {} # imgaes : {} should be SAME!'.format(len(predList),
-                                                                                                     len(test_imgs))
-        # Reset Graph
-        tf.reset_default_graph()
-        return np.asarray(predList)
 
 
 """
