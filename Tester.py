@@ -5,6 +5,7 @@ import tensorflow as tf
 import sys , os
 import utils
 from PIL import Image
+import cam
 class Tester(DNN):
 
     def __init__(self , recorder):
@@ -29,10 +30,10 @@ class Tester(DNN):
         return acc
     def _reconstruct_model(self , model_path):
         print 'Reconstruct Model';
-        sess = tf.Session()
+        self.sess = tf.Session()
         saver = tf.train.import_meta_graph(
             meta_graph_or_file=model_path + '.meta')  # example model path ./models/fundus_300/5/model_1.ckpt
-        saver.restore(sess, save_path=model_path)  # example model path ./models/fundus_300/5/model_1.ckpt
+        saver.restore(self.sess, save_path=model_path)  # example model path ./models/fundus_300/5/model_1.ckpt
 
         #Naming Rule  : tensor 뒤에는 _ undersocre 을 붙입니다.
         self.x_ = tf.get_default_graph().get_tensor_by_name('x_:0')
@@ -46,6 +47,7 @@ class Tester(DNN):
             cam_ind = tf.get_default_graph().get_tensor_by_name('cam_ind:0')
         except Exception as e :
             print "CAM 이 구현되어 있지 않은 모델입니다."
+
     def show_acc_loss(self , step ):
         print ''
         if not step is None:
@@ -54,12 +56,36 @@ class Tester(DNN):
         print 'Max Valication Acc : {} | Min Loss {}'.format(self.max_acc, self.min_loss)
         print ''
 
-    def validate(self , imgs , labs , batch_size , step):
+    def divide_images_and_eval(self , test_imgs , batch_size ,sess, pred_op,cost_op , x_ , is_training ):
+        # 이 함수에서 self.sess 을 써서 외부 입력 파라미터를 줄이는게 class 화 취지에 맞는다.
+        # self.sess 가 기본적으로 DNN 에서 정보를 가져오는데 충돌이 일어나지는 않을까? --> 가능성이 있다 pred_op 가 생성이 안되어 있다면 오류가 난다.
+
+
+        share = len(test_imgs) / batch_size
+        remainder = len(test_imgs) % batch_size
+        predList = []
+        for s in range(share):
+            preds = sess.run(pred_op, feed_dict={x_: test_imgs[s * batch_size:(s + 1) * batch_size], is_training: False})
+            predList.extend(preds)
+        if not remainder == 0:
+            preds = sess.run(pred_op, feed_dict={x_: test_imgs[-1 * remainder:], is_training : False})
+            predList.extend(preds)
+        assert len(predList) == len(test_imgs), '# pred : {} # imgaes : {} should be SAME!'.format(len(predList),
+                                                                                                   len(test_imgs))
+        # Reset Graph
+        tf.reset_default_graph()
+        return np.asarray(predList)
+
+
+
+
+    def validate(self , imgs , labs , batch_size , step , save_model = True):
 
         """
         #### Validate ###
         test_fetches = mean_cost , pred
         """
+
         share = len(labs) / batch_size
         remainer= len(labs) % batch_size
         loss_all,  pred_all = [], []
@@ -81,21 +107,20 @@ class Tester(DNN):
             test_feedDict = {self.x_: imgs, self.y_:labs, self.is_training: False}
             loss_all, pred_all = self.sess.run(fetches=fetches, feed_dict=test_feedDict)
 
-        mean_loss=np.mean(loss_all)
-        mean_acc = self.get_acc(labs,  pred_all)
+        self.pred_all = pred_all
+        self.loss = np.mean(loss_all)
+        self.acc = self.get_acc(labs,  self.pred_all)
         self.recorder.write_acc_loss(prefix='Test' , loss=mean_loss , acc= mean_acc , step= step)
-        self.acc = mean_acc
-        self.loss = mean_loss
 
-        if self.acc > self.max_acc:
-            self.max_acc = self.acc
-            print '###### Model Saved ######'
-            print 'Max Acc : {}'.format(self.max_acc)
-            self.recorder.saver.save(sess = DNN.sess ,save_path = os.path.join(self.recorder.models_path , 'model') , global_step = step)
+        if save_model:
+            if self.acc > self.max_acc:
+                self.max_acc = self.acc
+                print '###### Model Saved ######'
+                print 'Max Acc : {}'.format(self.max_acc)
+                self.recorder.saver.save(sess = DNN.sess ,save_path = os.path.join(self.recorder.models_path , 'model') , global_step = step)
 
-
-        if self.loss < self.min_loss:
-            self.min_loss = self.loss
+            if self.loss < self.min_loss:
+                self.min_loss = self.loss
 
 
 
@@ -145,6 +170,30 @@ class Tester(DNN):
         mean_loss = np.mean(loss_all)
         mean_acc = self.get_acc(labels, pred_all)
         return mean_acc , mean_loss , pred_all
+    def eval(self , sess, model_path  ,batch_size , test_imgs , test_labs = None ,actmap_savedir):
+
+        # Restore Model
+        self._reconstruct_model(model_path)
+
+        if not actmap_savedir is None:
+            if not os.path.isdir(actmap_savedir):
+                os.makedirs(actmap_savedir)
+            cam.eval_inspect_cam(sess, cam_, cam_ind ,top_conv, test_imgs[:], x_, y_, is_training_, logits,actmap_savedir)
+
+        share=len(test_imgs)/batch_size
+        remainder=len(test_imgs)%batch_size
+        predList=[]
+        for s in range(share):
+            pred = sess.run(pred_ , feed_dict={x_ : test_imgs[s*batch_size:(s+1)*batch_size],is_training_:False})
+            predList.extend(pred)
+        if not remainder == 0:
+            pred = sess.run(pred_, feed_dict={x_: test_imgs[-1*remainder:], is_training_: False})
+            predList.extend(pred)
+        assert len(predList) == len(test_imgs), '# pred : {} # imgaes : {} should be SAME!'.format(len(predList),
+                                                                                                     len(test_imgs))
+        # Reset Graph
+        tf.reset_default_graph()
+        return np.asarray(predList)
 
 
 """
