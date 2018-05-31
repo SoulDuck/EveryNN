@@ -9,6 +9,7 @@ import numpy as np
 import cv2
 import utils
 import time
+import copy
 import imgaug as ia
 from imgaug import augmenters as iaa
 def clahe_equalized(img):
@@ -24,8 +25,21 @@ def clahe_equalized(img):
         img = clahe.apply(np.array(img, dtype = np.uint8))
     return img
 
+
+
+def random_clahe_equalized(imgs):
+    # random 하게 imgs 에서 일정 부분을 추출해 적용합니다
+    ret_imgs = copy.deepcopy(imgs)
+    indices = random.sample(range(len(imgs)) , len(imgs)/2)
+    for ind in indices:
+        img=clahe_equalized(imgs[ind])
+        ret_imgs[ind]= img
+    return ret_imgs
+
+
+
 # Rotate 90 , 180 , 270
-def random_rotate_90(images):
+def random_rotate_90_180_270(images):
     start_time=time.time()
     k=np.random.randint(0,4)
     images=np.rot90(images , k , axes =(1,2))
@@ -34,7 +48,7 @@ def random_rotate_90(images):
 
 
 def tf_random_rotate_90(images):
-    images = tf.py_func(random_rotate_90, [images], [tf.float64])
+    images = tf.py_func(random_rotate_90_180_270, [images], [tf.float64])
     return tf.convert_to_tensor(images)
 
 
@@ -177,12 +191,20 @@ def aug_lv3(images):
 
 
 if __name__ == '__main__':
-    img = Image.open('/Users/seongjungkim/PycharmProjects/everyNN/3445147_20140625_L.png').resize((350, 350),
+    img = Image.open('/Users/seongjungkim/PycharmProjects/everyNN/fundus_sample.png').resize((350, 350),
                                                                                                   Image.ANTIALIAS)
     img = np.asarray(img)
     imgs = []
     for i in range(32):
         imgs.append(img)
+
+    # random clahe
+    start_time=time.time()
+    clahe_imgs = random_clahe_equalized(imgs)
+    consume_time  = start_time - time.time()
+    print consume_time
+    utils.plot_images(clahe_imgs, savepath='clahe_imgs.png')
+    # augmentation lv1
     augimgs=aug_lv1(imgs)
     utils.plot_images(augimgs , savepath='tmp.png')
 

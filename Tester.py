@@ -145,6 +145,8 @@ class Tester(DNN):
         mean_loss = np.mean(loss_all)
         mean_acc = self.get_acc(labels, pred_all)
         return mean_acc , mean_loss , pred_all
+
+
 """
     @classmethod
     def reconstruct_tfrecord_rawdata(cls, tfrecord_path, resize):

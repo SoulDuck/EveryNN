@@ -3,7 +3,7 @@ from DNN import DNN
 import Dataprovider
 import numpy as np
 import utils
-from aug import aug_lv1
+from aug import aug_lv1 , random_clahe_equalized , random_rotate_90_180_270
 class Trainer(DNN):
     def __init__(self , recorder , train_iter):
         print '####################################################'
@@ -42,6 +42,13 @@ class Trainer(DNN):
             if 'aug_lv1' in aug_list:
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
                 self.batch_xs = aug_lv1(self.batch_xs)
+            if 'aug_clahe' in aug_list:
+                self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
+                self.batch_xs = random_clahe_equalized(self.batch_xs)
+            if 'aug_rotate' in aug_list:
+                self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
+                self.batch_xs = random_rotate_90_180_270(self.batch_xs)
+
 
             if np.max(self.batch_xs) > 1:
                 self.batch_xs=self.batch_xs/255.
