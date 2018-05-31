@@ -27,3 +27,14 @@ Opinion
 
 
 
+######
+def __init__(self , recorder ):
+        print '####################################################'
+        print '#                   Tester                         #'
+        print '####################################################'
+        if recorder == None:
+            self.recorder = recorder
+        self.val_acc=0
+        self.val_loss=0
+        self.max_acc=0
+        self.min_loss=10000000
