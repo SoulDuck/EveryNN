@@ -38,3 +38,33 @@ def __init__(self , recorder ):
         self.val_loss=0
         self.max_acc=0
         self.min_loss=10000000
+
+
+
+####
+    ## 구 버전과 통합하기 위해 w=None 을 추가했다. ##
+    def get_class_map(self,name, x, cam_ind, im_width , w=None):
+        out_ch = int(x.get_shape()[-1])
+        conv_resize = tf.image.resize_bilinear(x, [im_width, im_width])
+        if w is None:
+            with tf.variable_scope(name, reuse=True) as scope:
+                label_w = tf.gather(tf.transpose(tf.get_variable('w')), cam_ind)
+                label_w = tf.reshape(label_w, [-1, out_ch, 1])
+        else:
+            label_w = tf.gather(tf.transpose(w), cam_ind)
+            label_w = tf.reshape(label_w, [-1, out_ch, 1])
+
+        conv_resize = tf.reshape(conv_resize, [-1, im_width * im_width, out_ch])
+        classmap = tf.matmul(conv_resize, label_w, name='classmap')
+        classmap = tf.reshape(classmap, [-1, im_width, im_width], name='classmap_reshape')
+        return classmap
+
+모델을 복원시키고 get_class_map을 통해서 weight 을 복원시킬려 하면 에러가 난다.
+label_w = tf.gather(tf.transpose(tf.get_variable('w')), cam_ind)
+이 부분에서 에러가 난다. scope 가 final 이고 weight 이름이 w 인데 못찾는 것이다
+
+그 이유가 짐작컨데 get_class_map을 실행시킨것도 함수영역이라 그런게 아닐까 싶다.
+
+
+
+#### CAM 을 얻으려면 bias 을 빼야 하나 마지막 부분에서 ?

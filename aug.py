@@ -191,7 +191,7 @@ def aug_lv3(images):
 
 
 if __name__ == '__main__':
-    img = Image.open('/Users/seongjungkim/PycharmProjects/everyNN/fundus_sample.png').resize((350, 350),
+    img = Image.open('/Users/seongjungkim/PycharmProjects/everyNN/my_data/fundus_sample.png').resize((350, 350),
                                                                                                   Image.ANTIALIAS)
     img = np.asarray(img)
     imgs = []

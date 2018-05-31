@@ -176,6 +176,22 @@ class DNN(object):
         logits=tf.identity(logits , name='logits')
         return logits
 
+    def get_class_map(self,name, x, cam_ind, im_width , w=None):
+        out_ch = int(x.get_shape()[-1])
+        conv_resize = tf.image.resize_bilinear(x, [im_width, im_width])
+        if w is None:
+            with tf.variable_scope(name, reuse=True) as scope:
+                label_w = tf.gather(tf.transpose(tf.get_variable('w')), cam_ind)
+                label_w = tf.reshape(label_w, [-1, out_ch, 1])
+        else:
+            label_w = tf.gather(tf.transpose(w), cam_ind)
+            label_w = tf.reshape(label_w, [-1, out_ch, 1])
+
+        conv_resize = tf.reshape(conv_resize, [-1, im_width * im_width, out_ch])
+        classmap = tf.matmul(conv_resize, label_w, name='classmap')
+        classmap = tf.reshape(classmap, [-1, im_width, im_width], name='classmap_reshape')
+        return classmap
+
     def count_trainable_params(self):
         total_parameters = 0
         for variable in tf.trainable_variables():

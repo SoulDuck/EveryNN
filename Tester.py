@@ -5,6 +5,7 @@ import tensorflow as tf
 import sys , os
 import utils
 from PIL import Image
+import matplotlib.pyplot as plt
 class Tester(DNN):
 
     def __init__(self , recorder ):
@@ -44,11 +45,14 @@ class Tester(DNN):
         self.top_conv = tf.get_default_graph().get_tensor_by_name('top_conv:0')
         self.logits_ = tf.get_default_graph().get_tensor_by_name('logits:0')
 
-        #self.cam_ = tf.get_default_graph().get_tensor_by_name('classmap:0')
+        self.final_w= tf.get_default_graph().get_tensor_by_name('final/w:0')
         try:
             cam_ind = tf.get_default_graph().get_tensor_by_name('cam_ind:0')
+
         except Exception as e :
             print "CAM 이 구현되어 있지 않은 모델입니다."
+
+        self.classmap_op = self.get_class_map('final', self.top_conv, 1 , 350 , self.final_w)
 
     def show_acc_loss(self , step ):
         print ''
@@ -91,7 +95,6 @@ class Tester(DNN):
         self.pred_all = pred_all
         self.loss = np.mean(loss_all)
         self.acc = self.get_acc(labs,  self.pred_all)
-
 
         if save_model:
             self.recorder.write_acc_loss(prefix='Test', loss=self.loss, acc=self.acc, step=step)
@@ -152,10 +155,33 @@ class Tester(DNN):
         mean_loss = np.mean(loss_all)
         mean_acc = self.get_acc(labels, pred_all)
         return mean_acc , mean_loss , pred_all
+    def _extract_actmap(self , imgs):
 
-    def eval(self, model_path, test_imgs, test_labs, batch_size):
+        for i,img in enumerate(imgs):
+
+            feed_dict = {self.x_: imgs[i:i+1], self.is_training: False}
+            cam = self.sess.run(self.classmap_op, feed_dict=feed_dict)
+            cam = np.squeeze(cam)
+            cam = list(map(lambda x: (x - x.min()) / (x.max() - x.min()), cam))
+            cmap = plt.cm.jet
+            cam = cmap(cam)
+            plt.imsave('tmp_cam.png' , cam)
+            plt.imsave('tmp_img.png', imgs[i])
+
+
+            exit()
+
+    def black_box(self):
+        pass;
+
+    def eval(self, model_path, test_imgs, test_labs, batch_size , actmap_dir):
         self._reconstruct_model(model_path)
         self.validate(test_imgs , test_labs , batch_size , step=0 , save_model = False)
+        if not actmap_dir is None:
+            cams = self._extract_actmap(test_imgs)
+            print np.shape(cams)
+
+
         return self.pred_all , self.acc , self.loss
 
 """
@@ -208,22 +234,26 @@ class Tester(DNN):
 """
 
 if __name__ =='__main__':
-    model_path = 'models/resnet_18/0/model-37620'
-    test_imgs=np.load('normal_test.npy')[:]
-    test_imgs=test_imgs/255.
-    test_labs=np.zeros([len(test_imgs) , 2])
-    test_labs[:,0]=1
-    batch_size = 60
-    tester=Tester(None)
-    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size)
-    print acc
 
-    tf.reset_default_graph()
-    test_imgs=np.load('abnormal_test.npy')[:]
+    model_path = 'models/resnet_18/0/model-37620'
+
+    test_imgs=np.load('my_data/abnormal_test.npy')[:2]
     test_imgs=test_imgs/255.
     test_labs=np.zeros([len(test_imgs) , 2])
     test_labs[:,1]=1
     batch_size = 60
     tester=Tester(None)
-    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size)
+    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size ,'tmp_actmap')
     print acc
+    tf.reset_default_graph()
+
+    test_imgs=np.load('my_data/normal_test.npy')[:2]
+    test_imgs=test_imgs/255.
+    test_labs=np.zeros([len(test_imgs) , 2])
+    test_labs[:,0]=1
+    batch_size = 60
+    tester=Tester(None)
+    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size , 'tmp_actmap')
+
+    print acc
+
