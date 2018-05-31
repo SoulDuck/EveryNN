@@ -55,28 +55,6 @@ class Tester(DNN):
         print 'Max Valication Acc : {} | Min Loss {}'.format(self.max_acc, self.min_loss)
         print ''
 
-    def divide_images_and_eval(self , test_imgs , batch_size ,sess, pred_op,cost_op , x_ , is_training ):
-        # 이 함수에서 self.sess 을 써서 외부 입력 파라미터를 줄이는게 class 화 취지에 맞는다.
-        # self.sess 가 기본적으로 DNN 에서 정보를 가져오는데 충돌이 일어나지는 않을까? --> 가능성이 있다 pred_op 가 생성이 안되어 있다면 오류가 난다.
-
-
-        share = len(test_imgs) / batch_size
-        remainder = len(test_imgs) % batch_size
-        predList = []
-        for s in range(share):
-            preds = sess.run(pred_op, feed_dict={x_: test_imgs[s * batch_size:(s + 1) * batch_size], is_training: False})
-            predList.extend(preds)
-        if not remainder == 0:
-            preds = sess.run(pred_op, feed_dict={x_: test_imgs[-1 * remainder:], is_training : False})
-            predList.extend(preds)
-        assert len(predList) == len(test_imgs), '# pred : {} # imgaes : {} should be SAME!'.format(len(predList),
-                                                                                                   len(test_imgs))
-        # Reset Graph
-        tf.reset_default_graph()
-        return np.asarray(predList)
-
-
-
 
     def validate(self , imgs , labs , batch_size , step , save_model = True):
 
