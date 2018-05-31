@@ -56,6 +56,7 @@ class Tester(DNN):
         print ''
 
 
+
     def validate(self , imgs , labs , batch_size , step , save_model = True):
 
         """
@@ -87,7 +88,7 @@ class Tester(DNN):
         self.pred_all = pred_all
         self.loss = np.mean(loss_all)
         self.acc = self.get_acc(labs,  self.pred_all)
-        self.recorder.write_acc_loss(prefix='Test' , loss=mean_loss , acc= mean_acc , step= step)
+        self.recorder.write_acc_loss(prefix='Test' , loss=self.loss, acc= self.acc , step= step)
 
         if save_model:
             if self.acc > self.max_acc:
