@@ -6,6 +6,7 @@ import sys , os
 import utils
 from PIL import Image
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 import copy
 class Tester(DNN):
 
@@ -173,7 +174,7 @@ class Tester(DNN):
             exit()
 
     def black_box(self , oriimg ,box_size):
-        ret_coord = []
+        ret_dict= {}
 
         height , width=np.shape(oriimg)[:2]
         skip_pix=30
@@ -181,11 +182,11 @@ class Tester(DNN):
         for h_ind in range(0,height-box_size+1,skip_pix):
             for w_ind in range(0,width-box_size+1,skip_pix):
                 img = copy.deepcopy(np.asarray(oriimg))
-                img[h_ind * box_size : (h_ind+1)*box_size , w_ind * box_size : (w_ind+1)*box_size ] =0
-                print np.shape(img)
-                plt.imsave('tmp_blackbox/tmp_blackbox_{}.png'.format(count) , img )
+                img[h_ind : h_ind+ box_size , w_ind : w_ind+ box_size ] = 0
+                #plt.imsave('tmp_blackbox/tmp_blackbox_{}.png'.format(count) , img )
                 count += 1
-
+                ret_dict[count] = ([h_ind , w_ind , box_size] , img )
+        return ret_dict
 
 
 
@@ -257,7 +258,11 @@ if __name__ =='__main__':
     # Black Box Test
     test_imgs = np.asarray(imgs)
     tester = Tester(None)
-    tester.black_box(img , 150)
+    imgs=tester.black_box(img , 150)
+    for i in imgs:
+        coord , img =imgs[i]
+        print np.shape(img)
+
 
 
 
