@@ -10,7 +10,6 @@ import matplotlib.patches as patches
 import copy
 import time
 class Tester(DNN):
-
     def __init__(self , recorder ):
         print '####################################################'
         print '#                   Tester                         #'
@@ -22,7 +21,6 @@ class Tester(DNN):
         self.max_acc=0
         self.min_loss=10000000
 
-
     def get_acc(self,trues, preds):
         assert np.ndim(trues) == np.ndim(preds), 'true shape : {} pred shape : {} '.format(np.shape(trues), np.shape(preds))
         if np.ndim(trues) == 2:
@@ -32,6 +30,7 @@ class Tester(DNN):
         tmp = [true_cls == pred_cls]
         acc = np.sum(tmp) / float(len(true_cls))
         return acc
+
     def _reconstruct_model(self , model_path):
         print 'Reconstruct Model';
         self.sess = tf.Session()
@@ -47,14 +46,11 @@ class Tester(DNN):
         self.is_training = tf.get_default_graph().get_tensor_by_name('is_training:0')
         self.top_conv = tf.get_default_graph().get_tensor_by_name('top_conv:0')
         self.logits_ = tf.get_default_graph().get_tensor_by_name('logits:0')
-
         self.final_w= tf.get_default_graph().get_tensor_by_name('final/w:0')
         try:
             cam_ind = tf.get_default_graph().get_tensor_by_name('cam_ind:0')
-
         except Exception as e :
             print "CAM 이 구현되어 있지 않은 모델입니다."
-
         self.classmap_op = self.get_class_map('final', self.top_conv, 1 , 350 , self.final_w)
 
     def show_acc_loss(self , step ):
@@ -65,15 +61,11 @@ class Tester(DNN):
         print 'Max Valication Acc : {} | Min Loss {}'.format(self.max_acc, self.min_loss)
         print ''
 
-
-
     def validate(self , imgs , labs , batch_size , step , save_model = True):
-
         """
         #### Validate ###
         test_fetches = mean_cost , pred
         """
-
         share = len(labs) / batch_size
         remainer= len(labs) % batch_size
         loss_all,  pred_all = [], []
@@ -109,8 +101,6 @@ class Tester(DNN):
 
             if self.loss < self.min_loss:
                 self.min_loss = self.loss
-
-
 
     def validate_tfrecords(self , tfrecord_path , preprocessing , resize):
         """
@@ -158,6 +148,7 @@ class Tester(DNN):
         mean_loss = np.mean(loss_all)
         mean_acc = self.get_acc(labels, pred_all)
         return mean_acc , mean_loss , pred_all
+
     def _extract_actmap(self , imgs):
 
         for i,img in enumerate(imgs):
@@ -170,8 +161,6 @@ class Tester(DNN):
             cam = cmap(cam)
             plt.imsave('tmp_cam.png' , cam)
             plt.imsave('tmp_img.png', imgs[i])
-
-
 
     def black_box(self , oriimg ,box_size):
         ret_dict= {}
@@ -278,6 +267,35 @@ class Tester(DNN):
         plt.savefig('roc.png')
         # plt.show()
         print 'The Area Under Curve is :', ySum * x_step
+
+
+    def get_spec_sens(self, preds , labels ,cufoff):
+        assert np.ndim(preds) == np.ndim(labels)
+        if np.ndim(preds) == 2:
+            preds = np.argmax(preds, axis=1)
+            labels = np.argmax(labels, axis=1)
+        assert np.ndim(preds) == np.ndim(labels)
+
+        preds=np.asarray(preds)
+
+        TN_indices = np.where(preds < cufoff) # True Negative indices
+        TP_indices = set(TN_indices) - range(len(preds))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ =='__main__':
     imgs = []
