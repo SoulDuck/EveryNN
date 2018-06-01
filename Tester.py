@@ -8,6 +8,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import copy
+import time
 class Tester(DNN):
 
     def __init__(self , recorder ):
@@ -171,7 +172,6 @@ class Tester(DNN):
             plt.imsave('tmp_img.png', imgs[i])
 
 
-            exit()
 
     def black_box(self , oriimg ,box_size):
         ret_dict= {}
@@ -188,6 +188,38 @@ class Tester(DNN):
                 ret_dict[count] = ([h_ind , w_ind , box_size] , img )
         return ret_dict
 
+    def mask(self , img , threshold , mark , bin_flag):
+        assert mark in  ['<' ,'>' , '<=' , '>='] , "mark param = '<' ,'>' , '<=' , '>=' "
+        img=np.asarray(img)
+        flatted_img = img.reshape(-1)
+        if mark == '<':
+            indices =np.where(flatted_img < threshold)[0]
+        elif mark == '>':
+            indices = np.where(flatted_img > threshold)[0]
+            rev_indices = np.where(flatted_img >= threshold)[0]
+        elif mark == '<=':
+            indices = np.where(flatted_img <= threshold)[0]
+        elif mark == '>=':
+            indices = np.where(flatted_img >= threshold)[0]
+        else:
+            raise AssertionError
+
+        # difference of sets
+        rev_indices=list(set(range(len(flatted_img))) - set(indices))
+
+        # mask imgs
+        flatted_img[indices] = 255
+        if bin_flag :
+            # if Meet the condition =>255 , else 0
+            flatted_img[rev_indices] = 0
+
+        masked_img=flatted_img.reshape(np.shape(img))
+        return masked_img
+
+
+
+
+
 
 
     def eval(self, model_path, test_imgs, test_labs, batch_size , actmap_dir):
@@ -196,58 +228,7 @@ class Tester(DNN):
         if not actmap_dir is None:
             cams = self._extract_actmap(test_imgs)
             print np.shape(cams)
-
-
         return self.pred_all , self.acc , self.loss
-
-"""
-    @classmethod
-    def reconstruct_tfrecord_rawdata(cls, tfrecord_path, resize):
-        debug_flag_lv0 = False
-        debug_flag_lv1 = False
-        if __debug__ == debug_flag_lv0:
-            print 'debug start | batch.py | class tfrecord_batch | reconstruct_tfrecord_rawdata '
-
-        print 'now Reconstruct Image Data please wait a second'
-        print 'Resize {}'.format(resize)
-        reconstruct_image = []
-        # caution record_iter is generator
-        record_iter = tf.python_io.tf_record_iterator(path=tfrecord_path)
-
-        ret_img_list = []
-        ret_lab_list = []
-        ret_filename_list = []
-        for i, str_record in enumerate(record_iter):
-            msg = '\r -progress {0}'.format(i)
-            sys.stdout.write(msg)
-            sys.stdout.flush()
-            example = tf.train.Example()
-            example.ParseFromString(str_record)
-
-            height = int(example.features.feature['height'].int64_list.value[0])
-            width = int(example.features.feature['width'].int64_list.value[0])
-            raw_image = (example.features.feature['raw_image'].bytes_list.value[0])
-            label = int(example.features.feature['label'].int64_list.value[0])
-            filename = (example.features.feature['filename'].bytes_list.value[0])
-            
-            image = np.fromstring(raw_image, dtype=np.uint8)
-            image = image.reshape((height, width, -1))
-            if not resize is None:
-                image=np.asarray(Image.fromarray(image).resize(resize,Image.ANTIALIAS))
-            ret_img_list.append(image)
-            ret_lab_list.append(label)
-            ret_filename_list.append(filename)
-
-
-        ret_img = np.asarray(ret_img_list)
-        ret_lab = np.asarray(ret_lab_list)
-        if debug_flag_lv1 == True:
-            print ''
-            print 'images shape : ', np.shape(ret_img)
-            print 'labels shape : ', np.shape(ret_lab)
-            print 'length of filenames : ', len(ret_filename_list)
-        return ret_img, ret_lab, ret_filename_list
-"""
 
 if __name__ =='__main__':
     imgs = []
@@ -255,21 +236,38 @@ if __name__ =='__main__':
         for f in files:
             img = np.asarray(Image.open(os.path.join(dirpath , f)))
             imgs.append(img)
-    # Black Box Test
-    test_imgs = np.asarray(imgs)
     tester = Tester(None)
+    # Black Box Test
+    """
+    test_imgs = np.asarray(imgs)
+    
     imgs=tester.black_box(img , 150)
     for i in imgs:
         coord , img =imgs[i]
         print np.shape(img)
+    """
+    # Mask Test
+    #tester.mask(img , 0.5 , '<' ,)
 
+    start_time =time.time()
+    model_path = 'models/resnet_18/0/model-37620'
+    test_imgs=np.load('my_data/new_cacs_abnormal_100_inf.npy')[:]
 
+    test_imgs=test_imgs/255.
+    test_labs=np.zeros([len(test_imgs) , 2])
+    test_labs[:,0]=1
+    batch_size = 60
+    tester=Tester(None)
+    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size , 'tmp_actmap')
+    print pred_all
+    print start_time - time.time()
+    print acc
 
 
 
 
 """
-    model_path = 'models/resnet_18/0/model-37620'
+    
 
     #test_imgs=np.load('my_data/abnormal_test.npy')[:2]
     test_imgs=test_imgs/255.
@@ -281,16 +279,5 @@ if __name__ =='__main__':
     print acc
     tf.reset_default_graph()
 """
-"""
 
-    test_imgs=np.load('my_data/normal_test.npy')[:2]
-    test_imgs=test_imgs/255.
-    test_labs=np.zeros([len(test_imgs) , 2])
-    test_labs[:,0]=1
-    batch_size = 60
-    tester=Tester(None)
-    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size , 'tmp_actmap')
 
-    print acc
-
-"""
