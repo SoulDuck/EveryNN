@@ -250,7 +250,7 @@ if __name__ =='__main__':
     #tester.mask(img , 0.5 , '<' ,)
 
     start_time =time.time()
-    model_path = 'models/resnet_18/0/model-37620'
+    model_path = 'models/resnet_18/best_model/model-37620'
     test_imgs=np.load('my_data/new_cacs_abnormal_100_inf.npy')[:]
 
     test_imgs=test_imgs/255.
