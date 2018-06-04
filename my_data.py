@@ -9,9 +9,9 @@ import random
 
 #항상 이런형태로 train , test tfrecords 형태로 해야한다.
 
-train_tfrecord_path= './my_data/train.tfrecord'
-test_tfrecord_path = './my_data/test.tfrecord'
-val_tfrecord_path = './my_data/val.tfrecord'
+train_tfrecord_path= './my_data/project6/train.tfrecord'
+test_tfrecord_path = './my_data/project6/test.tfrecord'
+val_tfrecord_path = './my_data/project6/val.tfrecord'
 
 
 def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs , n_nor , n_abnor):
