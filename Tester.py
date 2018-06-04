@@ -62,7 +62,7 @@ class Tester(DNN):
         print ''
 
     def show_acc_by_label(self):
-        for ind_cls in self.n_classes:
+        for ind_cls in range(self.n_classes):
             print 'Label : {} , Accuracy : {} '.format(ind_cls , self.acc_by_labels[ind_cls])
 
     def validate(self , imgs , labs , batch_size , step , save_model = True):
@@ -289,7 +289,6 @@ class Tester(DNN):
             preds = np.argmax(preds, axis=1)
             labels = np.argmax(labels, axis=1)
         assert np.ndim(preds) == np.ndim(labels)
-
         preds=np.asarray(preds)
 
         TN_indices = np.where(preds < cufoff) # True Negative indices
