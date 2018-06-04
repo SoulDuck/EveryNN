@@ -61,6 +61,10 @@ class Tester(DNN):
         print 'Max Valication Acc : {} | Min Loss {}'.format(self.max_acc, self.min_loss)
         print ''
 
+    def show_acc_by_label(self):
+        for ind_cls in self.n_classes:
+            print 'Label : {} , Accuracy : {} '.format(ind_cls , self.acc_by_labels[ind_cls])
+
     def validate(self , imgs , labs , batch_size , step , save_model = True):
         """
         #### Validate ###

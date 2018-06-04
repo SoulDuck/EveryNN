@@ -91,3 +91,7 @@ sensitivity 와 specifiy 을 보여줘야 한다 . 평가 모델에서
 이미지 전체의 평균과 분산을 빼는 방향으로 Normalization 을 해야 한다 .
 
 
+2018 6.4 + Tester, validate 에 label 별 accuracy 추가 기능
+2018 6.4
+
+
