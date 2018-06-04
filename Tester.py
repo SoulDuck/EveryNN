@@ -98,7 +98,7 @@ class Tester(DNN):
 
         # Accuracy By Label
         self.acc_by_labels=[]
-        for cls_ind in self.n_classes:
+        for cls_ind in range(self.n_classes):
             cls=np.argmax(labs , axis =1)
             indices = np.where([cls == cls_ind])[0]
             lab_by_true = labs[indices]
