@@ -102,7 +102,9 @@ class Tester(DNN):
         for cls_ind in range(self.n_classes):
             indices = np.where([cls == cls_ind])[0]
             lab_by_true = labs[indices]
+
             print lab_by_true[:10]
+            print len(indices)
 
             lab_by_pred = np.asarray(self.pred_all)[indices]
 
