@@ -14,7 +14,7 @@ class Tester(DNN):
         print '####################################################'
         print '#                   Tester                         #'
         print '####################################################'
-        if not recorder == None:
+        if not recorder is None:
             self.recorder = recorder
         self.val_acc=0
         self.val_loss=0
