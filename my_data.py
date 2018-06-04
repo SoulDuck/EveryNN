@@ -60,9 +60,8 @@ def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs , n_nor , 
             ind = abnormal_count
 
         elif normal_count + abnormal_count ==  n_nor + n_abnor :
-            print ''
-            print 'normal_count : {}'.format(normal_count)
-            print 'abnormal count {}'.format(abnormal_count)
+            print '\t normal_count : {}'.format(normal_count)
+            print '\t abnormal count {}'.format(abnormal_count)
             flag = False
         else:
             continue;
