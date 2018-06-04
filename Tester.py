@@ -14,7 +14,7 @@ class Tester(DNN):
         print '####################################################'
         print '#                   Tester                         #'
         print '####################################################'
-        if recorder == None:
+        if not recorder == None:
             self.recorder = recorder
         self.val_acc=0
         self.val_loss=0
@@ -340,7 +340,7 @@ if __name__ =='__main__':
     test_labs[:,0]=1
     batch_size = 60
     tester=Tester(None)
-    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size , 'tmp_actmap')
+    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size , 'tmp_actmap' ,)
     print pred_all
     print start_time - time.time()
     print acc
