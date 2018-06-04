@@ -106,7 +106,7 @@ class Tester(DNN):
 
             print lab_by_true[:10]
             print len(indices)
-
+            np.sum(lab_by_true)
             lab_by_pred = np.asarray(self.pred_all)[indices]
 
 
