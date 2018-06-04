@@ -73,3 +73,21 @@ label_w = tf.gather(tf.transpose(tf.get_variable('w')), cam_ind)
 #### cam_ind 는 필요없다
 
 #### Tester에서 eval 을 추가하고 block box 을 추가했다 , Tester 하수에 None 을 넣은게 잘한걸까 , 어떻게 짜야 더 잘 짰다고 할수 있을까
+
+
+####
+추가해야 할점
+sensitivity 와 specifiy 을 보여줘야 한다 . 평가 모델에서
+
+
+####
+모든 데이터셋은 Train , Test ,Val 이렇게 나누는 걸로 한다.
+
+
+### 비정상 accuracy 와 정상 accuracy 가 어떻게 ?
+라벨별 accuracy 을 보여주어야 한다 .
+
+#### 지금 255 로 나누고 있는데 그게 아니라
+이미지 전체의 평균과 분산을 빼는 방향으로 Normalization 을 해야 한다 .
+
+

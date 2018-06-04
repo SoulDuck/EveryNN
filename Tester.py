@@ -66,6 +66,7 @@ class Tester(DNN):
         #### Validate ###
         test_fetches = mean_cost , pred
         """
+
         share = len(labs) / batch_size
         remainer= len(labs) % batch_size
         loss_all,  pred_all = [], []
@@ -91,6 +92,16 @@ class Tester(DNN):
         self.loss = np.mean(loss_all)
         self.acc = self.get_acc(labs,  self.pred_all)
 
+        # Accuracy By Label
+        self.acc_by_labels=[]
+        for cls_ind in self.n_classes:
+            cls=np.argmax(labs , axis =1)
+            indices = np.where([cls == cls_ind])[0]
+            lab_by_true = labs[indices]
+            lab_by_pred = pred_all[indices]
+            lab_by_acc = self.get_acc(lab_by_true, lab_by_pred)
+            self.acc_by_labels.append(lab_by_acc)
+
         if save_model:
             self.recorder.write_acc_loss(prefix='Test', loss=self.loss, acc=self.acc, step=step)
             if self.acc > self.max_acc:
@@ -101,7 +112,6 @@ class Tester(DNN):
 
             if self.loss < self.min_loss:
                 self.min_loss = self.loss
-
     def validate_tfrecords(self , tfrecord_path , preprocessing , resize):
         """
         Validate 이용해 데이터를 꺼내옵니다. generators 임으로 하나하나 씩 꺼내 옵니다.

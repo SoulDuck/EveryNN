@@ -28,9 +28,14 @@ recorder = Recorder(folder_name=model_name)
 trainer = Trainer(recorder ,train_iter= 100)
 tester=Tester(recorder)
 
-test_imgs, test_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.test_tfrecord_path , None)
+test_imgs, test_labs , fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.test_tfrecord_path , None)
 test_labs=utils.cls2onehot(test_labs, 2)
 test_imgs=test_imgs/255.
+
+val_imgs, val_labs , fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.val_tfrecord_path , None)
+val_labs=utils.cls2onehot(val_labs, 2)
+val_imgs=val_imgs/255.
+
 
 print np.shape(test_imgs)
 print np.shape(test_labs)
@@ -38,7 +43,7 @@ print np.shape(fnames)
 
 for i in range(10):
     #val_acc, val_loss, val_preds = tester.validate_tfrecords(my_data.test_tfrecord_path, None, None)
-    tester.validate(test_imgs[:] ,test_labs[:] ,batch_size , trainer.train_step)
+    tester.validate(val_imgs[:] ,val_labs[:] ,batch_size , trainer.train_step)
     recorder.write_acc_loss('Validation test', tester.loss, tester.acc, trainer.train_step)
     tester.show_acc_loss(trainer.train_step)
     global_step = trainer.training()
