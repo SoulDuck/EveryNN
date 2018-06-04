@@ -95,3 +95,6 @@ sensitivity 와 specifiy 을 보여줘야 한다 . 평가 모델에서
 2018 6.4 + show_acc_by_label : 라벨별로 accuracy 넣을수 있는거 추가..
 
 
+
+2018.6.4 np.where 때문에 에러가 났었다.
+간단하게 cls=[cls == cls_ind]로 바꿨다. np.nonzeros , np.where 등의 활용에 대해 연구하자
