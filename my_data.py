@@ -59,7 +59,7 @@ def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs , n_nor , 
             abnormal_count +=1
             ind = abnormal_count
 
-        elif normal_count + abnormal_count == n_normal*2:
+        elif normal_count + abnormal_count ==  n_nor + n_abnor :
             print 'normal_count : {}'.format(normal_count)
             print 'abnormal count {}'.format(abnormal_count)
             flag = False
@@ -68,7 +68,7 @@ def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs , n_nor , 
 
         height, width = np.shape(np_img)[:2]
 
-        msg = '\r-Progress : {0}'.format(str(normal_count + abnormal_count) + '/' + str(n_normal*2))
+        msg = '\r-Progress : {0}'.format(str(normal_count + abnormal_count) + '/' + str(n_nor + n_abnor))
         sys.stdout.write(msg)
         sys.stdout.flush()
         if not resize is None:
