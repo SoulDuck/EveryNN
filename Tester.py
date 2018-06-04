@@ -296,21 +296,6 @@ class Tester(DNN):
         TP_indices = set(TN_indices) - range(len(preds))
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ =='__main__':
     imgs = []
 
