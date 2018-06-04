@@ -107,6 +107,12 @@ class Tester(DNN):
             lab_by_acc = self.get_acc(lab_by_true, lab_by_pred)
             self.acc_by_labels.append(lab_by_acc)
 
+        # Sensitivity , Specifity
+
+
+
+
+
         if save_model:
             self.recorder.write_acc_loss(prefix='Test', loss=self.loss, acc=self.acc, step=step)
             if self.acc > self.max_acc:
