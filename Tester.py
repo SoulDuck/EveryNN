@@ -100,18 +100,11 @@ class Tester(DNN):
         self.acc_by_labels=[]
         cls = np.argmax(labs, axis=1)
         for cls_ind in range(self.n_classes):
-            indices = np.where([cls == cls_ind])[0]
-            print cls[indices][:10]
+            indices = [cls == cls_ind]
             lab_by_true = labs[indices]
-
-            print lab_by_true[:10]
-            print len(indices)
             np.sum(lab_by_true)
             lab_by_pred = np.asarray(self.pred_all)[indices]
-
-
             lab_by_acc = self.get_acc(lab_by_true, lab_by_pred)
-            print lab_by_acc
             self.acc_by_labels.append(lab_by_acc)
 
         if save_model:

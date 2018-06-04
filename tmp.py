@@ -1,17 +1,14 @@
 import os
 import numpy as np
 from PIL import Image
-#root_dir = '/Volumes/Seagate Backup Plus Drive/data/project_000005/new_calc_fundus_350/1year/abnormal'
-root_dir = '/Volumes/Seagate Backup Plus Drive/data/project_000005/1year/350/abnormal'
-imgs = []
-for dirpath , subdirs , files in os.walk(root_dir):
-    for f in files:
-        img_path = os.path.join(dirpath,  f)
-        img = np.asarray(Image.open(img_path))
-        imgs.append(img)
+import Dataprovider
+path = '/Volumes/Seagate Backup Plus Drive/IMAC/project6/val.tfrecord'
+path = '/Volumes/Seagate Backup Plus Drive/IMAC/project6/test.tfrecord'
+imgs ,labs , fnames = Dataprovider.Dataprovider.reconstruct_tfrecord_rawdata(path , resize=None)
 
-imgs=np.asarray(imgs)
-np.save('/Users/seongjungkim/PycharmProjects/everyNN/my_data/cacs_abnormal_100_inf.npy' , imgs)
-
-
-
+print labs
+labs=np.asarray(labs)
+indices=[labs==0]
+print labs[indices]
+indices=np.where([labs==1])[1]
+print labs[indices]
