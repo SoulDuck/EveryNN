@@ -92,6 +92,6 @@ sensitivity 와 specifiy 을 보여줘야 한다 . 평가 모델에서
 
 
 2018 6.4 + Tester, validate 에 label 별 accuracy 추가 기능
-2018 6.4
+2018 6.4 + show_acc_by_label : 라벨별로 accuracy 넣을수 있는거 추가..
 
 
