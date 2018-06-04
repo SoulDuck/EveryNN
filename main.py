@@ -63,7 +63,7 @@ val_labs=utils.cls2onehot(val_labs, resnet_v1.n_classes)
 
 
 if np.max(test_imgs) > 1 :
-    test_imgs=test_imgs/255.
+    test_imgs = test_imgs / 255.
 if np.max(val_imgs) > 1:
     val_imgs = val_imgs / 255.
 

@@ -97,13 +97,15 @@ class Tester(DNN):
         self.acc = self.get_acc(labs,  self.pred_all)
 
         # Accuracy By Label
+
         self.acc_by_labels=[]
+        cls = np.argmax(labs, axis=1)
         for cls_ind in range(self.n_classes):
-            cls=np.argmax(labs , axis =1)
             indices = np.where([cls == cls_ind])[0]
             lab_by_true = labs[indices]
             lab_by_pred = np.asarray(self.pred_all)[indices]
             lab_by_acc = self.get_acc(lab_by_true, lab_by_pred)
+            print lab_by_acc
             self.acc_by_labels.append(lab_by_acc)
 
         if save_model:
