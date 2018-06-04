@@ -102,7 +102,7 @@ class Tester(DNN):
             cls=np.argmax(labs , axis =1)
             indices = np.where([cls == cls_ind])[0]
             lab_by_true = labs[indices]
-            lab_by_pred = pred_all[indices]
+            lab_by_pred = np.asarray(self.pred_all)[indices]
             lab_by_acc = self.get_acc(lab_by_true, lab_by_pred)
             self.acc_by_labels.append(lab_by_acc)
 
