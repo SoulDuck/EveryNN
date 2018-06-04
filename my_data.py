@@ -100,7 +100,7 @@ if '__main__' == __name__:
     test_tfrecord_path = './my_data/project6/test.tfrecord'
     val_tfrecord_path = './my_data/project6/val.tfrecord'
 
-    cac_dir = '~/fundus_harddisk/merged_CACS_350/1year/Numpy_Images'
+    cac_dir = 'home/mediwhale/fundus_harddisk/merged_CACS_350/1year/Numpy_Images'
     nor_test_imgs=np.load(os.path.join(cac_dir , 'normal_test.npy'))
     abnor_test_imgs = np.load(os.path.join(cac_dir, 'abnormal_test.npy'))
 
