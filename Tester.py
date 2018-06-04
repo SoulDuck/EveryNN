@@ -101,7 +101,7 @@ class Tester(DNN):
         cls = np.argmax(labs, axis=1)
         for cls_ind in range(self.n_classes):
             indices = np.where([cls == cls_ind])[0]
-            print cls[indices]
+            print cls[indices][:10]
             lab_by_true = labs[indices]
 
             print lab_by_true[:10]
