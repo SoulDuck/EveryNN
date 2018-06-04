@@ -101,12 +101,12 @@ class Tester(DNN):
         cls = np.argmax(labs, axis=1)
         for cls_ind in range(self.n_classes):
             indices = np.where([cls == cls_ind])[0]
-            print len(indices)
             lab_by_true = labs[indices]
-            print len(lab_by_true)
-            print lab_by_true[:100]
+            print lab_by_true[:10]
+
             lab_by_pred = np.asarray(self.pred_all)[indices]
-            print len(lab_by_pred)
+
+
             lab_by_acc = self.get_acc(lab_by_true, lab_by_pred)
             print lab_by_acc
             self.acc_by_labels.append(lab_by_acc)
