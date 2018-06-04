@@ -11,9 +11,10 @@ import random
 
 train_tfrecord_path= './my_data/train.tfrecord'
 test_tfrecord_path = './my_data/test.tfrecord'
+val_tfrecord_path = './my_data/val.tfrecord'
 
 
-def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs):
+def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs , n_nor , n_abnor):
     """
     img source 에는 두가지 형태로 존재합니다 . str type 의 path 와
     numpy 형태의 list 입니다.
@@ -46,26 +47,24 @@ def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs):
     NORMAL =0
     ABNORMAL = 1
 
-    total_count =0
     normal_count=0
     abnormal_count =0
     flag=True
     while(flag):
         label=random.randint(0, 1)
-        if label == NORMAL and normal_count < n_normal:
-
+        if label == NORMAL and normal_count < n_nor:
             np_img=normal_imgs[normal_count]
             normal_count +=1
             ind = normal_count
 
-        elif label == ABNORMAL and abnormal_count < n_normal:
+        elif label == ABNORMAL and abnormal_count < n_abnor: # *** Normal n imgs and Abnormal n imgs
             np_img = abnormal_imgs[abnormal_count % n_abnormal]
             abnormal_count +=1
             ind = abnormal_count
 
         elif normal_count + abnormal_count == n_normal*2:
-            print normal_count
-            print abnormal_count
+            print 'normal_count : {}'.format(normal_count)
+            print 'abnormal count {}'.format(abnormal_count)
             flag = False
         else:
             continue;
@@ -89,11 +88,27 @@ def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs):
     writer.close()
 
 if '__main__' == __name__:
+    # project 5
+    """
     cac_dir = '../fundus_data/cacs/imgSize_350/nor_0_10_abnor_300_inf/1/seoulfundus'
     nor_test_imgs=np.load(os.path.join(cac_dir , 'normal_test.npy'))
     abnor_test_imgs = np.load(os.path.join(cac_dir, 'abnormal_test.npy'))
     nor_train_imgs=np.load(os.path.join(cac_dir , 'normal_train.npy'))
     abnor_train_imgs = np.load(os.path.join(cac_dir, 'abnormal_train.npy'))
+    """
 
-    make_tfrecord(test_tfrecord_path,None , nor_test_imgs , abnor_test_imgs) # Train TF Recorder
-    make_tfrecord(train_tfrecord_path, None, nor_train_imgs, abnor_train_imgs) # Test TF Recorder
+    # project 6
+    cac_dir = '~/fundus_harddisk/merged_CACS_350/1year/Numpy_Images'
+    nor_test_imgs=np.load(os.path.join(cac_dir , 'normal_test.npy'))
+    abnor_test_imgs = np.load(os.path.join(cac_dir, 'abnormal_test.npy'))
+
+    nor_train_imgs=np.load(os.path.join(cac_dir , 'normal_train.npy'))
+    abnor_train_imgs = np.load(os.path.join(cac_dir, 'abnormal_train.npy'))
+
+    nor_val_imgs = np.load(os.path.join(cac_dir, 'normal_val.npy'))
+    abnor_val_imgs = np.load(os.path.join(cac_dir, 'abnormal_val.npy'))
+
+    # Train 이미지 수는 normal Image 와 똑같이 만든다
+    make_tfrecord(train_tfrecord_path, None, nor_train_imgs, abnor_train_imgs , len(nor_train_imgs) , len(nor_train_imgs))
+    make_tfrecord(test_tfrecord_path,None , nor_test_imgs , abnor_test_imgs , len(nor_test_imgs) , len(abnor_test_imgs)) # Train TF Recorder
+    make_tfrecord(val_tfrecord_path, None, nor_val_imgs, abnor_val_imgs, len(nor_val_imgs) , len(abnor_val_imgs)) # Test TF Recorder
