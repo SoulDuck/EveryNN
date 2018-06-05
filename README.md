@@ -98,3 +98,9 @@ sensitivity 와 specifiy 을 보여줘야 한다 . 평가 모델에서
 
 2018.6.4 np.where 때문에 에러가 났었다.
 간단하게 cls=[cls == cls_ind]로 바꿨다. np.nonzeros , np.where 등의 활용에 대해 연구하자
+
+
+2018.6.4 np.where 때문에 에러가 났었다.
+Regression 추가를 위해 loss function 을 추가한다.
+loss function 을 선택할수 있는 option 을 각 모델마다 넣는다.
+
