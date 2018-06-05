@@ -100,7 +100,7 @@ if '__main__' == __name__:
     # project 6
 
 
-    cac_dir = '~/fundus_harddisk/merged_CACS_350/1year/val_0_75_test_75_225'
+    cac_dir = '/home/mediwhale/fundus_harddisk/merged_CACS_350/1year/val_0_75_test_75_225'
     nor_test_imgs=np.load(os.path.join(cac_dir , 'normal_test.npy'))
     abnor_test_imgs = np.load(os.path.join(cac_dir, 'abnormal_test.npy'))
 
