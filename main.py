@@ -42,6 +42,8 @@ print 'Inital Learning Rate : ',args.init_lr
 print 'Learning Rage Decay Step : ' , args.lr_decay_step
 print 'Augmentation list : ', args.aug_list
 
+
+
 #test_imgs , test_labs =my_data.get_test_imgs_labs((350,350))
 #print test_labs
 
