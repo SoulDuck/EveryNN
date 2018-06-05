@@ -9,9 +9,9 @@ import random
 
 #항상 이런형태로 train , test tfrecords 형태로 해야한다.
 
-train_tfrecord_path = './my_data/project6/train.tfrecord'
-test_tfrecord_path = './my_data/project6/test.tfrecord'
-val_tfrecord_path = './my_data/project6/val.tfrecord'
+train_tfrecord_path = './my_data/project6/val_0_75_test_75_225/train.tfrecord'
+test_tfrecord_path = './my_data/project6/val_0_75_test_75_225/test.tfrecord'
+val_tfrecord_path = './my_data/project6/val_0_75_test_75_225/val.tfrecord'
 
 
 def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs , n_nor , n_abnor):
@@ -100,7 +100,7 @@ if '__main__' == __name__:
     # project 6
 
 
-    cac_dir = '/home/mediwhale/fundus_harddisk/merged_CACS_350/1year/Numpy_Images'
+    cac_dir = '~/fundus_harddisk/merged_CACS_350/1year/val_0_75_test_75_225'
     nor_test_imgs=np.load(os.path.join(cac_dir , 'normal_test.npy'))
     abnor_test_imgs = np.load(os.path.join(cac_dir, 'abnormal_test.npy'))
 
