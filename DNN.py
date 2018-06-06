@@ -28,7 +28,6 @@ class DNN(object):
     num_epoch=None
     max_iter = None
 
-
     def weight_variable_msra(self, shape, name):
         return tf.get_variable(name=name, shape=shape, initializer=tf.contrib.layers.variance_scaling_initializer())
 
@@ -242,8 +241,7 @@ class DNN(object):
         if loss_type == 'ce':
             cls.cost_op= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=cls.y_), name='cost')
         elif loss_type == 'mse':
-            cls.cost_op = tf.reduce_mean(tf.nn.)
-
+            cls.cost_op = tf.reduce_mean(tf.square(  logits - cls.y_))
         cls.lr_op = tf.train.exponential_decay(cls.init_lr, cls.global_step, decay_steps=int(cls.max_iter / cls.lr_decay_step),
                                                decay_rate=0.96,
                                                staircase=False)
@@ -276,17 +274,18 @@ class DNN(object):
 
     @classmethod
     def sess_start(cls):
-
         cls.sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=False))
         init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
         cls.sess.run(init)
         cls.coord = tf.train.Coordinator()
         cls.threads = tf.train.start_queue_runners(sess=cls.sess , coord = cls.coord)
+
     @classmethod
     def sess_stop(cls):
         cls.coord.request_stop()
         cls.coord.join(cls.threads)
         cls.sess.close()
+
     @classmethod
     def initialize(cls, optimizer_name, use_BN, l2_weight_decay ,logit_type, loss_type ,datatype, batch_size, num_epoch,
                    init_lr, lr_decay_step):
@@ -306,8 +305,7 @@ class DNN(object):
         cls.dataprovider = Dataprovider(datatype, batch_size, num_epoch)
         cls.max_iter =cls.dataprovider.n_train * num_epoch
         cls.n_classes = cls.dataprovider.n_classes
-        cls._define_input(shape=[None, cls.dataprovider.img_h, cls.dataprovider.img_w, cls.dataprovider.img_ch])#
-
+        cls._define_input(shape=[None, cls.dataprovider.img_h, cls.dataprovider.img_w, cls.dataprovider.img_ch])
 
     @classmethod
     def build_graph(cls):
