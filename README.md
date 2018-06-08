@@ -104,3 +104,12 @@ sensitivity 와 specifiy 을 보여줘야 한다 . 평가 모델에서
 Regression 추가를 위해 loss function 을 추가한다.
 loss function 을 선택할수 있는 option 을 각 모델마다 넣는다.
 
+2018.6.7
+Regeression 모델에서는 정답이 int 가 float 이 필요히다.
+앞으로 모든 라벨은 float 로 하는걸로 한다 .
+
+수정 사항 :
+Dataprovider.get_sample
+Dataprovider.reconstruct_tfrecord_rawdata
+
+label = int(example.features.feature['label'].float_list.value[0])

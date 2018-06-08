@@ -36,7 +36,7 @@ class RESNET_V1(DNN):
         #    self.input=tf_random_rotate_90(self.input)
         # Build Model
         self.logits = self.build_graph()
-        DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
+        DNN.algorithm(self.logits , self.loss_type)  # 이걸 self 로 바꾸면 안된다.
         DNN.sess_start()
         self.count_trainable_params()
 

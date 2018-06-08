@@ -37,7 +37,7 @@ class Dataprovider():
             self.n_train =  29102#Project 4 22164
             self.n_test = 4527# project 4 302
             self.n_val = 2085
-            self.n_classes = 2
+            self.n_classes = 1
 
         assert self.n_train is not None and self.n_test is not None , ' ** n_train : {} \t n_test : {} **'.format(self.n_train ,self.n_test)
         self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord_path, onehot=True,
@@ -180,7 +180,7 @@ class Dataprovider():
         height = int(example.features.feature['height'].int64_list.value[0])
         width = int(example.features.feature['width'].int64_list.value[0])
         raw_image = (example.features.feature['raw_image'].bytes_list.value[0])
-        label = int(example.features.feature['label'].int64_list.value[0])
+        label = int(example.features.feature['label'].float_list.value[0])
         filename = (example.features.feature['filename'].bytes_list.value[0])
         image = np.fromstring(raw_image, dtype=np.uint8)
         image = image.reshape((height, width, -1))
@@ -214,7 +214,7 @@ class Dataprovider():
             height = int(example.features.feature['height'].int64_list.value[0])
             width = int(example.features.feature['width'].int64_list.value[0])
             raw_image = (example.features.feature['raw_image'].bytes_list.value[0])
-            label = int(example.features.feature['label'].int64_list.value[0])
+            label = int(example.features.feature['label'].float_list.value[0])
             filename = (example.features.feature['filename'].bytes_list.value[0])
             image = np.fromstring(raw_image, dtype=np.uint8)
             image = image.reshape((height, width, -1))
@@ -234,11 +234,12 @@ class Dataprovider():
             print 'length of filenames : ', len(ret_filename_list)
         return ret_img, ret_lab, ret_filename_list
     @classmethod
-    def get_shuffled_batch(cls , tfrecord_path, batch_size, resize , num_epoch , min_after_dequeue=500):
+    def get_shuffled_batch(cls , tfrecord_path, batch_size, resize , num_epoch , min_after_dequeue=500 ):
         resize_height, resize_width = resize
         filename_queue = tf.train.string_input_producer([tfrecord_path], num_epochs=num_epoch , name='filename_queue')
         reader = tf.TFRecordReader()
         _, serialized_example = reader.read(filename_queue)
+
         features = tf.parse_single_example(serialized_example,
                                            # Defaults are not specified since both keys are required.
                                            features={
@@ -253,6 +254,8 @@ class Dataprovider():
         width = tf.cast(features['width'], tf.int32)
         label = tf.cast(features['label'], tf.int32)
         filename = tf.cast(features['filename'], tf.string)
+
+
 
         image_shape = tf.stack([height, width, 3])  # image_shape shape is ..
         #image_size_const = tf.constant((resize_height, resize_width, 3), dtype=tf.int32)
@@ -322,4 +325,3 @@ class Dataprovider():
 
 if '__main__' == __name__:
     Dataprovider('cifar10' , 60 , (32,32))
-

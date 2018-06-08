@@ -174,6 +174,7 @@ class DNN(object):
             logits = tf.matmul(layer, w, name='matmul') +b
         logits=tf.identity(logits , name='logits')
         return logits
+    
 
     def get_class_map(self,name, x, cam_ind, im_width , w=None):
         out_ch = int(x.get_shape()[-1])
@@ -238,10 +239,18 @@ class DNN(object):
 
         cls.pred_cls_op = tf.argmax(cls.pred_op, axis=1, name='pred_cls')
 
-        if loss_type == 'ce':
+        if loss_type == 'ce': #cross entropy
             cls.cost_op= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=cls.y_), name='cost')
+<<<<<<< Updated upstream
         elif loss_type == 'mse':
             cls.cost_op = tf.reduce_mean(tf.square(  logits - cls.y_))
+=======
+        elif loss_type == 'mse': # Mean Square error
+            cls.cost_op = tf.reduce_sum(tf.square(logits- cls.y_), name='cost')
+        else:
+            raise AssertionError
+
+>>>>>>> Stashed changes
         cls.lr_op = tf.train.exponential_decay(cls.init_lr, cls.global_step, decay_steps=int(cls.max_iter / cls.lr_decay_step),
                                                decay_rate=0.96,
                                                staircase=False)
