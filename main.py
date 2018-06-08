@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-from VGG import VGG
-from INCEPTION_V4 import INCEPTION_V4
 from RESNET_V1 import RESNET_V1
 from Recorder import Recorder
 from Trainer import Trainer
