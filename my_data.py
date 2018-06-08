@@ -140,8 +140,8 @@ if '__main__' == __name__:
 
 
     # Train 이미지 수는 normal Image 와 똑같이 만든다
-    make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train) ,(len(label_1_train), \
-              label_1_train),(len(label_2_train), label_2_train),(len(label_3_train), label_3_train),(len(label_4_train), label_4_train))
+    make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train) ,(len(label_0_train), \
+              label_1_train),(len(label_0_train), label_0_train),(len(label_0_train), label_3_train),(len(label_0_train), label_4_train))
 
     make_tfrecord(test_tfrecord_path,None ,(len(label_0_test), label_0_test) ,(len(label_1_test), \
               label_1_test),(len(label_2_test), label_2_test),(len(label_3_test), label_3_test),(len(label_4_test), label_4_test)) # Train TF Recorder
