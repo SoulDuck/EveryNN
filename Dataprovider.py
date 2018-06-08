@@ -35,8 +35,8 @@ class Dataprovider():
             self.val_tfrecord_path = my_data.val_tfrecord_path
             # DNN 에서 max iter 을 추정하는데 사용됩니다
 
-            self.n_train =  29102#Project 4 22164
-            self.n_test = 4527# project 4 302
+            self.n_train =  77180#Project 4 22164
+            self.n_test = 522# project 4 302
             self.n_val = 2085
             self.n_classes = 5
 
