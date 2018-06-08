@@ -114,8 +114,11 @@ if '__main__' == __name__:
     """
 
     #project 9
-    cac_dir = '/home/mediwhale/fundus_harddisk/merged_CACS_350/1year/Numpy_Images/val_0_75_test_75_225'
+
     cac_dir = '/Users/seongjungkim/PycharmProjects/everyNN/my_data/project9'
+
+    cac_dir = '/home/mediwhale/fundus_harddisk/merged_CACS_350/1year/Numpy_Images/val_0_75_test_75_225'
+    cac_dir = '/home/mediwhale/fundus_harddisk/merged_reg_fundus_350'
 
     label_0_train=np.load(os.path.join(cac_dir , 'cac_0_train.npy'))
     label_0_val = np.load(os.path.join(cac_dir, 'cac_0_val.npy'))
