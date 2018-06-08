@@ -114,3 +114,6 @@ Dataprovider.reconstruct_tfrecord_rawdata
 
 label = int(example.features.feature['label'].float_list.value[0])
 sample 데이터 셋에서 ...
+
+
+수정사항 다시 원상 복귀..
