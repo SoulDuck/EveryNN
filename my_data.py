@@ -101,14 +101,10 @@ if '__main__' == __name__:
     abnor_train_imgs = np.load(os.path.join(cac_dir, 'abnormal_train.npy'))
     """
     # project 6
-<<<<<<< Updated upstream
 
 
     # project 7 (Regression)
 
-
-
-=======
     """
 >>>>>>> Stashed changes
     cac_dir = '/home/mediwhale/fundus_harddisk/merged_CACS_350/1year/Numpy_Images/val_0_75_test_75_225'
