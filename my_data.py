@@ -8,16 +8,12 @@ import random
 # original Image
 
 #항상 이런형태로 train , test tfrecords 형태로 해야한다.
-#project 6
-"""
+
 train_tfrecord_path = './my_data/project6/val_0_75_test_75_225/train.tfrecord'
 test_tfrecord_path = './my_data/project6/val_0_75_test_75_225/test.tfrecord'
 val_tfrecord_path = './my_data/project6/val_0_75_test_75_225/val.tfrecord'
-"""
-#project 8 for regression
-train_tfrecord_path = './my_data/project8/project8_traint_350_sample.tfrecord'
-test_tfrecord_path = './my_data/project8/project8_test_350_sample.tfrecord'
-val_tfrecord_path = './my_data/project8/project8_val_350_sample.tfrecord'
+
+
 def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs , n_nor , n_abnor):
     """
     img source 에는 두가지 형태로 존재합니다 . str type 의 path 와
@@ -100,13 +96,10 @@ if '__main__' == __name__:
     nor_train_imgs=np.load(os.path.join(cac_dir , 'normal_train.npy'))
     abnor_train_imgs = np.load(os.path.join(cac_dir, 'abnormal_train.npy'))
     """
+
     # project 6
 
 
-    # project 7 (Regression)
-
-    """
->>>>>>> Stashed changes
     cac_dir = '/home/mediwhale/fundus_harddisk/merged_CACS_350/1year/Numpy_Images/val_0_75_test_75_225'
     nor_test_imgs=np.load(os.path.join(cac_dir , 'normal_test.npy'))
     abnor_test_imgs = np.load(os.path.join(cac_dir, 'abnormal_test.npy'))
@@ -121,4 +114,3 @@ if '__main__' == __name__:
     make_tfrecord(train_tfrecord_path, None, nor_train_imgs, abnor_train_imgs , len(nor_train_imgs) , len(nor_train_imgs))
     make_tfrecord(test_tfrecord_path,None , nor_test_imgs , abnor_test_imgs , len(nor_test_imgs) , len(abnor_test_imgs)) # Train TF Recorder
     make_tfrecord(val_tfrecord_path, None, nor_val_imgs, abnor_val_imgs, len(nor_val_imgs) , len(abnor_val_imgs)) # Test TF Recorder
-    """

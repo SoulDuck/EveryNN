@@ -3,7 +3,7 @@ import tensorflow as tf
 from DNN import DNN
 from aug import aug_lv0 , apply_aug_lv0 , apply_aug_rotate , tf_random_rotate_90
 class RESNET_V1(DNN):
-    def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, loss_type ,datatype, batch_size, cropped_size, num_epoch,
+    def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, cropped_size, num_epoch,
                        init_lr, lr_decay_step , model , aug_list):
         """
         :param n_filters_per_box: [32, 64, 64, 128 , 256 ]  , type = list
@@ -17,7 +17,7 @@ class RESNET_V1(DNN):
         customizing 을 함수를 추가한다.
         n_filters_per_box , n_blocks_per_box  , stride_per_box , bottlenect_factor =4
         """
-        DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, loss_type ,datatype, batch_size, num_epoch,
+        DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, num_epoch,
                        init_lr, lr_decay_step)
 
         ### bottlenect setting  ###
@@ -36,7 +36,7 @@ class RESNET_V1(DNN):
         #    self.input=tf_random_rotate_90(self.input)
         # Build Model
         self.logits = self.build_graph()
-        DNN.algorithm(self.logits , self.loss_type)  # 이걸 self 로 바꾸면 안된다.
+        DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
         DNN.sess_start()
         self.count_trainable_params()
 
@@ -79,7 +79,6 @@ class RESNET_V1(DNN):
         for box_idx in range(len(self.n_filters_per_box)):
             print '#######   box_{}  ########'.format(box_idx)
             with tf.variable_scope('box_{}'.format(box_idx)):
-
                 layer=self._box(layer , n_block= self.n_blocks_per_box[box_idx] , block_out_ch= self.n_filters_per_box[box_idx] ,
                           block_stride = self.stride_per_box[box_idx])
         self.top_conv=tf.identity(layer  , 'top_conv')
