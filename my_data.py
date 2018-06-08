@@ -9,7 +9,7 @@ import random
 
 #항상 이런형태로 train , test tfrecords 형태로 해야한다.
 
-def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs ,*args ):
+def make_tfrecord(tfrecord_path, resize ,*args ):
     """
     img source 에는 두가지 형태로 존재합니다 . str type 의 path 와
     numpy 형태의 list 입니다.
@@ -34,12 +34,12 @@ def make_tfrecord(tfrecord_path, resize , normal_imgs , abnormal_imgs ,*args ):
     n_total =0
     counts = []
     for i,arg in enumerate(args):
-        print 'Label :{} , # : {} '.format(i , arg[i])
+        print 'Label :{} , # : {} '.format(i , arg[0])
         n_total += arg[0]
         counts.append(0)
 
     while(flag):
-        label=random.randint(len(args))
+        label=random.randint(0,len(args)-1)
         n_max = args[label][0]
         if counts[label] < n_max:
             imgs = args[label][1]
@@ -79,6 +79,11 @@ val_tfrecord_path = './my_data/project6/val_0_75_test_75_225/val.tfrecord'
 
 # project 9
 
+train_tfrecord_path = './my_data/project9/train.tfrecord'
+test_tfrecord_path = './my_data/project9/test.tfrecord'
+val_tfrecord_path = './my_data/project9/val.tfrecord'
+
+
 if '__main__' == __name__:
 
     # project 5
@@ -110,17 +115,37 @@ if '__main__' == __name__:
 
     #project 9
     cac_dir = '/home/mediwhale/fundus_harddisk/merged_CACS_350/1year/Numpy_Images/val_0_75_test_75_225'
+    cac_dir = '/Users/seongjungkim/PycharmProjects/everyNN/my_data/project9'
 
-    nor_test_imgs=np.load(os.path.join(cac_dir , 'normal_test.npy'))
-    abnor_test_imgs = np.load(os.path.join(cac_dir, 'abnormal_test.npy'))
+    label_0_train=np.load(os.path.join(cac_dir , 'cac_0_train.npy'))
+    label_0_val = np.load(os.path.join(cac_dir, 'cac_0_val.npy'))
+    label_0_test = np.load(os.path.join(cac_dir, 'cac_0_test.npy'))
 
-    nor_train_imgs=np.load(os.path.join(cac_dir , 'normal_train.npy'))
-    abnor_train_imgs = np.load(os.path.join(cac_dir, 'abnormal_train.npy'))
+    label_1_train = np.load(os.path.join(cac_dir, 'cac_1_9_train.npy'))
+    label_1_val = np.load(os.path.join(cac_dir, 'cac_1_9_val.npy'))
+    label_1_test = np.load(os.path.join(cac_dir, 'cac_1_9_test.npy'))
 
-    nor_val_imgs = np.load(os.path.join(cac_dir, 'normal_val.npy'))
-    abnor_val_imgs = np.load(os.path.join(cac_dir, 'abnormal_val.npy'))
+    label_2_train = np.load(os.path.join(cac_dir, 'cac_10_99_train.npy'))
+    label_2_val = np.load(os.path.join(cac_dir, 'cac_10_99_val.npy'))
+    label_2_test = np.load(os.path.join(cac_dir, 'cac_10_99_test.npy'))
+
+    label_3_train = np.load(os.path.join(cac_dir, 'cac_100_399_train.npy'))
+    label_3_val = np.load(os.path.join(cac_dir, 'cac_100_399_val.npy'))
+    label_3_test = np.load(os.path.join(cac_dir, 'cac_100_399_test.npy'))
+
+    label_4_train = np.load(os.path.join(cac_dir, 'cac_400_inf_train.npy'))
+    label_4_val = np.load(os.path.join(cac_dir, 'cac_400_inf_val.npy'))
+    label_4_test = np.load(os.path.join(cac_dir, 'cac_400_inf_test.npy'))
+
+
 
     # Train 이미지 수는 normal Image 와 똑같이 만든다
-    make_tfrecord(train_tfrecord_path, None, nor_train_imgs, abnor_train_imgs , len(nor_train_imgs) , len(nor_train_imgs))
-    make_tfrecord(test_tfrecord_path,None , nor_test_imgs , abnor_test_imgs , len(nor_test_imgs) , len(abnor_test_imgs)) # Train TF Recorder
-    make_tfrecord(val_tfrecord_path, None, nor_val_imgs, abnor_val_imgs, len(nor_val_imgs) , len(abnor_val_imgs)) # Test TF Recorder
+    make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train) ,(len(label_1_train), \
+              label_1_train),(len(label_2_train), label_2_train),(len(label_3_train), label_3_train),(len(label_4_train), label_4_train))
+
+    make_tfrecord(test_tfrecord_path,None ,(len(label_0_test), label_0_test) ,(len(label_1_test), \
+              label_1_test),(len(label_2_test), label_2_test),(len(label_3_test), label_3_test),(len(label_4_test), label_4_test)) # Train TF Recorder
+
+    make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val) ,(len(label_1_val), \
+              label_1_val),(len(label_2_val), label_2_val),(len(label_3_val), label_3_val),(len(label_4_val), label_4_val)) # Test TF Recorder
+
