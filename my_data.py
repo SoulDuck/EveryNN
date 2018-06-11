@@ -83,9 +83,14 @@ test_tfrecord_path = './my_data/project9/test.tfrecord'
 val_tfrecord_path = './my_data/project9/val.tfrecord'
 
 # project 10
-train_tfrecord_path = './my_data/project10/train.tfrecord'
-test_tfrecord_path = './my_data/project10/test.tfrecord'
-val_tfrecord_path = './my_data/project10/val.tfrecord'
+train_tfrecord_path = './my_data/project10/train_nor_0_abnor_1_9.tfrecord'
+test_tfrecord_path = './my_data/project10/test_nor_0_abnor_1_9.tfrecord'
+val_tfrecord_path = './my_data/project10/val_nor_0_abnor_1_9.tfrecord'
+
+
+train_tfrecord_path = './my_data/project10/train_nor_0_abnor_10_50.tfrecord'
+test_tfrecord_path = './my_data/project10/test_nor_0_abnor_10_50.tfrecord'
+val_tfrecord_path = './my_data/project10/val_nor_0_abnor_10_50.tfrecord'
 
 
 if '__main__' == __name__:
@@ -164,9 +169,9 @@ if '__main__' == __name__:
     label_0_val = np.load(os.path.join(cac_dir, 'cac_0_val.npy'))
     label_0_test = np.load(os.path.join(cac_dir, 'cac_0_test.npy'))
 
-    label_1_train = np.load(os.path.join(cac_dir, 'cac_1_9_train.npy'))
-    label_1_val = np.load(os.path.join(cac_dir, 'cac_1_9_val.npy'))
-    label_1_test = np.load(os.path.join(cac_dir, 'cac_1_9_test.npy'))
+    label_1_train = np.load(os.path.join(cac_dir, 'cac_10_50_train.npy'))
+    label_1_val = np.load(os.path.join(cac_dir, 'cac_10_50_val.npy'))
+    label_1_test = np.load(os.path.join(cac_dir, 'cac_10_50_test.npy'))
 
     make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train), (len(label_0_train), label_1_train))
     make_tfrecord(test_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test))
