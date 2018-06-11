@@ -83,14 +83,15 @@ test_tfrecord_path = './my_data/project9/test.tfrecord'
 val_tfrecord_path = './my_data/project9/val.tfrecord'
 
 # project 10
-train_tfrecord_path = './my_data/project10/train_nor_0_abnor_1_9.tfrecord'
-test_tfrecord_path = './my_data/project10/test_nor_0_abnor_1_9.tfrecord'
-val_tfrecord_path = './my_data/project10/val_nor_0_abnor_1_9.tfrecord'
-
 
 train_tfrecord_path = './my_data/project10/train_nor_0_abnor_10_99.tfrecord'
 test_tfrecord_path = './my_data/project10/test_nor_0_abnor_10_99.tfrecord'
 val_tfrecord_path = './my_data/project10/val_nor_0_abnor_10_99.tfrecord'
+
+train_tfrecord_path = './my_data/project10/train_nor_0_abnor_1_9.tfrecord'
+test_tfrecord_path = './my_data/project10/test_nor_0_abnor_1_9.tfrecord'
+val_tfrecord_path = './my_data/project10/val_nor_0_abnor_1_9.tfrecord'
+
 
 
 if '__main__' == __name__:
