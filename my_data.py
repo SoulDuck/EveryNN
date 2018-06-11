@@ -46,7 +46,7 @@ def make_tfrecord(tfrecord_path, resize ,*args ):
             n_imgs = len(args[label][1])
             ind = counts[label] % n_imgs
             np_img = imgs[ind]
-            counts[label] += 1
+            counts[ ] += 1
         elif np.sum(np.asarray(counts)) ==  n_total:
             for i, count in enumerate(counts):
                 print 'Label : {} , # : {} '.format(i, count )
@@ -92,6 +92,9 @@ train_tfrecord_path = './my_data/project10/train_nor_0_abnor_10_99.tfrecord'
 test_tfrecord_path = './my_data/project10/test_nor_0_abnor_10_99.tfrecord'
 val_tfrecord_path = './my_data/project10/val_nor_0_abnor_10_99.tfrecord'
 
+train_tfrecord_path = './my_data/project10/train_nor_0_10_abnor_10_inf.tfrecord'
+test_tfrecord_path = './my_data/project10/test_nor_0_10_abnor_10_inf.tfrecord'
+val_tfrecord_path = './my_data/project10/val_nor_0_10_abnor_10_inf.tfrecord'
 
 
 if '__main__' == __name__:
@@ -163,7 +166,6 @@ if '__main__' == __name__:
 
 
     #project 10
-
     cac_dir = '/home/mediwhale/fundus_harddisk/merged_reg_fundus_350'
 
     label_0_train=np.load(os.path.join(cac_dir , 'cac_0_train.npy'))
@@ -177,5 +179,38 @@ if '__main__' == __name__:
     make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train), (len(label_0_train), label_1_train))
     make_tfrecord(test_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test))
     make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val), (len(label_0_val), label_1_val))
+
+
+
+
+    ##project 10
+    cac_dir = '/home/mediwhale/fundus_harddisk/merged_reg_fundus_350'
+
+    label_0_train = np.vstack([np.load(os.path.join(cac_dir, 'cac_0_train.npy')),
+                              np.load(os.path.join(cac_dir, 'cac_1_9_train.npy'))])
+
+    label_0_test = np.vstack([np.load(os.path.join(cac_dir, 'cac_0_train.npy')),
+                              np.load(os.path.join(cac_dir, 'cac_1_9_train.npy'))])
+
+    label_0_val = np.vstack([np.load(os.path.join(cac_dir, 'cac_0_train.npy')),
+                              np.load(os.path.join(cac_dir, 'cac_1_9_train.npy'))])
+
+
+    label_1_train = np.vstack([np.load(os.path.join(cac_dir, 'cac_10_99_train.npy')),
+                               np.load(os.path.join(cac_dir, 'cac_100_399_train.npy')),
+                               np.load(os.path.join(cac_dir, 'cac_400_inf_train.npy'))])
+
+    label_1_test = np.vstack([np.load(os.path.join(cac_dir, 'cac_100_399_test.npy')),
+                               np.load(os.path.join(cac_dir, 'cac_400_inf_test.npy'))])
+
+    label_1_val = np.vstack([np.load(os.path.join(cac_dir, 'cac_100_399_val.npy')),
+                               np.load(os.path.join(cac_dir, 'cac_400_inf_val.npy'))])
+
+
+    make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train), (len(label_0_train), label_1_train))
+    make_tfrecord(test_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test))
+    make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val), (len(label_0_val), label_1_val))
+
+
 
 
