@@ -169,7 +169,7 @@ if '__main__' == __name__:
     label_1_test = np.load(os.path.join(cac_dir, 'cac_1_9_test.npy'))
 
     make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train), (len(label_0_train), label_1_train))
-    make_tfrecord(train_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test))
-    make_tfrecord(train_tfrecord_path, None, (len(label_0_val), label_0_val), (len(label_0_val), label_1_val))
+    make_tfrecord(test_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test))
+    make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val), (len(label_0_val), label_1_val))
 
 
