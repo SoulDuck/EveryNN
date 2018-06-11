@@ -78,10 +78,14 @@ test_tfrecord_path = './my_data/project6/val_0_75_test_75_225/test.tfrecord'
 val_tfrecord_path = './my_data/project6/val_0_75_test_75_225/val.tfrecord'
 
 # project 9
-
 train_tfrecord_path = './my_data/project9/train.tfrecord'
 test_tfrecord_path = './my_data/project9/test.tfrecord'
 val_tfrecord_path = './my_data/project9/val.tfrecord'
+
+# project 10
+train_tfrecord_path = './my_data/project10/train.tfrecord'
+test_tfrecord_path = './my_data/project10/test.tfrecord'
+val_tfrecord_path = './my_data/project10/val.tfrecord'
 
 
 if '__main__' == __name__:
@@ -115,6 +119,7 @@ if '__main__' == __name__:
 
     #project 9
 
+    """
     cac_dir = '/home/mediwhale/fundus_harddisk/merged_reg_fundus_350'
 
     label_0_train=np.load(os.path.join(cac_dir , 'cac_0_train.npy'))
@@ -148,4 +153,22 @@ if '__main__' == __name__:
 
     make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val) ,(len(label_1_val), \
               label_1_val),(len(label_2_val), label_2_val),(len(label_3_val), label_3_val),(len(label_4_val), label_4_val)) # Test TF Recorder
+    """
+
+
+    #project 10
+    cac_dir = '/home/mediwhale/fundus_harddisk/merged_CACS_350/1year/Numpy_Images/val_0_75_test_75_225'
+
+    label_0_train=np.load(os.path.join(cac_dir , 'cac_0_train.npy'))
+    label_0_val = np.load(os.path.join(cac_dir, 'cac_0_val.npy'))
+    label_0_test = np.load(os.path.join(cac_dir, 'cac_0_test.npy'))
+
+    label_1_train = np.load(os.path.join(cac_dir, 'cac_1_9_train.npy'))
+    label_1_val = np.load(os.path.join(cac_dir, 'cac_1_9_val.npy'))
+    label_1_test = np.load(os.path.join(cac_dir, 'cac_1_9_test.npy'))
+
+    make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train), (len(label_0_train), label_1_train))
+    make_tfrecord(train_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test))
+    make_tfrecord(train_tfrecord_path, None, (len(label_0_val), label_0_val), (len(label_0_val), label_1_val))
+
 
