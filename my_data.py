@@ -189,6 +189,8 @@ if '__main__' == __name__:
     label_0_train = np.vstack([np.load(os.path.join(cac_dir, 'cac_0_train.npy')),
                               np.load(os.path.join(cac_dir, 'cac_1_9_train.npy'))])
 
+    print np.shape(label_0_train)
+
     label_0_test = np.vstack([np.load(os.path.join(cac_dir, 'cac_0_train.npy')),
                               np.load(os.path.join(cac_dir, 'cac_1_9_train.npy'))])
 
