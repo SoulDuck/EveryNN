@@ -46,7 +46,7 @@ def make_tfrecord(tfrecord_path, resize ,*args ):
             n_imgs = len(args[label][1])
             ind = counts[label] % n_imgs
             np_img = imgs[ind]
-            counts[ ] += 1
+            counts[label] += 1
         elif np.sum(np.asarray(counts)) ==  n_total:
             for i, count in enumerate(counts):
                 print 'Label : {} , # : {} '.format(i, count )
