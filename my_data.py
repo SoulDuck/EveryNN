@@ -88,9 +88,9 @@ test_tfrecord_path = './my_data/project10/test_nor_0_abnor_1_9.tfrecord'
 val_tfrecord_path = './my_data/project10/val_nor_0_abnor_1_9.tfrecord'
 
 
-train_tfrecord_path = './my_data/project10/train_nor_0_abnor_10_50.tfrecord'
-test_tfrecord_path = './my_data/project10/test_nor_0_abnor_10_50.tfrecord'
-val_tfrecord_path = './my_data/project10/val_nor_0_abnor_10_50.tfrecord'
+train_tfrecord_path = './my_data/project10/train_nor_0_abnor_10_99.tfrecord'
+test_tfrecord_path = './my_data/project10/test_nor_0_abnor_10_99.tfrecord'
+val_tfrecord_path = './my_data/project10/val_nor_0_abnor_10_99.tfrecord'
 
 
 if '__main__' == __name__:

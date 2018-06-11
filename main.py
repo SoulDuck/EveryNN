@@ -46,7 +46,7 @@ print 'Augmentation list : ', args.aug_list
 #print test_labs
 
 # Cifar VGG 11
-
+"""
 model_name = 'vgg_11'
 vgg = VGG(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.cropped_size,\
                     args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name ,args.aug_list)
@@ -72,10 +72,10 @@ for i in range(max_step):
     global_step = trainer.training(args.aug_list)
 
 vgg.sess_stop()
-
+"""
 
 # RESNET
-"""
+
 resnet_v1=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.cropped_size,\
                     args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name ,args.aug_list)
 
@@ -87,7 +87,6 @@ test_imgs, test_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdat
 test_labs=utils.cls2onehot(test_labs, resnet_v1.n_classes)
 val_imgs, val_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.val_tfrecord_path , None)
 val_labs=utils.cls2onehot(val_labs, resnet_v1.n_classes)
-
 
 if np.max(test_imgs) > 1 :
     test_imgs = test_imgs / 255.
@@ -103,4 +102,3 @@ for i in range(max_step):
     tester.show_acc_by_label()
     global_step = trainer.training(args.aug_list)
 resnet_v1.sess_stop()
-"""
