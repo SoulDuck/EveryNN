@@ -88,7 +88,7 @@ class RESNET_V1(DNN):
         elif self.logit_type == 'fc':
             fc_features = [4096, 4096]
             before_act_bn_mode = [False, False]
-            after_act_bn_mode = [False, False]
+            after_act_bn_mode = [True, True]
             for i in range(len(fc_features)):
                 with tf.variable_scope('fc_{}'.format(str(i))) as scope:
                     print i

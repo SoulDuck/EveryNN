@@ -18,8 +18,8 @@ img_size_flat = img_size * img_size * num_channels
 # Number of classes.
 num_classes = 10
 
-train_tfrecords = ['./cifar_10/cifar_10_train_imgs.tfrecord']
-test_tfrecords = ['./cifar_10/cifar_10_test_imgs.tfrecord']
+train_tfrecords = './cifar_10/cifar_10_train_imgs.tfrecord'
+test_tfrecords = './cifar_10/cifar_10_test_imgs.tfrecord'
 data_dir = './cifar_10/cifar-10-batches-py'
 def report_download_progress(count , block_size , total_size):
     pct_complete = float(count * block_size) / total_size

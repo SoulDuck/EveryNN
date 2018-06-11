@@ -80,6 +80,7 @@ class Tester(DNN):
                 feedDict = {self.x_: imgs[i * batch_size:(i + 1) * batch_size],
                                  self.y_: labs[i * batch_size:(i + 1) * batch_size], self.is_training: False}
                 mean_loss, preds = self.sess.run(fetches=fetches, feed_dict=feedDict)
+
                 pred_all.extend(preds)
                 loss_all.append(mean_loss)
 
@@ -108,11 +109,6 @@ class Tester(DNN):
             self.acc_by_labels.append(lab_by_acc)
 
         # Sensitivity , Specifity
-
-
-
-
-
         if save_model:
             self.recorder.write_acc_loss(prefix='Test', loss=self.loss, acc=self.acc, step=step)
             if self.acc > self.max_acc:
@@ -123,6 +119,9 @@ class Tester(DNN):
 
             if self.loss < self.min_loss:
                 self.min_loss = self.loss
+
+
+
     def validate_tfrecords(self , tfrecord_path , preprocessing , resize):
         """
         Validate 이용해 데이터를 꺼내옵니다. generators 임으로 하나하나 씩 꺼내 옵니다.
@@ -161,6 +160,8 @@ class Tester(DNN):
             label=utils.cls2onehot([label] ,self.n_classes)
             labels.extend(label)
 
+
+
             # Run Test
             test_feedDict = {self.x_: image, self.y_: label, self.is_training: False}
             loss , pred = self.sess.run(fetches=fetches, feed_dict=test_feedDict)
@@ -169,6 +170,21 @@ class Tester(DNN):
         mean_loss = np.mean(loss_all)
         mean_acc = self.get_acc(labels, pred_all)
         return mean_acc , mean_loss , pred_all
+
+    def validate_top_k(self , preds, labels, top_k , show_flag):
+        accs = []
+        top_k_acc = []
+        for k in range(1, top_k + 1):
+            for i, pred in enumerate(preds):
+                indices = pred.argsort()[-k:][::-1]
+                bin_value = np.sum(labels[i][indices])  # bin_value  True , False
+                accs.append(bin_value)
+            acc = np.sum(accs) / float(len(accs))
+            if show_flag:
+                print '{} : Accuracy {}'.format(k,acc)
+            top_k_acc.append(acc)
+
+        return top_k_acc
 
     def _extract_actmap(self , imgs):
 

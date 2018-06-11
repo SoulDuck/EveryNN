@@ -267,7 +267,17 @@ class DNN(object):
         cls.lr_ = tf.placeholder(tf.float32, shape=[], name='learning_rate')
         cls.is_training = tf.placeholder(tf.bool, shape=[], name='is_training')
         cls.global_step = tf.placeholder(tf.int32, shape=[], name='global_step')
-
+    @classmethod
+    def _top_n_k(cls):
+        print
+        if len(list(cls.y_.get_shape())) == 2 and int(cls.y_.get_shape()[-1]) == cls.n_classes:  # one hotencoder
+            labels=tf.argmax(cls.y_, axis=1)
+            cls.top_n_acc_ops = []
+            for k in range(cls.n_classes - 1):
+                print 'Top {} OP is created '.format(k+1)
+                cls.top_n_acc_ops.append(tf.nn.in_top_k(cls.pred,  targets= labels ,  k = k+1 ))
+        else:
+            return
     @classmethod
     def sess_start(cls):
 
