@@ -191,11 +191,11 @@ if '__main__' == __name__:
 
     print np.shape(label_0_train)
 
-    label_0_test = np.vstack([np.load(os.path.join(cac_dir, 'cac_0_train.npy')),
-                              np.load(os.path.join(cac_dir, 'cac_1_9_train.npy'))])
+    label_0_test = np.vstack([np.load(os.path.join(cac_dir, 'cac_0_test.npy')),
+                              np.load(os.path.join(cac_dir, 'cac_1_9_test.npy'))])
 
-    label_0_val = np.vstack([np.load(os.path.join(cac_dir, 'cac_0_train.npy')),
-                              np.load(os.path.join(cac_dir, 'cac_1_9_train.npy'))])
+    label_0_val = np.vstack([np.load(os.path.join(cac_dir, 'cac_0_val.npy')),
+                              np.load(os.path.join(cac_dir, 'cac_1_9_val.npy'))])
 
 
     label_1_train = np.vstack([np.load(os.path.join(cac_dir, 'cac_10_99_train.npy')),
