@@ -162,7 +162,7 @@ if '__main__' == __name__:
 
     make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val) ,(len(label_1_val), \
               label_1_val),(len(label_2_val), label_2_val),(len(label_3_val), label_3_val),(len(label_4_val), label_4_val)) # Test TF Recorder
-    """
+   
 
 
     #project 10
@@ -179,7 +179,7 @@ if '__main__' == __name__:
     make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train), (len(label_0_train), label_1_train))
     make_tfrecord(test_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test))
     make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val), (len(label_0_val), label_1_val))
-
+    """
 
 
 
