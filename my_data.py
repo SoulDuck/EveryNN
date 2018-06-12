@@ -96,9 +96,12 @@ train_tfrecord_path = './my_data/project10/train_nor_0_10_abnor_10_inf.tfrecord'
 test_tfrecord_path = './my_data/project10/test_nor_0_10_abnor_10_inf.tfrecord'
 val_tfrecord_path = './my_data/project10/val_nor_0_10_abnor_10_inf.tfrecord'
 
+train_tfrecord_path = './my_data/project10/train_nor_0_10_abnor_400_inf.tfrecord'
+test_tfrecord_path = './my_data/project10/test_nor_0_10_abnor_400_inf.tfrecord'
+val_tfrecord_path = './my_data/project10/val_nor_0_10_abnor_400_inf.tfrecord'
+
 
 if '__main__' == __name__:
-
     # project 5
     """
     cac_dir = '../fundus_data/cacs/imgSize_350/nor_0_10_abnor_300_inf/1/seoulfundus'
@@ -127,7 +130,6 @@ if '__main__' == __name__:
     """
 
     #project 9
-
     """
     cac_dir = '/home/mediwhale/fundus_harddisk/merged_reg_fundus_350'
 
@@ -164,7 +166,7 @@ if '__main__' == __name__:
               label_1_val),(len(label_2_val), label_2_val),(len(label_3_val), label_3_val),(len(label_4_val), label_4_val)) # Test TF Recorder
    
 
-
+    """
     #project 10
     cac_dir = '/home/mediwhale/fundus_harddisk/merged_reg_fundus_350'
 
@@ -172,18 +174,19 @@ if '__main__' == __name__:
     label_0_val = np.load(os.path.join(cac_dir, 'cac_0_val.npy'))
     label_0_test = np.load(os.path.join(cac_dir, 'cac_0_test.npy'))
 
-    label_1_train = np.load(os.path.join(cac_dir, 'cac_10_99_train.npy'))
-    label_1_val = np.load(os.path.join(cac_dir, 'cac_10_99_val.npy'))
-    label_1_test = np.load(os.path.join(cac_dir, 'cac_10_99_test.npy'))
+    label_1_train = np.load(os.path.join(cac_dir, 'cac_400_inf_train.npy'))
+    label_1_val = np.load(os.path.join(cac_dir, 'cac_400_inf_val.npy'))
+    label_1_test = np.load(os.path.join(cac_dir, 'cac_400_inf_test.npy'))
 
     make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train), (len(label_0_train), label_1_train))
     make_tfrecord(test_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test))
     make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val), (len(label_0_val), label_1_val))
-    """
+
 
 
 
     ##project 10
+    """
     cac_dir = '/home/mediwhale/fundus_harddisk/merged_reg_fundus_350'
 
     label_0_train = np.vstack([np.load(os.path.join(cac_dir, 'cac_0_train.npy')),
@@ -212,7 +215,4 @@ if '__main__' == __name__:
     make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train), (len(label_0_train), label_1_train))
     make_tfrecord(test_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test))
     make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val), (len(label_0_val), label_1_val))
-
-
-
-
+    """
