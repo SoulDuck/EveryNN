@@ -88,20 +88,11 @@ test_labs=utils.cls2onehot(test_labs, resnet_v1.n_classes)
 val_imgs, val_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.val_tfrecord_path , None)
 val_labs=utils.cls2onehot(val_labs, resnet_v1.n_classes)
 
-test_imgs_10_99 = np.load('./my_data/project10/cac_10_99_test.npy')
-test_labs_10_99 = np.zeros([len(test_imgs_10_99 ) ,  2])
-test_labs_10_99[: , 1]=1
-val_imgs_10_99 = np.load('./my_data/project10/cac_10_99_val.npy')
 
 if np.max(test_imgs) > 1 :
     test_imgs = test_imgs / 255.
 if np.max(val_imgs) > 1:
     val_imgs = val_imgs / 255.
-
-if np.max(test_imgs_10_99) > 1 :
-    test_imgs_10_99 = test_imgs_10_99 / 255.
-if np.max(val_imgs_10_99) > 1:
-    val_imgs_10_99 = val_imgs_10_99 / 255.
 
 
 max_step=int(resnet_v1.max_iter*args.num_epoch/args.batch_size)
@@ -110,9 +101,6 @@ for i in range(max_step):
     #val_acc, val_loss, val_preds = tester.validate_tfrecords(my_data.test_tfrecord_path, None, None)
 
     tester.validate(test_imgs[:] ,test_labs[:] ,args.batch_size , trainer.train_step)
-    tester.show_acc_loss(trainer.train_step)
-    tester.show_acc_by_label()
-    tester.validate(test_imgs_10_99[:], test_labs_10_99[:], args.batch_size, trainer.train_step , False ,)
     tester.show_acc_loss(trainer.train_step)
     tester.show_acc_by_label()
     global_step = trainer.training(args.aug_list)
