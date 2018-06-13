@@ -84,6 +84,7 @@ trainer = Trainer(recorder ,train_iter = 100 )
 tester=Tester(recorder)
 
 test_imgs, test_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.test_tfrecord_path , None)
+print test_labs
 test_labs=utils.cls2onehot(test_labs, resnet_v1.n_classes)
 val_imgs, val_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.val_tfrecord_path , None)
 val_labs=utils.cls2onehot(val_labs, resnet_v1.n_classes)
