@@ -198,7 +198,7 @@ if '__main__' == __name__:
     label_0_val = np.load(os.path.join(cac_dir, 'cac_0_9_val.npy'))
     label_0_test = np.load(os.path.join(cac_dir, 'cac_0_9_test.npy'))
 
-    label_1_train = np.load(os.path.join(cac_dir, 'cac_10_5_train.npy'))
+    label_1_train = np.load(os.path.join(cac_dir, 'cac_10_55_train.npy'))
     label_1_val = np.load(os.path.join(cac_dir, 'cac_10_55_val.npy'))
     label_1_test = np.load(os.path.join(cac_dir, 'cac_10_55_test.npy'))
 
