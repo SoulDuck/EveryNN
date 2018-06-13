@@ -45,6 +45,7 @@ def make_tfrecord(tfrecord_path, resize ,*args ):
             n_imgs = len(args[label][1])
             print n_imgs
             ind = counts[label] % n_imgs
+
             np_img = imgs[ind]
             counts[label] += 1
         elif np.sum(np.asarray(counts)) ==  n_total:
@@ -97,9 +98,11 @@ def get_name(path):
     name, ext = os.path.splitext(os.path.split(path)[-1])
     return name , ext
 
-def get_paths(imgdir , extension):
+def get_paths( extension , *imgdirs):
     ret_dict={}
-    img_paths=glob.glob(os.path.join(imgdir , '*.'+extension))
+    img_paths=[]
+    for imgdir in imgdirs:
+        img_paths.extend(glob.glob(os.path.join(imgdir , '*.'+extension)))
     for path in img_paths:
         name, ext = get_name(path)
         ret_dict[name] = path
@@ -138,6 +141,7 @@ def divide_into_tvt(src_dict , n_test , n_val ):
         test_paths = src_dict[label][:n_test]
         val_paths = src_dict[label][n_test:n_test + n_val ]
         train_paths = src_dict[label][n_test + n_val : ]
+        print 'label : {} , # {} {} {}'.format(label , len(train_paths) , len(test_paths) , len(val_paths))
         ret_dict[label] = {'train' : train_paths , 'test' : test_paths , 'val' : val_paths}
     return ret_dict
 
@@ -165,10 +169,12 @@ if __name__ == '__main__':
 
 
     labels_dict = read_csv(label_path , include_first = False )
-    paths_dict  = get_paths('./kaggle_fundus/train_0', 'jpeg')
+    paths_dict = get_paths('jpeg', './kaggle_fundus/train_0/train', './kaggle_fundus/train_1/train', './kaggle_fundus/train_2/train',
+                           './kaggle_fundus/train_3/train', './kaggle_fundus/train_4/train')
+
     pathLabel_dict = merge_dict(paths_dict, labels_dict)
     pathLabel_dict =divide_into_labels(pathLabel_dict)
-    pathLabel_dict =divide_into_tvt(pathLabel_dict , 2,2)
+    pathLabel_dict =divide_into_tvt(pathLabel_dict , 1,1)
 
     label_0_train = paths2numpy(pathLabel_dict[0]['train'],(300,300))
     label_0_test = paths2numpy(pathLabel_dict[0]['test'],(300,300))
@@ -185,6 +191,7 @@ if __name__ == '__main__':
     label_3_train = paths2numpy(pathLabel_dict[3]['train'],(300,300))
     label_3_test = paths2numpy(pathLabel_dict[3]['test'],(300,300))
     label_3_val = paths2numpy(pathLabel_dict[3]['val'],(300,300))
+
 
 
 
