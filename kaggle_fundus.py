@@ -211,16 +211,18 @@ if __name__ == '__main__':
 
     print 'label 3 is Done'
 
+    train_tfrecord_path = 'kaggle_fundus/kagglefundus_train.tfrecord'
+    val_tfrecord_path = 'kaggle_fundus/kagglefundus_val.tfrecord'
+    test_tfrecord_path = 'kaggle_fundus/kagglefundus_test.tfrecord'
 
 
-
-    make_tfrecord('kaggle_fundus/kagglefundus_train.tfrecord', None ,(len(label_0_train), label_0_train),
+    make_tfrecord(train_tfrecord_path, None ,(len(label_0_train), label_0_train),
                   (len(label_0_train), label_1_train), (len(label_0_train), label_2_train),
                   (len(label_0_train), label_3_train) , (len(label_0_train), label_4_train))
-    make_tfrecord('kaggle_fundus/kagglefundus_val.tfrecord', None ,(len(label_0_val), label_0_val),
+    make_tfrecord(val_tfrecord_path, None ,(len(label_0_val), label_0_val),
                   (len(label_1_val), label_1_val), (len(label_2_val), label_2_val),
                   (len(label_3_val), label_3_val),(len(label_4_val), label_4_val))
-    make_tfrecord('kaggle_fundus/kagglefundus_test.tfrecord', None, (len(label_0_test), label_0_test),
+    make_tfrecord(test_tfrecord_path, None, (len(label_0_test), label_0_test),
                   (len(label_1_test), label_1_test), (len(label_2_test), label_2_test),
                   (len(label_3_test), label_3_test),(len(label_4_test), label_4_test))
 

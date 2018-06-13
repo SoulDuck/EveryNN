@@ -4,7 +4,7 @@ import numpy as np
 import os
 import aug
 import tensorflow as tf
-import cifar , my_data
+import cifar , my_data , kaggle_fundus
 import sys
 from PIL import Image
 class Dataprovider():
@@ -51,6 +51,12 @@ class Dataprovider():
             self.n_test = 323  # project 4 302
             self.n_val = 301  #
             self.n_classes = 3
+        elif datatype == 'kaggle_fundus':
+            self.train_tfrecord_path = kaggle_fundus.train_tfrecord_path# list
+            self.test_tfrecord_path = kaggle_fundus.test_tfrecord_path # list
+            self.val_tfrecord_path = kaggle_fundus.val_tfrecord_path
+
+
 
         assert self.n_train is not None and self.n_test is not None , ' ** n_train : {} \t n_test : {} **'.format(self.n_train ,self.n_test)
         self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord_path, onehot=True,
