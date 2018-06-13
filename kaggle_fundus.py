@@ -174,7 +174,7 @@ if __name__ == '__main__':
 
     pathLabel_dict = merge_dict(paths_dict, labels_dict)
     pathLabel_dict =divide_into_labels(pathLabel_dict)
-    pathLabel_dict =divide_into_tvt(pathLabel_dict , 1,1)
+    pathLabel_dict =divide_into_tvt(pathLabel_dict , 75,75)
 
     label_0_train = paths2numpy(pathLabel_dict[0]['train'],(300,300))
     label_0_test = paths2numpy(pathLabel_dict[0]['test'],(300,300))
