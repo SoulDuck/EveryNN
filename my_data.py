@@ -202,9 +202,9 @@ if '__main__' == __name__:
     label_1_val = np.load(os.path.join(cac_dir, 'cac_10_55_val.npy'))
     label_1_test = np.load(os.path.join(cac_dir, 'cac_10_55_test.npy'))
 
-    label_2_train = np.load(os.path.join(cac_dir, 'cac_56_inf_train.npy'))
-    label_2_val = np.load(os.path.join(cac_dir, 'cac_56_inf_val.npy'))
-    label_2_test = np.load(os.path.join(cac_dir, 'cac_56_inf_test.npy'))
+    label_2_train = np.load(os.path.join(cac_dir, 'cac_55_inf_train.npy'))
+    label_2_val = np.load(os.path.join(cac_dir, 'cac_55_inf_val.npy'))
+    label_2_test = np.load(os.path.join(cac_dir, 'cac_55_inf_test.npy'))
 
 
     # Train 이미지 수는 normal Image 와 똑같이 만든다
