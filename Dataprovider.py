@@ -55,7 +55,7 @@ class Dataprovider():
             self.train_tfrecord_path = kaggle_fundus.train_tfrecord_path# list
             self.test_tfrecord_path = kaggle_fundus.test_tfrecord_path # list
             self.val_tfrecord_path = kaggle_fundus.val_tfrecord_path
-
+            self.n_train = 97545  # Project 4 22164
 
 
         assert self.n_train is not None and self.n_test is not None , ' ** n_train : {} \t n_test : {} **'.format(self.n_train ,self.n_test)
