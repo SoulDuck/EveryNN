@@ -96,9 +96,16 @@ train_tfrecord_path = './my_data/project10/train_nor_0_10_abnor_10_inf.tfrecord'
 test_tfrecord_path = './my_data/project10/test_nor_0_10_abnor_10_inf.tfrecord'
 val_tfrecord_path = './my_data/project10/val_nor_0_10_abnor_10_inf.tfrecord'
 
+
 train_tfrecord_path = './my_data/project10/train_nor_0_abnor_400_inf.tfrecord'
 test_tfrecord_path = './my_data/project10/test_nor_0_abnor_400_inf.tfrecord'
 val_tfrecord_path = './my_data/project10/val_nor_0_abnor_400_inf.tfrecord'
+
+
+# Data ID 0100-0000003-015
+train_tfrecord_path = './my_data/project10/train_0_9_10_55_56_inf.tfrecord'
+test_tfrecord_path = './my_data/project10/test_0_9_10_55_56_inf.tfrecord'
+val_tfrecord_path = './my_data/project10/val_0_9_10_55_56_inf.tfrecord'
 
 
 if '__main__' == __name__:
@@ -167,7 +174,8 @@ if '__main__' == __name__:
    
 
     """
-    #project 10
+    """
+    #project 10 
     cac_dir = '/home/mediwhale/fundus_harddisk/merged_reg_fundus_350'
 
     label_0_train=np.load(os.path.join(cac_dir , 'cac_0_train.npy'))
@@ -181,9 +189,33 @@ if '__main__' == __name__:
     make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train), (len(label_0_train), label_1_train))
     make_tfrecord(test_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test))
     make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val), (len(label_0_val), label_1_val))
+    """
+
+    # Data Id  0100-0000003-014 ==> 0100-0000003-015
+    cac_dir = '/home/mediwhale/fundus_harddisk/merged_reg_fundus_350'
+
+    label_0_train = np.load(os.path.join(cac_dir, 'cac_0_9_train.npy'))
+    label_0_val = np.load(os.path.join(cac_dir, 'cac_0_9_val.npy'))
+    label_0_test = np.load(os.path.join(cac_dir, 'cac_0_9_test.npy'))
+
+    label_1_train = np.load(os.path.join(cac_dir, 'cac_10_5_train.npy'))
+    label_1_val = np.load(os.path.join(cac_dir, 'cac_10_55_val.npy'))
+    label_1_test = np.load(os.path.join(cac_dir, 'cac_10_55_test.npy'))
+
+    label_2_train = np.load(os.path.join(cac_dir, 'cac_56_inf_train.npy'))
+    label_2_val = np.load(os.path.join(cac_dir, 'cac_56_inf_val.npy'))
+    label_2_test = np.load(os.path.join(cac_dir, 'cac_56_inf_test.npy'))
 
 
+    # Train 이미지 수는 normal Image 와 똑같이 만든다
+    make_tfrecord(train_tfrecord_path, None, (len(label_0_train), label_0_train), (len(label_0_train), label_1_train),
+                  (len(label_0_train), label_2_train))
 
+    make_tfrecord(test_tfrecord_path, None, (len(label_0_test), label_0_test), (len(label_1_test), label_1_test),
+                  (len(label_2_test), label_2_test))  # Train TF Recorder
+
+    make_tfrecord(val_tfrecord_path, None, (len(label_0_val), label_0_val), (len(label_1_val), label_1_val),
+                  (len(label_2_val), label_2_val))  # Test TF Recorder
 
     ##project 10
     """
