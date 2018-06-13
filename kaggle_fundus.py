@@ -180,18 +180,31 @@ if __name__ == '__main__':
     label_0_test = paths2numpy(pathLabel_dict[0]['test'],(300,300))
     label_0_val = paths2numpy(pathLabel_dict[0]['val'],(300,300))
 
+    print 'label 0 is Done'
+
     label_1_train = paths2numpy(pathLabel_dict[1]['train'],(300,300))
     label_1_test = paths2numpy(pathLabel_dict[1]['test'],(300,300))
     label_1_val = paths2numpy(pathLabel_dict[1]['val'],(300,300))
+
+    print 'label 1 is Done'
 
     label_2_train = paths2numpy(pathLabel_dict[2]['train'],(300,300))
     label_2_test = paths2numpy(pathLabel_dict[2]['test'],(300,300))
     label_2_val = paths2numpy(pathLabel_dict[2]['val'],(300,300))
 
+    print 'label 2 is Done'
+
     label_3_train = paths2numpy(pathLabel_dict[3]['train'],(300,300))
     label_3_test = paths2numpy(pathLabel_dict[3]['test'],(300,300))
     label_3_val = paths2numpy(pathLabel_dict[3]['val'],(300,300))
 
+    print 'label 3 is Done'
+
+    label_4_train = paths2numpy(pathLabel_dict[4]['train'],(300,300))
+    label_4_test = paths2numpy(pathLabel_dict[4]['test'],(300,300))
+    label_4_val = paths2numpy(pathLabel_dict[4]['val'],(300,300))
+
+    print 'label 4 is Done'
 
 
 
