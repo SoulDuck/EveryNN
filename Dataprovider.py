@@ -58,7 +58,7 @@ class Dataprovider():
             self.n_train = 97545  # Project 4 22164
             self.n_test = 375  # project 4 302
             self.n_val = 375  #
-            self.n_classes = 3
+            self.n_classes = 5
 
 
 
