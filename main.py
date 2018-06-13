@@ -95,7 +95,7 @@ if np.max(val_imgs) > 1:
     val_imgs = val_imgs / 255.
 
 
-max_step=int(resnet_v1.max_iter*args.num_epoch/args.batch_size)
+max_step=int(resnet_v1.max_iter)
 print 'Start Training , Max step : {}'.format(max_step)
 for i in range(max_step):
     #val_acc, val_loss, val_preds = tester.validate_tfrecords(my_data.test_tfrecord_path, None, None)

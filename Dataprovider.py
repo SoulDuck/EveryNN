@@ -48,8 +48,8 @@ class Dataprovider():
 
             # Data id :
             self.n_train = 15436 * 3  # Project 4 22164
-            self.n_test = 207  # project 4 302
-            self.n_val = 207  #
+            self.n_test = 323  # project 4 302
+            self.n_val = 301  #
             self.n_classes = 3
 
         assert self.n_train is not None and self.n_test is not None , ' ** n_train : {} \t n_test : {} **'.format(self.n_train ,self.n_test)

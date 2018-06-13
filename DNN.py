@@ -307,7 +307,7 @@ class DNN(object):
         ## input pipeline
         # why cls? dataprovider was used in *Train , *Test class
         cls.dataprovider = Dataprovider(datatype, batch_size, num_epoch)
-        cls.max_iter =cls.dataprovider.n_train * num_epoch
+        cls.max_iter =cls.dataprovider.n_train * num_epoch/batch_size
         cls.n_classes = cls.dataprovider.n_classes
         cls._define_input(shape=[None, cls.dataprovider.img_h, cls.dataprovider.img_w, cls.dataprovider.img_ch])#
 
