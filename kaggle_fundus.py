@@ -162,6 +162,10 @@ def paths2numpy(paths ,resize):
     return imgs
 
 
+train_tfrecord_path = 'kaggle_fundus/kagglefundus_train.tfrecord'
+val_tfrecord_path = 'kaggle_fundus/kagglefundus_val.tfrecord'
+test_tfrecord_path = 'kaggle_fundus/kagglefundus_test.tfrecord'
+
 
 if __name__ == '__main__':
     image_dir = './kaggle_fundus'
@@ -210,10 +214,6 @@ if __name__ == '__main__':
     label_3_val = paths2numpy(pathLabel_dict[3]['val'],(300,300))
 
     print 'label 3 is Done'
-
-    train_tfrecord_path = 'kaggle_fundus/kagglefundus_train.tfrecord'
-    val_tfrecord_path = 'kaggle_fundus/kagglefundus_val.tfrecord'
-    test_tfrecord_path = 'kaggle_fundus/kagglefundus_test.tfrecord'
 
 
     make_tfrecord(train_tfrecord_path, None ,(len(label_0_train), label_0_train),
