@@ -152,7 +152,9 @@ def path2numpy(path , resize ):
 
 def paths2numpy(paths ,resize):
     imgs=[]
-    for path in paths:
+    for i,path in enumerate(paths):
+        sys.stdout.write('\r progress {} {} '.format( i, len(paths)))
+        sys.stdout.flush()
         try:
             imgs.append(path2numpy(path, resize))
         except IOError as ioe:
