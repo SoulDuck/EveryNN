@@ -19,6 +19,11 @@ val_labs=cls2onehot(val_labs ,2)
 test_labs=cls2onehot(test_labs ,2)
 tester.n_classes =2
 tester.validate(val_imgs ,val_labs , 60 , 0 , None )
+print tester.acc
+print tester.loss
+
+print tester.acc_by_labels
+print tester.pred_all
 
 
 
