@@ -108,6 +108,14 @@ test_tfrecord_path = './my_data/project10/test_0_9_10_55_56_inf.tfrecord'
 val_tfrecord_path = './my_data/project10/val_0_9_10_55_56_inf.tfrecord'
 
 
+# # Data ID 0100-0000003-015
+train_tfrecord_path = './my_data/project10/train_0_9_10_55_56_inf.tfrecord'
+test_tfrecord_path = './my_data/project10/test_0_9_10_55_56_inf.tfrecord'
+val_tfrecord_path = './my_data/project10/val_0_9_10_55_56_inf.tfrecord'
+
+
+
+
 if '__main__' == __name__:
     # project 5
     """
