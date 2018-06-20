@@ -18,6 +18,7 @@ val_imgs ,val_labs , val_fs = Dataprovider.reconstruct_tfrecord_rawdata(val_data
 val_labs=cls2onehot(val_labs ,2)
 test_labs=cls2onehot(test_labs ,2)
 
+print val_labs
 tester.validate(val_imgs ,val_labs , 60 , 0 , None )
 
 
