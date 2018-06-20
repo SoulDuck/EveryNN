@@ -108,6 +108,12 @@ test_tfrecord_path = './my_data/project10/test_0_9_10_55_56_inf.tfrecord'
 val_tfrecord_path = './my_data/project10/val_0_9_10_55_56_inf.tfrecord'
 
 
+# Data ID 0100-0000003-017
+
+train_tfrecord_path = '../cac_re/cac_regressor/train_0_10_11_inf.tfrecord'
+val_tfrecord_path = '../cac_re/cac_regressor/val_0_10_11_inf.tfrecord'
+test_tfrecord_path = '../cac_re/cac_regressor/test_0_10_11_inf.tfrecord'
+
 
 
 if '__main__' == __name__:
