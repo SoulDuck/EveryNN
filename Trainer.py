@@ -50,6 +50,7 @@ class Trainer(DNN):
                 self.batch_xs = random_rotate_90_180_270(self.batch_xs)
             if 'aug_clahe' in aug_list:
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
+
                 self.batch_xs=apply_clahe(self.batch_xs)
 
 
