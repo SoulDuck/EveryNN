@@ -91,7 +91,7 @@ val_labs=utils.cls2onehot(val_labs, resnet_v1.n_classes)
 
 
 if 'aug_clahe' in args.aug_list:
-    "Clahe is applied , Validation images , Test Images "
+    print "Clahe is applied , Validation images , Test Images "
     test_imgs=aug.apply_clahe(test_imgs)
     val_imgs = aug.apply_clahe(val_imgs)
 
