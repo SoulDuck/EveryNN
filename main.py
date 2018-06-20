@@ -11,7 +11,7 @@ import cifar
 import my_data
 import utils
 import argparse
-
+import aug
 
 parser=argparse.ArgumentParser()
 parser.add_argument('--batch_size', type=int)
@@ -90,10 +90,17 @@ val_imgs, val_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(
 val_labs=utils.cls2onehot(val_labs, resnet_v1.n_classes)
 
 
+if 'aug_clahe' in args.aug_list:
+    test_imgs=aug.apply_clahe(test_imgs)
+    val_imgs = aug.apply_clahe(val_imgs)
+
 if np.max(test_imgs) > 1 :
     test_imgs = test_imgs / 255.
 if np.max(val_imgs) > 1:
     val_imgs = val_imgs / 255.
+
+
+
 
 
 max_step=int(resnet_v1.max_iter)

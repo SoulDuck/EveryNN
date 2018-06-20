@@ -12,6 +12,9 @@ import time
 import copy
 import imgaug as ia
 from imgaug import augmenters as iaa
+
+
+
 def clahe_equalized(img):
     if len(img.shape) == 2:
         img=np.reshape(img, list(np.shape(img)) +[1])
@@ -26,6 +29,11 @@ def clahe_equalized(img):
     return img
 
 
+def apply_clahe(imgs):
+    ret_imgs=[]
+    for img in imgs:
+        ret_imgs.append(clahe_equalized(img))
+    return np.asarray(ret_imgs)
 
 
 
@@ -198,6 +206,8 @@ if __name__ == '__main__':
     imgs = []
     for i in range(32):
         imgs.append(img)
+
+
 
     # random clahe
     start_time=time.time()

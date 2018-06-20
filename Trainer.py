@@ -53,7 +53,7 @@ class Trainer(DNN):
                 imgs=[]
                 for img in range(self.batch_xs):
                     imgs.appned(clahe_equalized(img))
-                imgs=np.asarray(imgs)
+                self.batch_xs=np.asarray(imgs)
 
 
 
