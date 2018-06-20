@@ -19,7 +19,7 @@ val_imgs ,val_labs , val_fs = Dataprovider.reconstruct_tfrecord_rawdata(val_data
 print np.shape(test_imgs)
 print np.shape(val_imgs)
 
-
+tester.validate(val_imgs ,val_labs , 60 , 0 , None )
 
 
 

@@ -106,3 +106,5 @@ for i in range(max_step):
     tester.show_acc_by_label()
     global_step = trainer.training(args.aug_list)
 resnet_v1.sess_stop()
+
+
