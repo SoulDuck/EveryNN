@@ -70,7 +70,6 @@ class Tester(DNN):
         #### Validate ###
         test_fetches = mean_cost , pred
         """
-
         share = len(labs) / batch_size
         remainer= len(labs) % batch_size
         loss_all,  pred_all = [], []
@@ -96,6 +95,7 @@ class Tester(DNN):
         self.pred_all = pred_all
         self.loss = np.mean(loss_all)
         self.acc = self.get_acc(labs,  self.pred_all)
+
 
         # Accuracy By Label
         self.acc_by_labels=[]
