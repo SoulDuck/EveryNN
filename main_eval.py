@@ -24,6 +24,12 @@ print tester.loss
 
 print tester.acc_by_labels
 print tester.pred_all
+for pred in tester.pred_all:
+    print pred
+for lab in val_labs:
+    print lab
+
+
 
 
 
