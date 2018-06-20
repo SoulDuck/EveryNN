@@ -5,12 +5,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from utils import cls2onehot
-restore_model = '/home/mediwhale-5/PythonProjects/everyNN/models/resnet_18/4/model-26730'
-dirpath = '/home/mediwhale-5/PythonProjects/everyNN/my_data/project10'
 
 
 restore_model = '/Users/seongjungkim/PycharmProjects/everyNN/models/best_model/0/model-26730'
 dirpath = '/Users/seongjungkim/PycharmProjects/everyNN/my_data/0100-0000003-012'
+
+restore_model = '/home/mediwhale-5/PythonProjects/everyNN/models/resnet_18/4/model-26730'
+dirpath = '/home/mediwhale-5/PythonProjects/everyNN/my_data/project10'
+
 
 test_data = os.path.join(dirpath ,'test_nor_0_10_abnor_10_inf.tfrecord')
 val_data = os.path.join(dirpath ,'val_nor_0_10_abnor_10_inf.tfrecord')
