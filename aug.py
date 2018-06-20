@@ -27,6 +27,8 @@ def clahe_equalized(img):
 
 
 
+
+
 def random_clahe_equalized(imgs):
     # random 하게 imgs 에서 일정 부분을 추출해 적용합니다
     ret_imgs = copy.deepcopy(imgs)
@@ -191,8 +193,7 @@ def aug_lv3(images):
 
 
 if __name__ == '__main__':
-    img = Image.open('/Users/seongjungkim/PycharmProjects/everyNN/my_data/fundus_sample.png').resize((350, 350),
-                                                                                                  Image.ANTIALIAS)
+    img = Image.open('./tmp_2.png')
     img = np.asarray(img)
     imgs = []
     for i in range(32):
@@ -204,6 +205,7 @@ if __name__ == '__main__':
     consume_time  = start_time - time.time()
     print consume_time
     utils.plot_images(clahe_imgs, savepath='clahe_imgs.png')
+
     # augmentation lv1
     augimgs=aug_lv1(imgs)
     utils.plot_images(augimgs , savepath='tmp.png')

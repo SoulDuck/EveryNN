@@ -3,7 +3,7 @@ from DNN import DNN
 import Dataprovider
 import numpy as np
 import utils
-from aug import aug_lv1 , random_clahe_equalized , random_rotate_90_180_270
+from aug import aug_lv1 , random_clahe_equalized , random_rotate_90_180_270 , clahe_equalized
 class Trainer(DNN):
     def __init__(self , recorder , train_iter):
         print '####################################################'
@@ -42,12 +42,22 @@ class Trainer(DNN):
             if 'aug_lv1' in aug_list:
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
                 self.batch_xs = aug_lv1(self.batch_xs)
-            if 'aug_clahe' in aug_list:
+            if 'aug_random_clahe' in aug_list:
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
                 self.batch_xs = random_clahe_equalized(self.batch_xs)
             if 'aug_rotate' in aug_list:
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
                 self.batch_xs = random_rotate_90_180_270(self.batch_xs)
+            if 'aug_clahe' in aug_list:
+                self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
+                imgs=[]
+                for img in range(self.batch_xs):
+                    imgs.appned(clahe_equalized(img))
+                imgs=np.asarray(imgs)
+
+
+
+
 
             if np.max(self.batch_xs) > 1:
                 self.batch_xs=self.batch_xs/255.
@@ -58,3 +68,5 @@ class Trainer(DNN):
             self.recorder.write_acc_loss('Train' , self.train_loss , self.train_acc , step)
             self.recorder.write_lr(self.learning_rate , step)
             self.train_step = step
+
+
