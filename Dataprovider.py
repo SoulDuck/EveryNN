@@ -47,10 +47,10 @@ class Dataprovider():
             self.n_classes = 2
 
             # Data id :
-            self.n_train = 15436 * 3  # Project 4 22164
+            self.n_train = 22000  # Project 4 22164
             self.n_test = 323  # project 4 302
             self.n_val = 301  #
-            self.n_classes = 3
+            self.n_classes = 2
         elif datatype == 'kaggle_fundus' or datatype == 'kagglefundus':
             self.train_tfrecord_path = kaggle_fundus.train_tfrecord_path# list
             self.test_tfrecord_path = kaggle_fundus.test_tfrecord_path # list
