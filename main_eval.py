@@ -38,6 +38,7 @@ plt.imsave('tmp.jpg' , test_imgs[0])
 tester.n_classes =2
 tester.validate(val_imgs ,val_labs , 60 , 0 , None )
 
+val_imgs=val_imgs/255.
 print tester.acc
 print tester.loss
 
