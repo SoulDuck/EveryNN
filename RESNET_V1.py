@@ -75,7 +75,7 @@ class RESNET_V1(DNN):
 
             layer = self.convolution2d('conv_0', out_ch= 32,  x=self.input, k=7, s=2)
             layer = self.batch_norm_layer(layer, phase_train = self.is_training, scope_bn='bn')
-            if int(layer.get_shape()[1]) > 500:
+            if int(self.input.get_shape()[1]) > 500:
                 layer = self.convolution2d('conv_1', out_ch= 32,  x=layer, k=3, s=2)
                 layer = self.batch_norm_layer(layer, phase_train = self.is_training, scope_bn='bn')
 
