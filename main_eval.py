@@ -35,10 +35,7 @@ test_labs=cls2onehot(test_labs ,2)
 plt.imshow(test_imgs[0])
 plt.show()
 plt.imsave('tmp.jpg' , test_imgs[0])
-exit()
-
 tester.n_classes =2
-
 tester.validate(val_imgs ,val_labs , 60 , 0 , None )
 
 print tester.acc
