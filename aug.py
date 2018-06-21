@@ -13,6 +13,13 @@ import copy
 import imgaug as ia
 from imgaug import augmenters as iaa
 
+def fundus_projection(img , scale):
+    blur_img=cv2.GaussianBlur(img,(0 ,0) , scale/30)
+    merge_img=cv2.addWeighted(img , 4 , blur_img , -4 , 128)
+    b = np.zeros(img.shape)
+    cv2.circle(b , (150 ,150) , int(150*0.9) , (1,1,1), -1 , 8 , 0 )
+    merge_img = merge_img * b + 128 * (1 - b)
+    return merge_img
 
 
 def clahe_equalized(img):
@@ -29,13 +36,12 @@ def clahe_equalized(img):
     return img
 
 
+
 def apply_clahe(imgs):
     ret_imgs=[]
     for img in imgs:
         ret_imgs.append(clahe_equalized(img))
     return np.asarray(ret_imgs)
-
-
 
 def random_clahe_equalized(imgs):
     # random 하게 imgs 에서 일정 부분을 추출해 적용합니다
@@ -201,13 +207,12 @@ def aug_lv3(images):
 
 
 if __name__ == '__main__':
-    img = Image.open('./tmp_2.png')
+    img = Image.open('/Users/seongjungkim/PycharmProjects/everyNN/my_data/fundus_sample.png').resize((350, 350),
+                                                                                                  Image.ANTIALIAS)
     img = np.asarray(img)
     imgs = []
     for i in range(32):
         imgs.append(img)
-
-
 
     # random clahe
     start_time=time.time()
@@ -215,7 +220,6 @@ if __name__ == '__main__':
     consume_time  = start_time - time.time()
     print consume_time
     utils.plot_images(clahe_imgs, savepath='clahe_imgs.png')
-
     # augmentation lv1
     augimgs=aug_lv1(imgs)
     utils.plot_images(augimgs , savepath='tmp.png')
