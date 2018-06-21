@@ -13,6 +13,11 @@ import copy
 import imgaug as ia
 from imgaug import augmenters as iaa
 
+
+
+
+
+
 def fundus_projection(img , scale):
     blur_img=cv2.GaussianBlur(img,(0 ,0) , scale/30)
     merge_img=cv2.addWeighted(img , 4 , blur_img , -4 , 128)
@@ -20,6 +25,11 @@ def fundus_projection(img , scale):
     cv2.circle(b , (150 ,150) , int(150*0.9) , (1,1,1), -1 , 8 , 0 )
     merge_img = merge_img * b + 128 * (1 - b)
     return merge_img
+
+def apply_projection(imgs , scale):
+    imgs=map(lambda img : fundus_projection(img , scale) , imgs)
+    return imgs
+
 
 
 def clahe_equalized(img):
@@ -34,7 +44,6 @@ def clahe_equalized(img):
     elif img.shape[-1] ==1: # if Greys,
         img = clahe.apply(np.array(img, dtype = np.uint8))
     return img
-
 
 
 def apply_clahe(imgs):

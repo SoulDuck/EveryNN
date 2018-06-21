@@ -3,7 +3,7 @@ from DNN import DNN
 import Dataprovider
 import numpy as np
 import utils
-from aug import aug_lv1 , random_clahe_equalized , random_rotate_90_180_270 , clahe_equalized , apply_clahe
+from aug import aug_lv1 , random_clahe_equalized , random_rotate_90_180_270 , clahe_equalized , apply_clahe , apply_projection
 class Trainer(DNN):
     def __init__(self , recorder , train_iter):
         print '####################################################'
@@ -50,8 +50,12 @@ class Trainer(DNN):
                 self.batch_xs = random_rotate_90_180_270(self.batch_xs)
             if 'aug_clahe' in aug_list:
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
-
                 self.batch_xs=apply_clahe(self.batch_xs)
+            if 'fundus_projection' in aug_list:
+                self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
+                self.batch_xs=apply_projection(self.batch_xs)
+
+
 
 
 

@@ -342,7 +342,6 @@ class Dataprovider():
             return image
         images = tf.map_fn(lambda image:_fn(image), images)
         return images
-
 if '__main__' == __name__:
     Dataprovider('cifar10' , 60 , (32,32))
 

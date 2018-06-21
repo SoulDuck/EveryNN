@@ -95,6 +95,13 @@ if 'aug_clahe' in args.aug_list:
     test_imgs=aug.apply_clahe(test_imgs)
     val_imgs = aug.apply_clahe(val_imgs)
 
+if 'aug_projection' in args.aug_list:
+    print "Projection is applied , Validation images , Test Images "
+    test_imgs=aug.fundus_projection(test_imgs)
+    val_imgs = aug.fundus_projection(val_imgs)
+
+
+
 if np.max(test_imgs) > 1 :
     test_imgs = test_imgs / 255.
 if np.max(val_imgs) > 1:
