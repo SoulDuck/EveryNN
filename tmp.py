@@ -24,6 +24,7 @@ for f in glob.glob("train/*.jpeg")+ glob.glob("test/*.jpeg"):
 
 if '__main__' == __name__:
     img = np.asarray(Image.open('./tmp.png'))
+    print np.shape(img)
     clahe_image =aug.clahe_equalized(img)
 
     merge_img=aug.fundus_projection(img , 300)
@@ -36,8 +37,12 @@ if '__main__' == __name__:
 
     plt.imshow(img)
     plt.show()
+    plt.imsave('merge_img_tmp.png' , merge_img)
+    img=Image.open('merge_img_tmp.png')
+    print np.max(img)
+    print np.shape(img)
 
-    plt.imshow(merge_img)
+    plt.imshow(img)
     plt.show()
 
 
