@@ -13,16 +13,12 @@ import copy
 import imgaug as ia
 from imgaug import augmenters as iaa
 
-
-
-
-
-
 def fundus_projection(img , scale):
+    radius=scale/2
     blur_img=cv2.GaussianBlur(img,(0 ,0) , scale/30)
     merge_img=cv2.addWeighted(img , 4 , blur_img , -4 , 128)
     b = np.zeros(img.shape)
-    cv2.circle(b , (150 ,150) , int(150*0.9) , (1,1,1), -1 , 8 , 0 )
+    cv2.circle(b , (radius,radius) , int(radius*0.9) , (1,1,1), -1 , 8 , 0 )
     merge_img = merge_img * b + 128 * (1 - b)
     return merge_img
 
@@ -216,71 +212,31 @@ def aug_lv3(images):
 
 
 if __name__ == '__main__':
-    img = Image.open('/Users/seongjungkim/PycharmProjects/everyNN/my_data/fundus_sample.png').resize((350, 350),
+    img = Image.open('/Users/seongjungkim/PycharmProjects/everyNN/my_data/fundus_sample.png').resize((540, 540),
                                                                                                   Image.ANTIALIAS)
     img = np.asarray(img)
     imgs = []
-    for i in range(32):
+    for i in range(64):
         imgs.append(img)
+    imgs=np.asarray(imgs)
 
     # random clahe
     start_time=time.time()
-    clahe_imgs = random_clahe_equalized(imgs)
+    n,h,w,ch=np.shape(imgs)
+
+    projected_imgs = apply_projection(imgs , h)
+    projected_imgs = np.asarray(projected_imgs)
+    print np.max(projected_imgs)
+    print np.min(projected_imgs)
+    plt.imsave('tmp_1.png', projected_imgs[0]/255.)
+    plt.imsave('tmp_2.png', projected_imgs[0]*255.)
+
     consume_time  = start_time - time.time()
     print consume_time
-    utils.plot_images(clahe_imgs, savepath='clahe_imgs.png')
+
+    utils.plot_images(projected_imgs , savepath='projected_imgs.png')
+    #print consume_time
+    #utils.plot_images(clahe_imgs/255., savepath='clahe_imgs.png')
     # augmentation lv1
-    augimgs=aug_lv1(imgs)
-    utils.plot_images(augimgs , savepath='tmp.png')
+    #augimgs=aug_lv1(imgs)
 
-
-    """
-    is_training = tf.placeholder(tf.bool)
-    path = 'tmp.png'
-    imgs=[]
-    img=np.asarray(Image.open(path)).astype('uint8')
-    #img=img
-    for i in range(20):
-        imgs.append(np.asarray(img))
-    imgs=np.asarray(imgs).astype('uint8') # numpy 로 안만들면 에러가 난다
-    imgs = imgs / 255.
-
-
-    #tf_imgs = apply_aug_rotate(imgs, is_training ,[90, 180, 270])
-    # Rotate 90 180 270
-    tf_imgs = aug_lv1(imgs)
-
-    sess=tf.Session()
-    output =sess.run(tf_imgs , feed_dict={is_training : True})
-    output=np.squeeze(output)
-    utils.plot_images(output , savepath = 'tmp_output.png')
-"""
-
-"""
-def anchor_target_layer(rpn_cls_score, gt_boxes, im_dims, _feat_stride, anchor_scales):
-    '''
-    Make Python version of _anchor_target_layer_py below Tensorflow compatible
-    '''
-    rpn_labels, rpn_bbox_targets, rpn_bbox_inside_weights, rpn_bbox_outside_weights = \
-        tf.py_func(_anchor_target_layer_py, [rpn_cls_score, gt_boxes, im_dims, _feat_stride, anchor_scales],
-                   [tf.float32, tf.float32, tf.float32, tf.float32])
-
-    rpn_labels = tf.convert_to_tensor(tf.cast(rpn_labels, tf.int32), name='rpn_labels')
-    rpn_bbox_targets = tf.convert_to_tensor(rpn_bbox_targets, name='rpn_bbox_targets')
-    rpn_bbox_inside_weights = tf.convert_to_tensor(rpn_bbox_inside_weights, name='rpn_bbox_inside_weights')
-    rpn_bbox_outside_weights = tf.convert_to_tensor(rpn_bbox_outside_weights, name='rpn_bbox_outside_weights')
-
-    return rpn_labels, rpn_bbox_targets, rpn_bbox_inside_weights, rpn_bbox_outside_weights
-
-def _anchor_target_layer_py(rpn_cls_score, gt_boxes, im_dims, _feat_stride, anchor_scales):
-
-    #
-    # for each (H, W) location i
-    #   generate 9 anchor boxes centered on cell i
-    #   apply predicted bbox deltas at cell i to each of the 9 anchors
-    # filter out-of-image anchors
-    # measure GT overlap
-    im_dims = im_dims[0]
-    # _anchors shape : ( 9, 4 ) anchor coordinate type : x1,y1,x2,y2
-
-"""
