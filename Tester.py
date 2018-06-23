@@ -322,6 +322,7 @@ class Tester(DNN):
         # Calculate predictions
         pred_dic={}
         for model_path in model_paths:
+            print 'Model Path : {} is Loading : '.format(model_path)
             self._reconstruct_model(model_path)
             self.validate(test_imgs , test_labs ,batch_size , 0 , False )
             pred_dic[model_path] =  self.pred_all
