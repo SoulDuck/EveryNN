@@ -337,10 +337,12 @@ class Tester(DNN):
             for cbn_models in itertools.combinations(pred_dic.keys(), k):
                 for idx, model in enumerate(cbn_models):
                     pred = pred_dic[model]
+                    pred = np.asarray(pred)
                     if idx == 0:
                         pred_sum = pred
                     else:
                         pred_sum += pred
+                pred_sum=np.asarray(pred_sum)
                 pred_sum = pred_sum / float(len(cbn_models))
                 acc = self.get_acc(preds = pred_sum, trues=test_labs)
                 if max_acc < acc:
