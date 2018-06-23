@@ -11,7 +11,7 @@ from utils import cls2onehot
 restore_model = '/home/mediwhale-5/PythonProjects/everyNN/models/resnet_18/4/model-26730'
 dirpath = '/home/mediwhale-5/PythonProjects/everyNN/my_data/project10'
 
-restore_model = './models/best_model/exam_id_000000065/model-37719'
+restore_model = './models/best_models/exam_id_000000065/model-37719'
 dirpath = './my_data/0100-0000003-019'
 
 
