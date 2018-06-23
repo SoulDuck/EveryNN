@@ -359,6 +359,7 @@ class Tester(DNN):
         print f.write('Model List : {}\n'.format(max_list))
         print f.write('max Acc : {}\n'.format(max_acc))
         for pred in max_pred:
+            print pred
             f.write(pred+'\n')
         return max_acc , max_pred , max_list
 
