@@ -33,6 +33,7 @@ class Tester(DNN):
         return acc
 
     def _reconstruct_model(self , model_path):
+        tf.reset_default_graph()
         print 'Reconstruct Model';
         self.sess = tf.Session()
         saver = tf.train.import_meta_graph(
