@@ -82,9 +82,9 @@ for lab in val_labs:
     print lab
 """
 
-tester.ensemble(test_imgs, test_labs, 60, './models/best_models/0_from_5555', './models/best_models/0_from_5566',
-                './models/best_models/0_from_5571', './models/best_models/1_from_5555',
-                './models/best_models/1_from_5571')
+tester.ensemble(test_imgs, test_labs, 60, './models/best_models/0_from_5555/model-37719', './models/best_models/0_from_5566/model-14751',
+                './models/best_models/0_from_5571/model-45144', './models/best_models/1_from_5555/model-25839',
+                './models/best_models/1_from_5571/model-64548')
 
 
 
