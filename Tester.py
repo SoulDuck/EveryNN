@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 import sys , os
 import utils
+import itertools
 from PIL import Image
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -316,6 +317,43 @@ class Tester(DNN):
 
         TN_indices = np.where(preds < cufoff) # True Negative indices
         TP_indices = set(TN_indices) - range(len(preds))
+    def ensemble(self , test_imgs , test_labs , batch_size, *model_paths):
+        # Calculate predictions
+        pred_dic={}
+        for model_path in model_paths:
+            self._reconstruct_model(model_path)
+            self.validate(test_imgs , test_labs ,batch_size , 0 , False )
+            pred_dic[model_path] =  self.pred_all
+
+        f = open('ensemble_report.txt' , 'w')
+        # Run all combinations
+        for k in range(2, len(pred_dic.keys()) + 1):
+            k_max_acc = 0
+            k_max_list = []
+            print 'K : {}'.format(k)
+
+
+            for cbn_models in itertools.combinations(pred_dic.keys(), k):
+                for idx, model in enumerate(cbn_models):
+                    pred = pred_dic[model]
+                    if idx == 0:
+                        pred_sum = pred
+                    else:
+                        pred_sum += pred
+                pred_sum = pred_sum / float(len(cbn_models))
+                acc = self.get_acc(preds = pred_sum, trues=test_labs)
+                if max_acc < acc:
+                    max_acc = acc
+                    max_pred = pred_sum
+                    max_list = cbn_models
+                if k_max_acc < acc:
+                    k_max_acc = acc
+                    k_max_list = cbn_models
+        print f.write('Model List : {}\n'.format(max_list))
+        print f.write('max Acc : {}\n'.format(max_acc))
+        for pred in max_pred:
+            f.write(pred+'\n')
+        return max_acc , max_pred , max_list
 
 
 if __name__ =='__main__':
