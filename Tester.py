@@ -356,6 +356,8 @@ class Tester(DNN):
                 if k_max_acc < acc:
                     k_max_acc = acc
                     k_max_list = cbn_models
+        print 'Max Acc : ', max_acc
+        print 'Max Combination model : ', max_list
         print f.write('Model List : {}\n'.format(max_list))
         print f.write('max Acc : {}\n'.format(max_acc))
         for pred in max_pred:
