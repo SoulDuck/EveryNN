@@ -358,7 +358,6 @@ class Tester(DNN):
 
 if __name__ =='__main__':
     imgs = []
-
     for dirpath , subdir , files in os.walk('./my_data/abnormal'):
         for f in files:
             img = np.asarray(Image.open(os.path.join(dirpath , f)))
@@ -389,6 +388,11 @@ if __name__ =='__main__':
     print pred_all
     print start_time - time.time()
     print acc
+
+
+    #Ensemble
+    tester.ensemble(test_imgs, test_labs, 60, './models/best_models/0_from_5555', './models/best_models/0_from_5566',
+                    './models/best_models/0_from_5571', './models/best_models/1_from_5555' , './models/best_models/1_from_5571')
 
 
 
