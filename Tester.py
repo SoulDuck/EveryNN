@@ -329,6 +329,8 @@ class Tester(DNN):
 
         f = open('ensemble_report.txt' , 'w')
         # Run all combinations
+
+        max_acc =0
         for k in range(2, len(pred_dic.keys()) + 1):
             k_max_acc = 0
             k_max_list = []
