@@ -39,7 +39,6 @@ test_imgs= test_imgs/255.
 print len(val_imgs)
 print len(test_imgs)
 plt.imsave('delete.png',test_imgs[0])
-exit()
 tester.validate(test_imgs , test_labs , 60 ,0 ,False)
 print ''
 print tester.acc
@@ -47,6 +46,7 @@ print tester.loss
 print tester.acc_by_labels
 for pred in tester.pred_all:
     print pred
+
 """
 for pred in tester.pred_all:
     print pred
