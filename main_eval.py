@@ -47,6 +47,7 @@ test_labs[n_label_0 : ,1 ]=1
 
 # Image
 for path in paths_0 + paths_1:
+    print path
     img=np.asarray(Image.open(path).convert('RGB'))
     imgs.append(img)
 test_imgs=np.asarray(imgs)
