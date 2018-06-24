@@ -253,7 +253,7 @@ class Tester(DNN):
             print np.shape(cams)
         return self.pred_all , self.acc , self.loss
 
-    def plotROC(predStrength, labels):
+    def plotROC(self,predStrength, labels , prefix):
         debug_flag = False
         assert np.ndim(predStrength) == np.ndim(labels)
         if np.ndim(predStrength) == 2:
@@ -298,7 +298,7 @@ class Tester(DNN):
         ax.plot([0, 1], [0, 1], 'b--')
         plt.xlabel('False Positive Rate');
         plt.ylabel('True Positive Rate')
-        plt.title('ROC curve for Fundus Classification System')
+        plt.title('ROC curve for {}'.format(prefix))
         ax.axis([0, 1, 0, 1])
         if __debug__ == debug_flag:
             print '# of True :', n_pos
@@ -367,6 +367,7 @@ class Tester(DNN):
 
 
 if __name__ =='__main__':
+    """"""
     imgs = []
     for dirpath , subdir , files in os.walk('./my_data/abnormal'):
         for f in files:
@@ -395,6 +396,8 @@ if __name__ =='__main__':
     batch_size = 60
     tester=Tester(None)
     pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size , 'tmp_actmap' ,)
+    test_labs=np.argmax(test_labs , axis=1)
+    tester.plotROC(predStrength = pred_all[:,1] , test_labs)
     print pred_all
     print start_time - time.time()
     print acc
