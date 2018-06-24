@@ -253,7 +253,7 @@ class Tester(DNN):
             print np.shape(cams)
         return self.pred_all , self.acc , self.loss
 
-    def plotROC(self,predStrength, labels , prefix):
+    def plotROC(self,predStrength, labels , prefix , savepath):
         debug_flag = False
         assert np.ndim(predStrength) == np.ndim(labels)
         if np.ndim(predStrength) == 2:
@@ -303,7 +303,7 @@ class Tester(DNN):
         if __debug__ == debug_flag:
             print '# of True :', n_pos
             print '# of False :', n_neg
-        plt.savefig('roc.png')
+        plt.savefig(savepath)
         # plt.show()
         print 'The Area Under Curve is :', ySum * x_step
 
@@ -397,7 +397,7 @@ if __name__ =='__main__':
     tester=Tester(None)
     pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size , 'tmp_actmap' ,)
     test_labs=np.argmax(test_labs , axis=1)
-    tester.plotROC(predStrength = pred_all[:,1] , test_labs)
+    tester.plotROC(predStrength = pred_all[:,1] , labels = test_labs , prefix = 'CAC fundus Classifier', savepath='./tmp.png')
     print pred_all
     print start_time - time.time()
     print acc
