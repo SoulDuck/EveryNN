@@ -75,7 +75,8 @@ print tester.acc_by_labels
 for pred in tester.pred_all:
     print pred
 test_cls=np.argmax(test_labs , axis=1)
-tester.plotROC(predStrength=tester.pred_all[1,:] , labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp.png')
+predStrength=np.asarray(tester.pred_all)[:,1]
+tester.plotROC(predStrength=predStrength , labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp.png')
 """
 for pred in tester.pred_all:
     print pred
