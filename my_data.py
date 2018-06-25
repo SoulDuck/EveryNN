@@ -114,18 +114,16 @@ train_tfrecord_path = '../cac_regressor/0100-0000003-022/train_0_10_11_inf.tfrec
 val_tfrecord_path = '../cac_regressor/0100-0000003-022/val_0_10_11_inf.tfrecord'
 test_tfrecord_path = '../cac_regressor/0100-0000003-022/test_0_10_11_inf.tfrecord'
 
-# Data ID 0100-0000003-020
-train_tfrecord_path = '../cac_regressor/0100-0000003-020/train_0_30_31_inf.tfrecord'
-val_tfrecord_path = '../cac_regressor/0100-0000003-020/val_0_30_31_inf.tfrecord'
-test_tfrecord_path = '../cac_regressor/0100-0000003-020/test_0_30_31_inf.tfrecord'
-
-
-
 
 # Data ID 0100-0000003-019
 train_tfrecord_path = '../cac_regressor/train_0_10_11_inf.tfrecord'
 val_tfrecord_path = '../cac_regressor/val_0_10_11_inf.tfrecord'
 test_tfrecord_path = '../cac_regressor/test_0_10_11_inf.tfrecord'
+
+# Data ID 0100-0000003-020
+train_tfrecord_path = '../cac_regressor/0100-0000003-020/train_0_30_31_inf.tfrecord'
+val_tfrecord_path = '../cac_regressor/0100-0000003-020/val_0_30_31_inf.tfrecord'
+test_tfrecord_path = '../cac_regressor/0100-0000003-020/test_0_30_31_inf.tfrecord'
 
 
 
