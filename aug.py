@@ -231,6 +231,7 @@ if __name__ == '__main__':
     plt.imsave('tmp_1.png', projected_imgs[0]/255.)
     plt.imsave('tmp_2.png', projected_imgs[0]*255.)
 
+
     consume_time  = start_time - time.time()
     print consume_time
 
