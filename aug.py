@@ -223,6 +223,10 @@ if __name__ == '__main__':
     # random clahe
     start_time=time.time()
     n,h,w,ch=np.shape(imgs)
+    # aug lv 1
+    imgs=aug_lv1(imgs)
+    utils.plot_images(imgs , None , False , 'aug_lv1.png')
+    exit()
 
     projected_imgs = apply_projection(imgs , h)
     projected_imgs = np.asarray(projected_imgs)
