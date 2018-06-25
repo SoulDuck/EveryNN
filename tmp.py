@@ -1,48 +1,70 @@
-#-*- coding:utf-8 -*-
-import cv2 , glob
+import os , glob
 import numpy as np
-from PIL import Image
-import matplotlib.pyplot as plt
-scale =300
-import aug
+import csv
+import Tester
 """
-for f in glob.glob("train/*.jpeg")+ glob.glob("test/*.jpeg"):
+
+paths_0=glob.glob('./images/0100-0000003-019_label_0/*.png')
+paths_0=sorted(paths_0)
+paths_1=glob.glob('./images/0100-0000003-019_label_1/*.png')
+paths_1=sorted(paths_1)
+imgs= []
+# Label
+n_label_0=len(paths_0)
+n_label_1=len(paths_1)
+print (n_label_1)
+print (n_label_0)
+test_labs=np.zeros([n_label_0 + n_label_1 , 2])
+test_labs[:n_label_0 , 0]=1
+test_labs[n_label_0 : ,1 ]=1
+
+test_cls=np.argmax(test_labs , axis=1)
+"""
+f=open('/Users/seongjungkim/Desktop/prediction_cac_row.csv','r')
+ret_dict={}
+count =0
+ret_cls={}
+
+for line in f.readlines()[1:]:
+    fname , pred_0 , pred_1  ,test_cls = line.split(',')[1:5]
+    # name
+    fname=os.path.splitext(fname)[0]
+    pred_1=pred_1.replace(']', '')
     try:
-        a = cv2.imread(f)
-        #s c a l e img t o a gi v e n r a di u s
-        a=scaleRadius(a , scale)
-        #subtract local mean color
-        a=cv2.addWeighted( a , 4 , cv2.GaussianBlur(a,(0 ,0) , scale/30)  −4 ,128)
-        #remove o u t e r 10%
-        b=numpy.zeros(a.shape)
-        cv2.circle( b , ( a.shape[1] / 2 , a.shape[0] / 2 ) , int( scale * 0.9) , ( 1 , 1 , 1 ) , −1 , 8 , 0)
-        a = a∗b + 128∗(1−b )
-        cv2.imwrite(str( scale )+"_"+f , a )
-"""
+        pred_0 , pred_1 =map(float , [pred_0 , pred_1])
+    except :
+        print fname, pred_0, pred_1
+    # binding the Same patients together
+    fname = fname.replace('_L', '').replace('_R', '')
+    if not fname in ret_dict.keys():
+        ret_dict[fname]=[pred_0]
+        ret_cls[fname] = int(test_cls)
+    else:
+        ret_dict[fname].append(pred_0)
+    #print fname, pred_0, pred_1, test_cls
+    count += 1
+assert len(ret_cls) == len(ret_dict)
+f.close()
+
+f=open('/Users/seongjungkim/Desktop/prediction_cac_.csv','w')
+writer=csv.writer(f)
+
+means=[]
+patient_labels=[]
+labels = []
+for key in ret_dict.keys():
+    mean = np.mean(ret_dict[key])
+    writer.writerow([key , mean])
+    means.append(mean)
+    labels.append(ret_cls[key])
 
 
+means=np.asarray(means)
+indices=np.where([means >= 0.5])[1]
+rev_indices=np.where([means < 0.5])[1]
 
-if '__main__' == __name__:
-    img = np.asarray(Image.open('./tmp.png'))
-    print np.shape(img)
-    clahe_image =aug.clahe_equalized(img)
+print means
+print ret_cls
 
-    merge_img=aug.fundus_projection(img , 300)
-
-    clahe_image = aug.clahe_equalized(img)
-    merge_img=merge_img/255.
-
-    plt.imshow(clahe_image)
-    plt.show()
-
-    plt.imshow(img)
-    plt.show()
-    plt.imsave('merge_img_tmp.png' , merge_img)
-    img=Image.open('merge_img_tmp.png')
-    print np.max(img)
-    print np.shape(img)
-
-    plt.imshow(img)
-    plt.show()
-
-
+tester=Tester.Tester(None)
+tester.plotROC( means , labels , 'Patient ROC curve' , savepath='tmp.png')

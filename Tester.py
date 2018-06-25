@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 import sys , os
 import utils
+import itertools
 from PIL import Image
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -32,6 +33,7 @@ class Tester(DNN):
         return acc
 
     def _reconstruct_model(self , model_path):
+        tf.reset_default_graph()
         print 'Reconstruct Model';
         self.sess = tf.Session()
         saver = tf.train.import_meta_graph(
@@ -251,7 +253,7 @@ class Tester(DNN):
             print np.shape(cams)
         return self.pred_all , self.acc , self.loss
 
-    def plotROC(predStrength, labels):
+    def plotROC(self,predStrength, labels , prefix , savepath):
         debug_flag = False
         assert np.ndim(predStrength) == np.ndim(labels)
         if np.ndim(predStrength) == 2:
@@ -296,12 +298,12 @@ class Tester(DNN):
         ax.plot([0, 1], [0, 1], 'b--')
         plt.xlabel('False Positive Rate');
         plt.ylabel('True Positive Rate')
-        plt.title('ROC curve for Fundus Classification System')
+        plt.title('ROC curve for {}'.format(prefix))
         ax.axis([0, 1, 0, 1])
         if __debug__ == debug_flag:
             print '# of True :', n_pos
             print '# of False :', n_neg
-        plt.savefig('roc.png')
+        plt.savefig(savepath)
         # plt.show()
         print 'The Area Under Curve is :', ySum * x_step
 
@@ -316,11 +318,57 @@ class Tester(DNN):
 
         TN_indices = np.where(preds < cufoff) # True Negative indices
         TP_indices = set(TN_indices) - range(len(preds))
+    def ensemble(self , test_imgs , test_labs , batch_size, *model_paths):
+        # Calculate predictions
+        pred_dic={}
+        for model_path in model_paths:
+            print 'Model Path : {} is Loading : '.format(model_path)
+            self._reconstruct_model(model_path)
+            self.validate(test_imgs , test_labs ,batch_size , 0 , False )
+            pred_dic[model_path] =  self.pred_all
+
+        f = open('ensemble_report.txt' , 'w')
+        # Run all combinations
+
+        max_acc = 0
+        max_list = []
+        for k in range(2, len(pred_dic.keys()) + 1):
+            k_max_acc = 0
+            k_max_list = []
+            print 'K : {}'.format(k)
+
+
+            for cbn_models in itertools.combinations(pred_dic.keys(), k):
+                for idx, model in enumerate(cbn_models):
+                    pred = pred_dic[model]
+                    pred = np.asarray(pred)
+                    if idx == 0:
+                        pred_sum = pred
+                    else:
+                        pred_sum += pred
+                pred_sum=np.asarray(pred_sum)
+                pred_sum = pred_sum / float(len(cbn_models))
+                acc = self.get_acc(preds = pred_sum, trues=test_labs)
+                if max_acc < acc:
+                    max_acc = acc
+                    max_pred = pred_sum
+                    max_list = cbn_models
+                if k_max_acc < acc:
+                    k_max_acc = acc
+                    k_max_list = cbn_models
+        print 'Max Acc : ', max_acc
+        print 'Max Combination model : ', max_list
+        print f.write('Model List : {}\n'.format(max_list))
+        print f.write('max Acc : {}\n'.format(max_acc))
+        for pred in max_pred:
+            print pred
+            f.write(str(pred[0])+'\t'+str(pred[1])+'\n')
+        return max_acc , max_pred , max_list
 
 
 if __name__ =='__main__':
+    """"""
     imgs = []
-
     for dirpath , subdir , files in os.walk('./my_data/abnormal'):
         for f in files:
             img = np.asarray(Image.open(os.path.join(dirpath , f)))
@@ -348,9 +396,17 @@ if __name__ =='__main__':
     batch_size = 60
     tester=Tester(None)
     pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size , 'tmp_actmap' ,)
+    test_labs=np.argmax(test_labs , axis=1)
+    tester.plotROC(predStrength = pred_all[:,1] , labels = test_labs , prefix = 'CAC fundus Classifier', savepath='./tmp.png')
+
     print pred_all
     print start_time - time.time()
     print acc
+
+
+    #Ensemble
+    tester.ensemble(test_imgs, test_labs, 60, './models/best_models/0_from_5555', './models/best_models/0_from_5566',
+                    './models/best_models/0_from_5571', './models/best_models/1_from_5555' , './models/best_models/1_from_5571')
 
 
 
