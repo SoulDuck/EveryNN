@@ -253,6 +253,7 @@ class DNN(object):
         if cls.optimizer_name == 'momentum':
             cls.train_op = optimizer_dic[cls.optimizer_name](cls.lr_op, use_nesterov=True).minimize(total_cost,
                                                                                                     name='train_op')
+
         else:
             cls.train_op = optimizer_dic[cls.optimizer_name](cls.lr_op).minimize(total_cost,name='train_op')
         # Prediction Op , Accuracy Op
