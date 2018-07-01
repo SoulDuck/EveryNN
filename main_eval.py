@@ -97,19 +97,19 @@ predStrength=np.asarray(tester.pred_all)[:,1]
 indices = np.where([predStrength > 0.5])[1]
 rev_indices = np.where([predStrength < 0.5])[1]
 
-for i in range(1000):
-    random.seed(1)
-    random.shuffle(indices)
-    random.shuffle(rev_indices)
-    print test_cls
 
-    predStrength=list(predStrength[indices[:80]]) + list(predStrength[rev_indices[40:60]])
-    test_cls=list(test_cls[indices[0:80]]) + list(test_cls[rev_indices[40:60]])
+random.seed(1)
+random.shuffle(indices)
+random.shuffle(rev_indices)
+print test_cls
 
-    print predStrength
-    print test_cls
+predStrength=list(predStrength[indices[:160]]) + list(predStrength[rev_indices[:40]])
+test_cls=list(test_cls[indices[:160]]) + list(test_cls[rev_indices[:40]])
 
-    tester.plotROC(predStrength=predStrength , labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp.png')
+print predStrength
+print test_cls
+
+tester.plotROC(predStrength=predStrength , labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp.png')
 """
 
 for pred in tester.pred_all:
