@@ -26,13 +26,14 @@ test_imgs  , test_labs , test_fs = Dataprovider.reconstruct_tfrecord_rawdata(tes
 val_imgs ,val_labs , val_fs = Dataprovider.reconstruct_tfrecord_rawdata(val_data , None)
 
 
-
+"""
 for i,img in enumerate(val_imgs):
     plt.imshow(test_imgs[0])
     plt.show()
     plt.imsave('tmp/{}.jpg'.format(i) , img)
 
 exit()
+"""
 """
 
 paths_0=glob.glob('./images/0100-0000003-019_label_0/*.png')
