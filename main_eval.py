@@ -110,7 +110,7 @@ for i in range(100):
     print predStrength
     print test_cls
 
-    tester.plotROC(predStrength=predStrength , labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp.png')
+    tester.plotROC(predStrength=predStrength , labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp_{}.png'.format(i))
 """
 
 for pred in tester.pred_all:
