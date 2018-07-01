@@ -124,14 +124,14 @@ pred_cls =np.argmax(tester.pred_all , axis= 1)
 for i in range(len(pred_cls)):
     if pred_cls[i] == test_cls[i]:
         if pred_cls[i]==0:
-            plt.imsave('./images/TT/'.format(i),test_imgs[i])
+            plt.imsave('./images/TT/{}'.format(i),test_imgs[i])
 
         elif pred_cls[i]==1:
-            plt.imsave('./images/FF'.format(i), test_imgs[i])
+            plt.imsave('./images/FF/{}'.format(i), test_imgs[i])
     else:
         if pred_cls[i]==0:
-            plt.imsave('./images/TF'.format(i), test_imgs[i])
+            plt.imsave('./images/TF/{}'.format(i), test_imgs[i])
         elif pred_cls[i] ==1:
-            plt.imsave('./images/FT'.format(i), test_imgs[i])
+            plt.imsave('./images/FT/{}'.format(i), test_imgs[i])
 
 
