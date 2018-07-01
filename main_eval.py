@@ -122,7 +122,7 @@ tester.ensemble(test_imgs, test_labs, 60, './models/best_models/0_from_5555/mode
 pred_cls =np.argmax(tester.pred_all , axis= 1)
 
 for i in range(len(pred_cls)):
-    if pred_cls == test_cls:
+    if pred_cls[i] == test_cls[i]:
         if pred_cls ==0:
             plt.imsave('./images/TT',test_imgs[i])
 
