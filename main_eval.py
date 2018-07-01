@@ -95,7 +95,7 @@ predStrength=np.asarray(tester.pred_all)[:,1]
 indices = np.where([predStrength > 0.5])[0]
 rev_indices = np.where([predStrength < 0.5])[0]
 
-predStrength=predStrength[indices[:80]] + predStrength[rev_indices[:20]]
+predStrength=list(predStrength[indices[:80]]) + list(predStrength[rev_indices[:20]])
 
 
 
