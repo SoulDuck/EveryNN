@@ -14,7 +14,10 @@ dirpath = '/home/mediwhale-5/PythonProjects/everyNN/my_data/project10'
 restore_model = './models/best_models/exam_id_000000065/model-37719'
 dirpath = './my_data/0100-0000003-019'
 
-"""
+
+restore_model  = '/home/mediwhale-5/PythonProjects/everyNN/models/resnet_18/10/model-26631.meta'
+dirpath = '/home/mediwhale-5/PythonProjects/cac_regressor/0100-0000003-023/0100-0000003-022'
+
 test_data = os.path.join(dirpath ,'test_0_10_11_inf.tfrecord')
 val_data = os.path.join(dirpath ,'val_0_10_11_inf.tfrecord')
 
@@ -58,7 +61,7 @@ test_imgs=np.asarray(imgs)
 assert len(test_labs) == len(test_imgs)
 print np.shape(test_imgs)
 
-
+"""
 
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)

@@ -408,9 +408,6 @@ if __name__ =='__main__':
     tester.ensemble(test_imgs, test_labs, 60, './models/best_models/0_from_5555', './models/best_models/0_from_5566',
                     './models/best_models/0_from_5571', './models/best_models/1_from_5555' , './models/best_models/1_from_5571')
 
-
-
-
 """
     
 
