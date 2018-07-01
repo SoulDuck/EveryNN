@@ -98,17 +98,11 @@ indices = np.where([predStrength > 0.5])[1]
 rev_indices = np.where([predStrength < 0.5])[1]
 
 
-for i in range(100):
-    random.seed(i)
-    random.shuffle(indices)
-    random.shuffle(rev_indices)
+predStrength_ = list(predStrength[indices[:160]]) + list(predStrength[rev_indices[:40]])
+test_cls_=list(test_cls[indices[:160]]) + list(test_cls[rev_indices[:40]])
 
 
-    predStrength_ = list(predStrength[indices[:160]]) + list(predStrength[rev_indices[:40]])
-    test_cls_=list(test_cls[indices[:160]]) + list(test_cls[rev_indices[:40]])
-
-
-    tester.plotROC(predStrength=predStrength_ , labels= test_cls_ ,  prefix='CAC fundus classifier' , savepath='tmp_{}.png'.format(i))
+tester.plotROC(predStrength=predStrength_ , labels= test_cls_ ,  prefix='CAC fundus classifier' , savepath='tmp_{}.png'.format(i))
 """
 
 for pred in tester.pred_all:
