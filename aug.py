@@ -233,7 +233,7 @@ if __name__ == '__main__':
     n,h,w,ch=np.shape(imgs)
     # aug lv 1
     imgs=aug_lv1(imgs)
-    utils.plot_images(imgs , None , False , 'aug_lv1.png')
+    utils.plot_images(imgs/255. , None , False , 'aug_lv1.png')
     exit()
 
     projected_imgs = apply_projection(imgs , h)
