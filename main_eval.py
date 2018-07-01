@@ -24,7 +24,8 @@ val_data = os.path.join(dirpath ,'val_0_10_11_inf.tfrecord')
 #tester.validate( save_model = None )
 test_imgs  , test_labs , test_fs = Dataprovider.reconstruct_tfrecord_rawdata(test_data , None )
 val_imgs ,val_labs , val_fs = Dataprovider.reconstruct_tfrecord_rawdata(val_data , None)
-
+val_labs=cls2onehot(val_labs ,2)
+test_labs=cls2onehot(test_labs ,2)
 
 """
 for i,img in enumerate(val_imgs):
