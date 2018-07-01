@@ -102,7 +102,7 @@ predStrength_ = list(predStrength[indices[:160]]) + list(predStrength[rev_indice
 test_cls_=list(test_cls[indices[:160]]) + list(test_cls[rev_indices[:40]])
 
 
-tester.plotROC(predStrength=predStrength_ , labels= test_cls_ ,  prefix='CAC fundus classifier' , savepath='tmp_{}.png'.format(i))
+tester.plotROC(predStrength=predStrength_ , labels= test_cls_ ,  prefix='CAC fundus classifier' , savepath='tmp.png')
 """
 
 for pred in tester.pred_all:
