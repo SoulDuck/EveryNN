@@ -99,6 +99,8 @@ predStrength=list(predStrength[indices[:80]]) + list(predStrength[rev_indices[:2
 
 test_cls=list(test_cls[indices[:80]]) + list(test_cls[rev_indices[:20]])
 
+print predStrength
+print test_cls
 
 tester.plotROC(predStrength=predStrength , labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp.png')
 """
