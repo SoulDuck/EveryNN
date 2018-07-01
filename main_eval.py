@@ -18,12 +18,14 @@ dirpath = './my_data/0100-0000003-019'
 restore_model  = '/home/mediwhale-5/PythonProjects/everyNN/models/resnet_18/10/model-26631'
 dirpath = '/home/mediwhale-5/PythonProjects/cac_regressor/0100-0000003-020'
 
-test_data = os.path.join(dirpath ,'test_0_30_31_inf.tfrecord')
-val_data = os.path.join(dirpath ,'val_0_30_31_inf.tfrecord')
+test_data = os.path.join(dirpath ,'test_0_10_11_inf.tfrecord')
+val_data = os.path.join(dirpath ,'val_0_10_11_inf.tfrecord')
 
 #tester.validate( save_model = None )
 test_imgs  , test_labs , test_fs = Dataprovider.reconstruct_tfrecord_rawdata(test_data , None )
 val_imgs ,val_labs , val_fs = Dataprovider.reconstruct_tfrecord_rawdata(val_data , None)
+print test_labs
+print val_labs
 val_labs=cls2onehot(val_labs ,2)
 test_labs=cls2onehot(test_labs ,2)
 
