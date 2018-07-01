@@ -71,20 +71,21 @@ print np.shape(test_imgs)
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)
 tester.n_classes =2
-val_imgs = val_imgs/255.
-print len(val_imgs)
+test_imgs = test_imgs/255.
+tester.validate(test_imgs , test_labs, 60 ,0 ,False)
 
-plt.imsave('delete.png',val_imgs[0])
-tester.validate(val_imgs , val_labs, 60 ,0 ,False)
 print ''
 print tester.acc
 print tester.loss
 print tester.acc_by_labels
+
 for pred in tester.pred_all:
     print pred
+
 test_cls=np.argmax(test_labs , axis=1)
 predStrength=np.asarray(tester.pred_all)[:,1]
 tester.plotROC(predStrength=predStrength , labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp.png')
+
 """
 for pred in tester.pred_all:
     print pred
