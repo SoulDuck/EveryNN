@@ -98,7 +98,8 @@ indices = np.where([predStrength > 0.5])[1]
 rev_indices = np.where([predStrength < 0.5])[1]
 
 
-random.seed(2)
+
+random.seed(3)
 random.shuffle(indices)
 random.shuffle(rev_indices)
 print test_cls
