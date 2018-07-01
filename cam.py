@@ -25,13 +25,13 @@ def get_class_map(name, x, cam_ind, im_width):
     return classmap
 
 
-def inspect_cam(sess, cam, top_conv, test_imgs, test_labs, global_step, num_images, x_, y_, phase_train, y, ):
+def inspect_cam(sess, cam, top_conv, test_imgs, test_labs, global_step, x_, y_, phase_train, y ):
     debug_flag = False
     try:
         os.mkdir('./out');
     except Exception:
         pass;
-
+    num_images = len(test_imgs)
     for s in range(num_images):
         save_dir = './out/img_{}'.format(s)
         try:

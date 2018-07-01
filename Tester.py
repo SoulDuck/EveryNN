@@ -395,7 +395,7 @@ if __name__ =='__main__':
     test_labs[:,0]=1
     batch_size = 60
     tester=Tester(None)
-    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size , 'tmp_actmap' ,)
+    pred_all, acc, loss=tester.eval(model_path, test_imgs, test_labs, batch_size , 'tmp_actmap' )
     test_labs=np.argmax(test_labs , axis=1)
     tester.plotROC(predStrength = pred_all[:,1] , labels = test_labs , prefix = 'CAC fundus Classifier', savepath='./tmp.png')
 
