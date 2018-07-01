@@ -97,7 +97,7 @@ rev_indices = np.where([predStrength < 0.5])[0]
 
 predStrength=list(predStrength[indices[:80]]) + list(predStrength[rev_indices[:20]])
 
-
+test_cls=test_cls[indices[:80]] + test_cls[rev_indices[:20]]
 
 
 tester.plotROC(predStrength=predStrength , labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp.png')
