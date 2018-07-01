@@ -94,15 +94,17 @@ test_cls=np.argmax(test_labs , axis=1)
 predStrength=np.asarray(tester.pred_all)[:,1]
 
 
+
+
+"""
 indices = np.where([predStrength > 0.5])[1]
 rev_indices = np.where([predStrength < 0.5])[1]
 
-
 predStrength_ = list(predStrength[indices[:160]]) + list(predStrength[rev_indices[:40]])
 test_cls_=list(test_cls[indices[:160]]) + list(test_cls[rev_indices[:40]])
+"""
 
-
-tester.plotROC(predStrength=predStrength_ , labels= test_cls_ ,  prefix='CAC fundus classifier' , savepath='tmp.png')
+tester.plotROC(predStrength=predStrength, labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp.png')
 """
 
 for pred in tester.pred_all:
@@ -115,3 +117,21 @@ tester.ensemble(test_imgs, test_labs, 60, './models/best_models/0_from_5555/mode
 
 
 """
+
+
+pred_cls =np.argmax(tester.pred_all , axis= 1)
+
+for i in range(len(pred_cls)):
+    if pred_cls == test_cls:
+        if pred_cls ==0:
+            plt.imsave('./images/TT',test_imgs[i])
+
+        elif pred_cls ==1:
+            plt.imsave('./images/FF', test_imgs[i])
+    else:
+        if pred_cls ==0:
+            plt.imsave('./images/TF', test_imgs[i])
+        elif pred_cls ==1:
+            plt.imsave('./images/FT', test_imgs[i])
+
+
