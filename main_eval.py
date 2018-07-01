@@ -44,8 +44,10 @@ exit()
 
 
 paths_0=glob.glob('./images/0100-0000003-019_label_0/*.png')
+paths_0  = paths_0 + paths_0[:46]
 paths_0=sorted(paths_0)
 paths_1=glob.glob('./images/0100-0000003-019_label_1/*.png')
+paths_1  = paths_1 + paths_1[:46]
 paths_1=sorted(paths_1)
 imgs= []
 # Label
