@@ -96,8 +96,8 @@ indices = np.where([predStrength > 0.5])[1]
 rev_indices = np.where([predStrength < 0.5])[1]
 print test_cls
 
-predStrength=list(predStrength[indices[:100]]) + list(predStrength[rev_indices[:20]])
-test_cls=list(test_cls[indices[:100]]) + list(test_cls[rev_indices[:20]])
+predStrength=list(predStrength[indices[30:130]]) + list(predStrength[rev_indices[20:40]])
+test_cls=list(test_cls[indices[30:130]]) + list(test_cls[rev_indices[20:40]])
 
 print predStrength
 print test_cls
