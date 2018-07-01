@@ -15,7 +15,7 @@ restore_model = './models/best_models/exam_id_000000065/model-37719'
 dirpath = './my_data/0100-0000003-019'
 
 
-restore_model  = '/home/mediwhale-5/PythonProjects/everyNN/models/resnet_18/10/model-26631.meta'
+restore_model  = '/home/mediwhale-5/PythonProjects/everyNN/models/resnet_18/10/model-26631'
 dirpath = '/home/mediwhale-5/PythonProjects/cac_regressor/0100-0000003-023/0100-0000003-022'
 
 test_data = os.path.join(dirpath ,'test_0_10_11_inf.tfrecord')
