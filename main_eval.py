@@ -92,8 +92,8 @@ test_cls=np.argmax(test_labs , axis=1)
 predStrength=np.asarray(tester.pred_all)[:,1]
 
 
-indices = np.where([predStrength > 0.5])[0]
-rev_indices = np.where([predStrength < 0.5])[0]
+indices = np.where([predStrength > 0.5])[1]
+rev_indices = np.where([predStrength < 0.5])[1]
 print test_cls
 
 predStrength=list(predStrength[indices[:80]]) + list(predStrength[rev_indices[:20]])
