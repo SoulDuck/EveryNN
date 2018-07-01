@@ -57,7 +57,8 @@ test_labs=np.zeros([n_label_0 + n_label_1 , 2])
 test_labs[:n_label_0 , 0]=1
 test_labs[n_label_0 : ,1 ]=1
 
-print test_labs
+print len(paths_0)
+print len(paths_1)
 
 # Image
 for path in paths_0 + paths_1:
