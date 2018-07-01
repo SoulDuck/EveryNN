@@ -3,6 +3,8 @@ import Tester
 from Dataprovider import Dataprovider
 import numpy as np
 import matplotlib.pyplot as plt
+import random
+
 import os , glob
 from utils import cls2onehot
 from PIL import Image
@@ -94,7 +96,12 @@ predStrength=np.asarray(tester.pred_all)[:,1]
 
 indices = np.where([predStrength > 0.5])[1]
 rev_indices = np.where([predStrength < 0.5])[1]
+random.seed(1)
+random.shuffle(indices)
+random.shuffle(rev_indices)
 print test_cls
+
+
 
 predStrength=list(predStrength[indices[40:140]]) + list(predStrength[rev_indices[40:60]])
 test_cls=list(test_cls[indices[40:140]]) + list(test_cls[rev_indices[40:60]])
