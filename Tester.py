@@ -32,7 +32,7 @@ class Tester(DNN):
         acc = np.sum(tmp) / float(len(true_cls))
         return acc
 
-    def _reconstruct_model(self , model_path):
+    def _reconstruct_model(self , model_path , cam_imgSize=540):
         tf.reset_default_graph()
         print 'Reconstruct Model';
         self.sess = tf.Session()
@@ -53,7 +53,7 @@ class Tester(DNN):
             cam_ind = tf.get_default_graph().get_tensor_by_name('cam_ind:0')
         except Exception as e :
             print "CAM 이 구현되어 있지 않은 모델입니다."
-        self.classmap_op = self.get_class_map('final', self.top_conv, 1 , 350 , self.final_w)
+        self.classmap_op = self.get_class_map('final', self.top_conv, 1 , cam_imgSize , self.final_w)
 
     def show_acc_loss(self , step ):
         print ''

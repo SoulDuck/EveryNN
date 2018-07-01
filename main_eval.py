@@ -80,6 +80,9 @@ tester._reconstruct_model(restore_model)
 tester.n_classes =2
 test_imgs = test_imgs/255.
 tester.validate(test_imgs , test_labs, 60 ,0 ,False)
+tester.sess.run(tester.classmap_op , {tester.x_: test_imgs[0] , tester.is_training :False})
+
+exit()
 
 print ''
 print tester.acc
