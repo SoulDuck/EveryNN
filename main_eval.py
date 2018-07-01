@@ -103,8 +103,8 @@ print test_cls
 
 
 
-predStrength=list(predStrength[indices[40:140]]) + list(predStrength[rev_indices[40:60]])
-test_cls=list(test_cls[indices[40:140]]) + list(test_cls[rev_indices[40:60]])
+predStrength=list(predStrength[indices[:80]]) + list(predStrength[rev_indices[40:60]])
+test_cls=list(test_cls[indices[0:80]]) + list(test_cls[rev_indices[40:60]])
 
 print predStrength
 print test_cls
