@@ -214,11 +214,19 @@ def aug_lv3(images):
 if __name__ == '__main__':
     img = Image.open('/Users/seongjungkim/PycharmProjects/everyNN/my_data/fundus_sample.png').resize((540, 540),
                                                                                                   Image.ANTIALIAS)
+    print 'a'
+    img=np.asarray(img)
+    img=fundus_projection(img , 540)
+    plt.imsave('fundus_projection.png',img)
+
+
     img = np.asarray(img)
     imgs = []
     for i in range(64):
         imgs.append(img)
     imgs=np.asarray(imgs)
+    imgs=aug_lv1(imgs)
+    utils.plot_images(imgs , savepath='aug_lv1_proejection.png')
 
     # random clahe
     start_time=time.time()
