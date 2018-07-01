@@ -17,7 +17,6 @@ dirpath = './my_data/0100-0000003-019'
 restore_model  = '/home/mediwhale-5/PythonProjects/everyNN/models/resnet_18/10/model-26631'
 dirpath = '/home/mediwhale-5/PythonProjects/cac_regressor/0100-0000003-023/0100-0000003-022'
 
-
 restore_model  = '/home/mediwhale/PycharmProjects/everyNN/models/resnet_34/4/model-29700'
 #dirpath = '/home/mediwhale-5/PythonProjects/cac_regressor/0100-0000003-023/0100-0000003-022'
 """
@@ -44,10 +43,10 @@ exit()
 
 
 paths_0=glob.glob('./images/0100-0000003-019_label_0/*.png')
-paths_0  = paths_0 + paths_0[-50:]
+paths_0  = paths_0 + paths_0[30:80]
 paths_0=sorted(paths_0)
 paths_1=glob.glob('./images/0100-0000003-019_label_1/*.png')
-paths_1  = paths_1 + paths_1[-50:]
+paths_1  = paths_1 + paths_1[30:80]
 paths_1=sorted(paths_1)
 imgs= []
 # Label
