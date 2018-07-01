@@ -43,10 +43,10 @@ exit()
 
 
 paths_0=glob.glob('./images/0100-0000003-019_label_0/*.png')
-paths_0  = paths_0 + paths_0[30:80]
+paths_0  = paths_0 + paths_0[-50:]
 paths_0=sorted(paths_0)
 paths_1=glob.glob('./images/0100-0000003-019_label_1/*.png')
-paths_1  = paths_1 + paths_1[30:80]
+paths_1  = paths_1 + paths_1[-50:]
 paths_1=sorted(paths_1)
 imgs= []
 # Label
@@ -90,6 +90,16 @@ for pred in tester.pred_all:
 
 test_cls=np.argmax(test_labs , axis=1)
 predStrength=np.asarray(tester.pred_all)[:,1]
+
+
+indices = np.where([predStrength > 0.5])[0]
+rev_indices = np.where([predStrength < 0.5])[0]
+
+predStrength=predStrength[indices[:80]] + predStrength[rev_indices[:20]]
+
+
+
+
 tester.plotROC(predStrength=predStrength , labels= test_cls ,  prefix='CAC fundus classifier' , savepath='tmp.png')
 """
 
