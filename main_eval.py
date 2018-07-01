@@ -68,11 +68,11 @@ print np.shape(test_imgs)
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)
 tester.n_classes =2
-test_imgs= test_imgs/255.
-print len(test_imgs)
+val_imgs = val_imgs/255.
+print len(val_imgs)
 
-plt.imsave('delete.png',test_imgs[0])
-tester.validate(test_imgs , test_labs , 60 ,0 ,False)
+plt.imsave('delete.png',val_imgs[0])
+tester.validate(val_imgs , val_labs, 60 ,0 ,False)
 print ''
 print tester.acc
 print tester.loss
@@ -88,10 +88,10 @@ for pred in tester.pred_all:
 for lab in val_labs:
     print lab
 """
-
+"""
 tester.ensemble(test_imgs, test_labs, 60, './models/best_models/0_from_5555/model-37719', './models/best_models/0_from_5566/model-14751',
                 './models/best_models/0_from_5571/model-45144', './models/best_models/1_from_5555/model-25839',
                 './models/best_models/1_from_5571/model-64548')
 
 
-
+"""
