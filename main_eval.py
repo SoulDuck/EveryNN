@@ -27,7 +27,7 @@ val_imgs ,val_labs , val_fs = Dataprovider.reconstruct_tfrecord_rawdata(val_data
 
 
 
-for i,img in enumerate(test_imgs):
+for i,img in enumerate(val_imgs):
     plt.imshow(test_imgs[0])
     plt.show()
     plt.imsave('tmp/{}.jpg'.format(i) , img)
