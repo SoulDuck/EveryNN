@@ -60,7 +60,7 @@ def inspect_cam(sess, cam, top_conv, test_imgs, test_labs, global_step, x_, y_, 
             plt.close();
             #overlay
             cam_vis=np.squeeze(cam_vis)
-            img=np.squeeze(img)
+            img=np.squeeze(img*255)
 
             overlay(actmap=cam_vis, ori_img=img, save_path='{}/blended_{}.png'.format(save_dir, global_step),
                     factor=0.5)
