@@ -64,8 +64,8 @@ print len(paths_0)
 print len(paths_1)
 
 # Image
-for path in paths_0 + paths_1:
-    print os.path.split(path)[-1]
+for i,path in enumerate(paths_0 + paths_1):
+    print i,os.path.split(path)[-1]
     img=np.asarray(Image.open(path).convert('RGB'))
     imgs.append(img)
 test_imgs=np.asarray(imgs)
