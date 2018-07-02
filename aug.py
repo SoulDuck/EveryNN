@@ -226,6 +226,11 @@ if __name__ == '__main__':
         imgs.append(img)
     imgs=np.asarray(imgs)
     imgs=aug_lv1(imgs)
+
+    for i,img in enumerate(imgs):
+
+        plt.imsave('./images/aug_lv1_samples/aug_{}.png'.format(i) , img/255.)
+    exit()
     utils.plot_images(imgs , savepath='aug_lv1_proejection.png')
 
     # random clahe
