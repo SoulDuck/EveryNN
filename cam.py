@@ -59,6 +59,8 @@ def inspect_cam(sess, cam, top_conv, test_imgs, test_labs, global_step, x_, y_, 
             plt.savefig(cmap_file)
             plt.close();
             #overlay
+            print np.shape(cam_vis)
+            print np.shape(img)
             overlay(actmap=cam_vis, ori_img=img, save_path='{}/blended_{}.png'.format(save_dir, global_step),
                     factor=0.5)
 
