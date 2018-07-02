@@ -45,10 +45,10 @@ exit()
 
 
 paths_0=glob.glob('./images/0100-0000003-019_label_0/*.png')
-paths_0  = paths_0 + paths_0[-50:]
+paths_0  = paths_0 #+ paths_0[-50:]
 paths_0=sorted(paths_0)
 paths_1=glob.glob('./images/0100-0000003-019_label_1/*.png')
-paths_1  = paths_1 + paths_1[-50:]
+paths_1  = paths_1 #+ paths_1[-50:]
 paths_1=sorted(paths_1)
 imgs= []
 # Label
@@ -65,13 +65,15 @@ print len(paths_1)
 
 # Image
 for path in paths_0 + paths_1:
-    print path
+    print os.path.split(path)[-1]
     img=np.asarray(Image.open(path).convert('RGB'))
     imgs.append(img)
 test_imgs=np.asarray(imgs)
 
 assert len(test_labs) == len(test_imgs)
 print np.shape(test_imgs)
+
+
 
 
 
