@@ -82,6 +82,7 @@ tester._reconstruct_model(restore_model)
 tester.n_classes =2
 test_imgs = test_imgs/255.
 tester.validate(test_imgs , test_labs, 60 ,0 ,False)
+print tester.pred_all
 inspect_cam(tester.sess , tester.classmap_op  , tester.top_conv ,test_imgs , test_labs , 0 , tester.x_ , tester.y_ , tester.is_training , tester.logits_ )
 actmap=tester.sess.run(tester.classmap_op , {tester.x_: test_imgs[0:1] , tester.is_training :False})
 actmap=np.squeeze(actmap)
