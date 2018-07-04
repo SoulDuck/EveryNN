@@ -266,6 +266,8 @@ class Tester(DNN):
         ySum = 0.0  # for AUC curve
         n_pos = np.sum(np.array(labels) == 1)
         n_neg = len(labels) - n_pos
+        print n_pos
+        print n_neg
         y_step = 1 / float(n_pos)
         x_step = 1 / float(n_neg)
         n_est_pos = 0

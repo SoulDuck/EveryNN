@@ -87,7 +87,7 @@ tester.validate(test_imgs , test_labs, 60 ,0 ,False)
 for i,path in enumerate(paths_0 + paths_1):
     print os.path.split(path)[-1].split('_')[0] , tester.pred_all[i] ,test_cls[i]
 
-inspect_cam(tester.sess , tester.classmap_op  , tester.top_conv ,test_imgs , test_labs , 0 , tester.x_ , tester.y_ , tester.is_training , tester.logits_ )
+inspect_cam(tester.sess , tester.classmap_op  , tester.top_conv ,test_imgs , test_labs , 1 , tester.x_ , tester.y_ , tester.is_training , tester.logits_ )
 actmap=tester.sess.run(tester.classmap_op , {tester.x_: test_imgs[0:1] , tester.is_training :False})
 actmap=np.squeeze(actmap)
 print np.shape(actmap)
