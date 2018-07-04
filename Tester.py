@@ -53,7 +53,7 @@ class Tester(DNN):
             cam_ind = tf.get_default_graph().get_tensor_by_name('cam_ind:0')
         except Exception as e :
             print "CAM 이 구현되어 있지 않은 모델입니다."
-        self.classmap_op = self.get_class_map('final', self.top_conv, 1 , cam_imgSize , self.final_w)
+        self.classmap_op = self.get_class_map('final', self.top_conv, 0, cam_imgSize , self.final_w)
 
     def show_acc_loss(self , step ):
         print ''

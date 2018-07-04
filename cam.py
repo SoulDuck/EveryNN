@@ -48,7 +48,7 @@ def inspect_cam(sess, cam, top_conv, test_imgs, test_labs, global_step, x_, y_, 
         img = test_imgs[s:s + 1]
         label = test_labs[s:s + 1]
         conv_val, output_val = sess.run([top_conv, y], feed_dict={x_: img, phase_train: False})
-        cam_ans = sess.run(cam, feed_dict={y_: 0, top_conv: conv_val})
+        cam_ans = sess.run(cam, feed_dict={y_:label , top_conv: conv_val})
         cam_vis = list(map(lambda x: (x - x.min()) / (x.max() - x.min()), cam_ans))
         for vis, ori in zip(cam_vis, img):
             if ori.shape[-1] == 1:  # grey
