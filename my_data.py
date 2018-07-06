@@ -134,6 +134,7 @@ train_tfrecord_path = '../fundus_divider/0100-0000002-006/train.tfrecord'
 val_tfrecord_path = '../fundus_divider/0100-0000002-006/val.tfrecord'
 test_tfrecord_path = '../fundus_divider/0100-0000002-006/test.tfrecord'
 
+"""
 # Data ID 0100-0000003-025
 train_tfrecord_path = '../fundus_divider/0100-0000002-007/train.tfrecord'
 val_tfrecord_path = '../fundus_divider/0100-0000002-007/val.tfrecord'
@@ -143,6 +144,12 @@ test_tfrecord_path = '../fundus_divider/0100-0000002-007/test.tfrecord'
 train_tfrecord_path = '../fundus_divider/0100-0000002-008/train.tfrecord'
 val_tfrecord_path = '../fundus_divider/0100-0000002-008/val.tfrecord'
 test_tfrecord_path = '../fundus_divider/0100-0000002-008/test.tfrecord'
+"""
+
+# Data ID 0100-0000003-026
+train_tfrecord_path = '../fundus_divider/0100-0000002-006/train.tfrecord'
+val_tfrecord_path = '../fundus_divider/0100-0000002-006/val.tfrecord'
+test_tfrecord_path = '../fundus_divider/0100-0000002-006/test.tfrecord'
 
 
 
