@@ -129,7 +129,20 @@ train_tfrecord_path = '../cac_regressor/0100-0000003-023/train_0_10_11_inf.tfrec
 val_tfrecord_path = '../cac_regressor/0100-0000003-023/val_0_10_11_inf.tfrecord'
 test_tfrecord_path = '../cac_regressor/0100-0000003-023/test_0_10_11_inf.tfrecord'
 
+# Data ID 0100-0000003-024
+train_tfrecord_path = '../fundus_divider/0100-0000002-006/train.tfrecord'
+val_tfrecord_path = '../fundus_divider/0100-0000002-006/val.tfrecord'
+test_tfrecord_path = '../fundus_divider/0100-0000002-006/test.tfrecord'
 
+# Data ID 0100-0000003-025
+train_tfrecord_path = '../fundus_divider/0100-0000002-007/train.tfrecord'
+val_tfrecord_path = '../fundus_divider/0100-0000002-007/val.tfrecord'
+test_tfrecord_path = '../fundus_divider/0100-0000002-007/test.tfrecord'
+
+# Data ID 0100-0000003-026
+train_tfrecord_path = '../fundus_divider/0100-0000002-008/train.tfrecord'
+val_tfrecord_path = '../fundus_divider/0100-0000002-008/val.tfrecord'
+test_tfrecord_path = '../fundus_divider/0100-0000002-008/test.tfrecord'
 
 
 

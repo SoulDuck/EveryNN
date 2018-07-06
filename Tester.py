@@ -272,7 +272,7 @@ class Tester(DNN):
         x_step = 1 / float(n_neg)
         n_est_pos = 0
         sortedIndices = np.argsort(predStrength, axis=0)
-        fig = plt.figure()
+        fig = plt.figure(figsize=(10,10))
         fig.clf()
         ax = plt.subplot(1, 1, 1)
         if __debug__ == debug_flag:
@@ -301,6 +301,7 @@ class Tester(DNN):
         plt.xlabel('False Positive Rate');
         plt.ylabel('True Positive Rate')
         plt.title('ROC curve for {}'.format(prefix))
+
         ax.axis([0, 1, 0, 1])
         if __debug__ == debug_flag:
             print '# of True :', n_pos
