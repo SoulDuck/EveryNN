@@ -278,7 +278,7 @@ class Dataprovider():
         label = tf.cast(features['label'], tf.int32)
         filename = tf.cast(features['filename'], tf.string)
 
-        image_shape = tf.stack([height, width, 3])  # image_shape shape is ..
+        image_shape = tf.stack([300, 300, 3])  # image_shape shape is ..
         #image_size_const = tf.constant((resize_height, resize_width, 3), dtype=tf.int32)
         image = tf.reshape(image, image_shape)
         image = tf.image.resize_image_with_crop_or_pad(image=image, target_height=resize_height,
