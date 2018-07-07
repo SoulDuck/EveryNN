@@ -100,7 +100,7 @@ if '__main__' == __name__:
     val_labs = train_labs[:5000]
 
     train_imgs = train_imgs[5000:]
-    train_labs = train_labs[:5000]
+    train_labs = train_labs[5000:]
 
 
     print 'train images shape : {}'.format(np.shape(train_imgs))
