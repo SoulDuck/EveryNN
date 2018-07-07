@@ -21,6 +21,7 @@ num_classes = 10
 # Tfrecord paths
 train_tfrecords = './cifar_10/cifar_10_train_imgs.tfrecord'
 test_tfrecords = './cifar_10/cifar_10_test_imgs.tfrecord'
+val_tfrecords = './cifar_10/cifar_10_val_imgs.tfrecord'
 data_dir = './cifar_10/cifar-10-batches-py'
 
 
@@ -102,11 +103,13 @@ if '__main__' == __name__:
     train_labs = train_labs[:5000]
 
 
-    print np.shape(train_imgs)
-    print np.shape(test_imgs)
+    print 'train images shape : {}'.format(np.shape(train_imgs))
+    print 'Validation images shape : {}'.format(np.shape(val_imgs))
+    print 'Test images shape : {}'.format(np.shape(test_imgs))
 
     Dataprovider.Dataprovider.make_tfrecord_rawdata( train_tfrecords, train_imgs , train_labs)
     Dataprovider.Dataprovider.make_tfrecord_rawdata(test_tfrecords, test_imgs, test_labs)
+    Dataprovider.Dataprovider.make_tfrecord_rawdata(val_tfrecords, val_imgs , val_labs)
     print np.shape(Dataprovider.Dataprovider.get_sample(train_tfrecords , True , 10)[0])
     print 'train imgs shape : {}'.format(np.shape(train_imgs))
     print 'train labs shape : {}'.format(np.shape(train_labs))
