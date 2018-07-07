@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import copy
 import time
-import sklearn
+from sklearn.metrics import confusion_matrix
 class Tester(DNN):
     def __init__(self , recorder ):
         print '####################################################'
@@ -114,12 +114,9 @@ class Tester(DNN):
             self.acc_by_labels.append(lab_by_acc)
 
         # Sensitivity , Specifity
-        self.get_spec_sens()
-
-
-
         if save_model:
             self.recorder.write_acc_loss(prefix='Test', loss=self.loss, acc=self.acc, step=step)
+
             if self.acc > self.max_acc:
                 self.max_acc = self.acc
                 print '###### Model Saved ######'
@@ -318,13 +315,21 @@ class Tester(DNN):
         print 'The Area Under Curve is :', ySum * x_step
 
     def get_confmat(self , pred_cls , cls):
-        cm = sklearn.confusion_matrix(pred_cls[['active_cust']], cls)
+        cm = confusion_matrix(cls,pred_cls)
         return cm
 
-    def get_spec_sens(self, pred_cls , labels):
+    def get_spec_sens(self, pred_cls , labels , cutoff):
+        pred_cls=np.asarray(pred_cls)
+
+        indices = pred_cls > cutoff
+        rev_indices = pred_cls < cutoff
+
+        pred_cls[indices]=1
+        pred_cls[rev_indices] = 0
+
         cm=self.get_confmat(pred_cls , labels )
-        sensitivity = cm[0, 0] / (cm[0, 0] + cm[0, 1])
-        specificity = cm[1, 1] / (cm[1, 0] + cm[1, 1])
+        sensitivity = cm[0, 0] / float(cm[0, 0] + cm[0, 1])
+        specificity = cm[1, 1] / float(cm[1, 0] + cm[1, 1])
         print('Sensitivity : ', sensitivity)
         print('Specificity : ', specificity)
         return sensitivity , specificity
@@ -378,7 +383,6 @@ class Tester(DNN):
 
 
 if __name__ =='__main__':
-    """"""
     imgs = []
     for dirpath , subdir , files in os.walk('./my_data/abnormal'):
         for f in files:
@@ -419,9 +423,7 @@ if __name__ =='__main__':
     tester.ensemble(test_imgs, test_labs, 60, './models/best_models/0_from_5555', './models/best_models/0_from_5566',
                     './models/best_models/0_from_5571', './models/best_models/1_from_5555' , './models/best_models/1_from_5571')
 
-"""
-    
-
+"""    
     #test_imgs=np.load('my_data/abnormal_test.npy')[:2]
     test_imgs=test_imgs/255.
     test_labs=np.zeros([len(test_imgs) , 2])

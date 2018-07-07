@@ -1,6 +1,7 @@
 import Tester
 import numpy as np
-f=open('./pred_list_2.csv','r')
+f=open('./pred_list_for_ensemble_cac.csv','r')
+
 
 pat_pred={}
 pat_count={}
@@ -33,4 +34,6 @@ print len(labels)
 preds=np.asarray(preds)
 labels =np.asarray(labels)
 tester=Tester.Tester(None)
+tester.get_spec_sens(preds , labels , cutoff=0.5)
+
 tester.plotROC(predStrength=preds, labels=labels ,prefix='cac ensemble ROC Curve' , savepath='ensemble_cac.png')

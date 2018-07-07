@@ -30,21 +30,27 @@ class Recorder(DNN):
                                     tf.Summary.Value(tag='accuracy_{}'.format(prefix), simple_value=float(acc))])
         self.summary_writer.add_summary(summary, step)
 
-    def _make_logfolder(self):
-        log_count =0;
-        while True:
-            logs_root_path='./logs/{}'.format(self.folder_name)
-            try:
-                os.makedirs(logs_root_path)
-            except Exception as e :
-                pass;
-            self.logs_path=os.path.join( logs_root_path , str(log_count))
-            if not os.path.isdir(self.logs_path):
-                os.mkdir(self.logs_path)
-                break;
-            else:
-                log_count+=1
-        print 'folder where logs is saved : {} '.format(self.logs_path)
+    def write_spec_sens(self , prefix, spec, sens ,step):
+        summary = tf.Summary(value=[tf.Summary.Value(tag='spec {}'.format(prefix), simple_value=float(spec)),
+                                    tf.Summary.Value(tag='sens {}'.format(prefix), simple_value=float(sens))])
+        self.summary_writer.add_summary(summary,step)
+
+
+def _make_logfolder(self):
+    log_count =0;
+    while True:
+        logs_root_path='./logs/{}'.format(self.folder_name)
+        try:
+            os.makedirs(logs_root_path)
+        except Exception as e :
+            pass;
+        self.logs_path=os.path.join( logs_root_path , str(log_count))
+        if not os.path.isdir(self.logs_path):
+            os.mkdir(self.logs_path)
+            break;
+        else:
+            log_count+=1
+    print 'folder where logs is saved : {} '.format(self.logs_path)
 
 
 
