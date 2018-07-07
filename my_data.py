@@ -149,7 +149,7 @@ test_tfrecord_path = '../fundus_divider/0100-0000002-008/test.tfrecord'
 # Data ID 0100-0000003-026
 train_tfrecord_path = '../fundus_divider/0100-0000002-006_1/train.tfrecord'
 val_tfrecord_path = '../fundus_divider/0100-0000002-006_1/val.tfrecord'
-test_tfrecord_path = '../fundus_divider/0100-0000002-006_!/test.tfrecord'
+test_tfrecord_path = '../fundus_divider/0100-0000002-006_1/test.tfrecord'
 
 
 
