@@ -207,7 +207,7 @@ class Dataprovider():
         label = int(example.features.feature['label'].int64_list.value[0])
         filename = (example.features.feature['filename'].bytes_list.value[0])
         image = np.fromstring(raw_image, dtype=np.uint8)
-        image = image.reshape((300, 300, -1))
+        image = image.reshape((height, width, -1))
         if onehot:
             label = cls.cls2onehot([label], n_classes)
         return image , label , filename
@@ -241,7 +241,7 @@ class Dataprovider():
             label = int(example.features.feature['label'].int64_list.value[0])
             filename = (example.features.feature['filename'].bytes_list.value[0])
             image = np.fromstring(raw_image, dtype=np.uint8)
-            image = image.reshape((300, 300, -1))
+            image = image.reshape((height, width , -1))
             if not resize is None:
                 image=np.asarray(Image.fromarray(image).resize(resize,Image.ANTIALIAS))
             ret_img_list.append(image)
@@ -278,7 +278,7 @@ class Dataprovider():
         label = tf.cast(features['label'], tf.int32)
         filename = tf.cast(features['filename'], tf.string)
 
-        image_shape = tf.stack([300, 300, 3])  # image_shape shape is ..
+        image_shape = tf.stack([height , width , -1])  # image_shape shape is ..
         #image_size_const = tf.constant((resize_height, resize_width, 3), dtype=tf.int32)
         image = tf.reshape(image, image_shape)
         image = tf.image.resize_image_with_crop_or_pad(image=image, target_height=resize_height,
@@ -309,7 +309,7 @@ class Dataprovider():
         label = tf.cast(features['label'], tf.int32)
         filename = tf.cast(features['filename'], tf.string)
 
-        image_shape = tf.stack([300, 300, 3])
+        image_shape = tf.stack([height, width , -1])
         image = tf.reshape(image, image_shape)
         if not resize == None:
             resize_height, resize_width = resize
