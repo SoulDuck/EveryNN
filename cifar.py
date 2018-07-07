@@ -94,6 +94,10 @@ if '__main__' == __name__:
     test_filenames=glob.glob(os.path.join(data_dir, 'test_batch*'))
     test_imgs, test_labs = get_images_labels(*test_filenames)
     train_imgs , train_labs = get_images_labels(*train_filenames)
+
+    print np.shape(train_imgs)
+    print np.shape(test_imgs)
+
     Dataprovider.Dataprovider.make_tfrecord_rawdata( train_tfrecords, train_imgs , train_labs)
     Dataprovider.Dataprovider.make_tfrecord_rawdata(test_tfrecords, test_imgs, test_labs)
     print np.shape(Dataprovider.Dataprovider.get_sample(train_tfrecords , True , 10)[0])
