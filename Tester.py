@@ -101,7 +101,6 @@ class Tester(DNN):
         self.loss = np.mean(loss_all)
         self.acc = self.get_acc(labs,  self.pred_all)
 
-
         # Accuracy By Label
         self.acc_by_labels=[]
         cls = np.argmax(labs, axis=1)
@@ -113,9 +112,17 @@ class Tester(DNN):
             lab_by_acc = self.get_acc(lab_by_true, lab_by_pred)
             self.acc_by_labels.append(lab_by_acc)
 
-        # Sensitivity , Specifity
+
         if save_model:
-            self.recorder.write_acc_loss(prefix='Test', loss=self.loss, acc=self.acc, step=step)
+            self.recorder.write_acc_loss(prefix='Validate', loss=self.loss, acc=self.acc, step=step)
+            # Sensitivity , Specifity
+            self.ABNORMAL =1
+            if self.n_classes == 2:
+                pred_abnor = self.pred_all[:, self.ABNORMAL]
+                cls=np.argmax(labs , axis=1)
+                spec , sens =self.get_spec_sens(pred_abnor , cls , cutoff=0.5)
+                self.recorder.write_spec_sens('Validate' , spec , sens , step)
+
 
             if self.acc > self.max_acc:
                 self.max_acc = self.acc

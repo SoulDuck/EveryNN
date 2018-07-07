@@ -18,14 +18,18 @@ img_size_flat = img_size * img_size * num_channels
 # Number of classes.
 num_classes = 10
 
+# Tfrecord paths
 train_tfrecords = './cifar_10/cifar_10_train_imgs.tfrecord'
 test_tfrecords = './cifar_10/cifar_10_test_imgs.tfrecord'
 data_dir = './cifar_10/cifar-10-batches-py'
+
+
 def report_download_progress(count , block_size , total_size):
     pct_complete = float(count * block_size) / total_size
     msg = "\r {0:1%} already downloader".format(pct_complete)
     sys.stdout.write(msg)
     sys.stdout.flush()
+
 
 def download_data_url(url, download_dir):
     filename = url.split('/')[-1]
@@ -35,10 +39,10 @@ def download_data_url(url, download_dir):
             os.makedirs(download_dir)
         except Exception :
             pass
+        if not os.path.exists('./cifar_10/cifar-10-python.tar.gz'):
+            print "Download %s  to %s" %(url , file_path)
+            file_path , _ = urlretrieve(url=url,filename=file_path,reporthook=report_download_progress)
 
-        print "Download %s  to %s" %(url , file_path)
-        file_path , _ = urlretrieve(url=url,filename=file_path,reporthook=report_download_progress)
-        print file_path
         print('\nExtracting files')
         if file_path.endswith(".zip"):
             zipfile.ZipFile(file=file_path , mode="r").extracall(download_dir)
@@ -85,6 +89,7 @@ def get_cifar_images_labels(onehot=True , data_dir =data_dir):
 
 if '__main__' == __name__:
     download_data_url(url , './cifar_10') # Download Dataset
+
     train_filenames=glob.glob(os.path.join(data_dir,'data_batch*'))
     test_filenames=glob.glob(os.path.join(data_dir, 'test_batch*'))
     test_imgs, test_labs = get_images_labels(*test_filenames)

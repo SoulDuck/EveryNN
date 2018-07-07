@@ -139,7 +139,6 @@ for i in range(len(pred_cls)):
     if pred_cls[i] == test_cls[i]:
         if pred_cls[i]==0:
             plt.imsave('./images/TT/{}.png'.format(i),test_imgs[i])
-
         elif pred_cls[i]==1:
             plt.imsave('./images/FF/{}.png'.format(i), test_imgs[i])
     else:
