@@ -34,6 +34,7 @@ def report_download_progress(count , block_size , total_size):
 def download_data_url(url, download_dir):
     filename = url.split('/')[-1]
     file_path = os.path.join(download_dir , filename)
+    print 'filepath : {}'.format(file_path)
     if not os.path.exists(file_path):
         os.makedirs(download_dir)
     # Download Data
