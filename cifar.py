@@ -35,19 +35,17 @@ def download_data_url(url, download_dir):
     filename = url.split('/')[-1]
     file_path = os.path.join(download_dir , filename)
     if not os.path.exists(file_path):
-        try:
-            os.makedirs(download_dir)
-        except Exception :
-            pass
-        if not os.path.exists('./cifar_10/cifar-10-python.tar.gz'):
-            print "Download %s  to %s" %(url , file_path)
-            file_path , _ = urlretrieve(url=url,filename=file_path,reporthook=report_download_progress)
-
-        print('\nExtracting files')
-        if file_path.endswith(".zip"):
-            zipfile.ZipFile(file=file_path , mode="r").extracall(download_dir)
-        elif file_path.endswith(".tar.gz" , ".tgz"):
-            tarfile.open(name=file_path , mode='r:gz').extractall(download_dir)
+        os.makedirs(download_dir)
+    # Download Data
+    if not os.path.exists('./cifar_10/cifar-10-python.tar.gz'):
+        print "Download %s  to %s" %(url , file_path)
+        file_path , _ = urlretrieve(url=url,filename=file_path,reporthook=report_download_progress)
+    # Unzip Data
+    print('\nExtracting files')
+    if file_path.endswith(".zip"):
+        zipfile.ZipFile(file=file_path , mode="r").extracall(download_dir)
+    elif file_path.endswith(".tar.gz" , ".tgz"):
+        tarfile.open(name=file_path , mode='r:gz').extractall(download_dir)
 
 def get_images_labels(*filenames):
     for i,f in enumerate(filenames):
