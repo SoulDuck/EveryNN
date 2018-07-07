@@ -107,7 +107,7 @@ if '__main__' == __name__:
     print 'Validation images shape : {}'.format(np.shape(val_imgs))
     print 'Test images shape : {}'.format(np.shape(test_imgs))
 
-    Dataprovider.Dataprovider.make_tfrecord_rawdata( train_tfrecords, train_imgs , train_labs)
+    Dataprovider.Dataprovider.make_tfrecord_rawdata(train_tfrecords, train_imgs , train_labs)
     Dataprovider.Dataprovider.make_tfrecord_rawdata(test_tfrecords, test_imgs, test_labs)
     Dataprovider.Dataprovider.make_tfrecord_rawdata(val_tfrecords, val_imgs , val_labs)
     print np.shape(Dataprovider.Dataprovider.get_sample(train_tfrecords , True , 10)[0])
