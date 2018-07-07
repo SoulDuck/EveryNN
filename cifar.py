@@ -94,6 +94,14 @@ if '__main__' == __name__:
     test_imgs, test_labs = get_images_labels(*test_filenames)
     train_imgs , train_labs = get_images_labels(*train_filenames)
 
+
+    val_imgs=train_imgs[:5000]
+    val_labs = train_labs[:5000]
+
+    train_imgs = train_imgs[5000:]
+    train_labs = train_labs[:5000]
+
+
     print np.shape(train_imgs)
     print np.shape(test_imgs)
 
