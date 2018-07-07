@@ -317,13 +317,11 @@ class Tester(DNN):
         # plt.show()
         print 'The Area Under Curve is :', ySum * x_step
 
-    #
     def get_confmat(self , pred_cls , cls):
         cm = sklearn.confusion_matrix(pred_cls[['active_cust']], cls)
         return cm
 
-    def get_spec_sens(self, pred_cls , labels ,cufoff):
-
+    def get_spec_sens(self, pred_cls , labels):
         cm=self.get_confmat(pred_cls , labels )
         sensitivity = cm[0, 0] / (cm[0, 0] + cm[0, 1])
         specificity = cm[1, 1] / (cm[1, 0] + cm[1, 1])
@@ -331,11 +329,6 @@ class Tester(DNN):
         print('Specificity : ', specificity)
         return sensitivity , specificity
 
-
-
-
-        TN_indices = np.where(preds < cufoff) # True Negative indices
-        TP_indices = set(TN_indices) - range(len(preds))
     def ensemble(self , test_imgs , test_labs , batch_size, *model_paths):
         # Calculate predictions
         pred_dic={}
