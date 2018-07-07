@@ -45,8 +45,7 @@ def download_data_url(url, download_dir):
     print('\nExtracting files')
     if file_path.endswith(".zip"):
         zipfile.ZipFile(file=file_path , mode="r").extracall(download_dir)
-    elif file_path.endswith(".tar.gz" , ".tgz"):
-        print 'a'
+    elif file_path.endswith(".tar.gz" ) or file_path.endswith(".tgz"):
         tarfile.open(name=file_path , mode='r:gz').extractall(download_dir)
 
 def get_images_labels(*filenames):
