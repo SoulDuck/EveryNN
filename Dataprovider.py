@@ -8,7 +8,6 @@ import cifar , my_data , kaggle_fundus
 import sys
 from PIL import Image
 class Dataprovider():
-
     def __init__(self, datatype , batch_size , num_epoch=10 , onehot = True):
         self.num_epoch = num_epoch
         self.batch_size = batch_size
@@ -53,6 +52,7 @@ class Dataprovider():
             self.n_classes = 2
 
         elif datatype == 'kaggle_fundus' or datatype == 'kagglefundus':
+
             self.train_tfrecord_path = kaggle_fundus.train_tfrecord_path# list
             self.test_tfrecord_path = kaggle_fundus.test_tfrecord_path # list
             self.val_tfrecord_path = kaggle_fundus.val_tfrecord_path
@@ -61,20 +61,17 @@ class Dataprovider():
             self.n_val = 375  #
             self.n_classes = 5
 
-
-
         assert self.n_train is not None and self.n_test is not None , ' ** n_train : {} \t n_test : {} **'.format(self.n_train ,self.n_test)
         self.sample_image, self.sample_label, _ = self.get_sample(self.test_tfrecord_path, onehot=True,
                                                                   n_classes=self.n_classes)
         self.img_h, self.img_w, self.img_ch = np.shape(self.sample_image)
-        # Resize
+
+
+        # Resize and Onehot
         with tf.device('/cpu:0'):
             # tf.image.resize_image_with_crop_or_pad is used in 'get_shuffled_batch'
             self.batch_xs, self.batch_ys, self.batch_fs = self.get_shuffled_batch(self.train_tfrecord_path, self.batch_size,
                                                                                   (self.img_h, self.img_w) , self.num_epoch)
-            # Augmentation
-            # self.batch_xs=self.augmentation(self.batch_xs , True , True , True )
-
             # One Hot
             if onehot:
                 self.batch_ys = tf.one_hot(self.batch_ys, self.n_classes)
@@ -278,7 +275,7 @@ class Dataprovider():
         label = tf.cast(features['label'], tf.int32)
         filename = tf.cast(features['filename'], tf.string)
 
-        image_shape = tf.stack([height , width , -1])  # image_shape shape is ..
+        image_shape = tf.stack([height , width , 3])  # image_shape shape is ..
         #image_size_const = tf.constant((resize_height, resize_width, 3), dtype=tf.int32)
         image = tf.reshape(image, image_shape)
         image = tf.image.resize_image_with_crop_or_pad(image=image, target_height=resize_height,
