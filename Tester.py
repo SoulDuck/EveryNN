@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import copy
 import time
+import sklearn
 class Tester(DNN):
     def __init__(self , recorder ):
         print '####################################################'
@@ -31,6 +32,8 @@ class Tester(DNN):
         tmp = [true_cls == pred_cls]
         acc = np.sum(tmp) / float(len(true_cls))
         return acc
+
+
 
     def _reconstruct_model(self , model_path , cam_imgSize=540):
         tf.reset_default_graph()
@@ -111,6 +114,10 @@ class Tester(DNN):
             self.acc_by_labels.append(lab_by_acc)
 
         # Sensitivity , Specifity
+        self.get_spec_sens()
+
+
+
         if save_model:
             self.recorder.write_acc_loss(prefix='Test', loss=self.loss, acc=self.acc, step=step)
             if self.acc > self.max_acc:
@@ -310,14 +317,22 @@ class Tester(DNN):
         # plt.show()
         print 'The Area Under Curve is :', ySum * x_step
 
+    #
+    def get_confmat(self , pred_cls , cls):
+        cm = sklearn.confusion_matrix(pred_cls[['active_cust']], cls)
+        return cm
 
-    def get_spec_sens(self, preds , labels ,cufoff):
-        assert np.ndim(preds) == np.ndim(labels)
-        if np.ndim(preds) == 2:
-            preds = np.argmax(preds, axis=1)
-            labels = np.argmax(labels, axis=1)
-        assert np.ndim(preds) == np.ndim(labels)
-        preds=np.asarray(preds)
+    def get_spec_sens(self, pred_cls , labels ,cufoff):
+
+        cm=self.get_confmat(pred_cls , labels )
+        sensitivity = cm[0, 0] / (cm[0, 0] + cm[0, 1])
+        specificity = cm[1, 1] / (cm[1, 0] + cm[1, 1])
+        print('Sensitivity : ', sensitivity)
+        print('Specificity : ', specificity)
+        return sensitivity , specificity
+
+
+
 
         TN_indices = np.where(preds < cufoff) # True Negative indices
         TP_indices = set(TN_indices) - range(len(preds))
