@@ -54,20 +54,20 @@ def _make_logfolder(self):
 
 
 
-    def _make_modelfolder(self):
-        model_count =0;
-        while True:
-            models_root_path='./models/{}'.format(self.folder_name)
-            try:
-                os.makedirs(models_root_path)
-            except Exception as e:
-                pass;
-            self.models_path=os.path.join(models_root_path , str(model_count))
+def _make_modelfolder(self):
+    model_count =0;
+    while True:
+        models_root_path='./models/{}'.format(self.folder_name)
+        try:
+            os.makedirs(models_root_path)
+        except Exception as e:
+            pass;
+        self.models_path=os.path.join(models_root_path , str(model_count))
 
-            if not os.path.isdir(self.models_path):
-                os.mkdir(self.models_path)
-                break; #
-            else:
-                model_count+=1
+        if not os.path.isdir(self.models_path):
+            os.mkdir(self.models_path)
+            break; #
+        else:
+            model_count+=1
 
-        print 'folder where models is saved : {} '.format(self.models_path)
+    print 'folder where models is saved : {} '.format(self.models_path)
