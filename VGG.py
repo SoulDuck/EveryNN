@@ -45,26 +45,26 @@ def fc_layer_to_clssses(_input, n_classes):
 class VGG(DNN):
     def __init__(self, optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, cropped_size, num_epoch,
                        init_lr, lr_decay_step , model , aug_list):
+
+        # DNN Initalize
         DNN.initialize(optimizer_name, use_bn, l2_weight_decay, logit_type, datatype, batch_size, num_epoch,
                        init_lr, lr_decay_step)
 
+
         self.model = model
-        # Augmentation
         self.aug_list = aug_list
+
+        # Augmentation
         self.input = self.x_
+        #  The augmentation order must be fellowed aug_rotate => aug_lv0
         if 'aug_lv0' in self.aug_list :
-            self.input = apply_aug_lv0(self.input,  aug_lv0 ,  self.is_training , cropped_size , cropped_size )
-        if 'aug_rotate' in self.aug_list:
-            self.input = apply_aug_rotate(self.input, self.is_training , rotate_range=[90,180,270])
-
-
+            print 'Augmentation Level 0 is applied'
+            self.input = apply_aug_lv0(self.input,  aug_lv0 ,  self.is_training , cropped_size , cropped_size)
         # Build Model
         self.logits = self.build_graph()
-
         DNN.algorithm(self.logits)  # 이걸 self 로 바꾸면 안된다.
-        self.count_trainable_params()
         DNN.sess_start()
-
+        self.count_trainable_params()
 
     def build_graph(self):
         ##### define conv connected layer #######
