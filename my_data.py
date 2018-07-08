@@ -151,11 +151,6 @@ val_tfrecord_path = '../fundus_divider/0100-0000002-007/val.tfrecord'
 test_tfrecord_path = '../fundus_divider/0100-0000002-007/test.tfrecord'
 
 """
-# Data ID 0100-0000003-025 retina
-train_tfrecord_path = '../fundus_divider/0100-0000002-006_1/train.tfrecord'
-val_tfrecord_path = '../fundus_divider/0100-0000002-006_1/val.tfrecord'
-test_tfrecord_path = '../fundus_divider/0100-0000002-006_1/test.tfrecord'
-
 
 
 if '__main__' == __name__:
