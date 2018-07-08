@@ -33,8 +33,6 @@ class Tester(DNN):
         acc = np.sum(tmp) / float(len(true_cls))
         return acc
 
-
-
     def _reconstruct_model(self , model_path , cam_imgSize=540):
         tf.reset_default_graph()
         print 'Reconstruct Model';
@@ -118,6 +116,8 @@ class Tester(DNN):
             # Sensitivity , Specifity
             self.ABNORMAL =1
             if self.n_classes == 2:
+                print self.pred_all[:3]
+                print self.ABNORMAL
                 pred_abnor = self.pred_all[:, self.ABNORMAL]
                 cls=np.argmax(labs , axis=1)
                 spec , sens =self.get_spec_sens(pred_abnor , cls , cutoff=0.5)
@@ -174,7 +174,6 @@ class Tester(DNN):
             labels.extend(label)
 
 
-
             # Run Test
             test_feedDict = {self.x_: image, self.y_: label, self.is_training: False}
             loss , pred = self.sess.run(fetches=fetches, feed_dict=test_feedDict)
@@ -200,7 +199,6 @@ class Tester(DNN):
         return top_k_acc
 
     def _extract_actmap(self , imgs):
-
         for i,img in enumerate(imgs):
 
             feed_dict = {self.x_: imgs[i:i+1], self.is_training: False}
