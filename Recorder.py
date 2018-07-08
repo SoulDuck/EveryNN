@@ -30,7 +30,7 @@ class Recorder(DNN):
                                     tf.Summary.Value(tag='accuracy_{}'.format(prefix), simple_value=float(acc))])
         self.summary_writer.add_summary(summary, step)
 
-    def cwrite_spec_sens(self , prefix, spec, sens ,step):
+    def write_spec_sens(self , prefix, spec, sens ,step):
         summary = tf.Summary(value=[tf.Summary.Value(tag='spec {}'.format(prefix), simple_value=float(spec)),
                                     tf.Summary.Value(tag='sens {}'.format(prefix), simple_value=float(sens))])
         self.summary_writer.add_summary(summary,step)
