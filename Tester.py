@@ -333,8 +333,8 @@ class Tester(DNN):
         cm=self.get_confmat(pred_cls , labels )
         sensitivity = cm[0, 0] / float(cm[0, 0] + cm[0, 1])
         specificity = cm[1, 1] / float(cm[1, 0] + cm[1, 1])
-        print('Sensitivity : ', sensitivity)
-        print('Specificity : ', specificity)
+        print'Sensitivity : {}'.format(sensitivity)
+        print'Specificity : {}'.format(specificity)
         return sensitivity , specificity
 
     def ensemble(self , test_imgs , test_labs , batch_size, *model_paths):
