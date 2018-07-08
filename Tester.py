@@ -117,6 +117,7 @@ class Tester(DNN):
             self.ABNORMAL =1
             if self.n_classes == 2:
                 print self.pred_all[:3]
+                print np.shape(self.pred_all)
                 print self.ABNORMAL
                 pred_abnor = self.pred_all[:, self.ABNORMAL]
                 cls=np.argmax(labs , axis=1)
