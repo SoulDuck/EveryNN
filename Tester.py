@@ -116,10 +116,7 @@ class Tester(DNN):
             # Sensitivity , Specifity
             self.ABNORMAL =1
             if self.n_classes == 2:
-                print self.pred_all[:3]
-                print np.shape(self.pred_all)
-                print self.ABNORMAL
-                pred_abnor = self.pred_all[:, self.ABNORMAL]
+                pred_abnor = np.asarray(self.pred_all)[:, self.ABNORMAL]
                 cls=np.argmax(labs , axis=1)
                 spec , sens =self.get_spec_sens(pred_abnor , cls , cutoff=0.5)
                 self.recorder.write_spec_sens('Validate' , spec , sens , step)
