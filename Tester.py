@@ -118,7 +118,8 @@ class Tester(DNN):
             if self.n_classes == 2:
                 pred_abnor = np.asarray(self.pred_all)[:, self.ABNORMAL]
                 cls=np.argmax(labs , axis=1)
-                spec , sens =self.get_spec_sens(pred_abnor , cls , cutoff=0.5)
+                spec , sens =self.\
+                        get_spec_sens(pred_abnor , cls , cutoff=0.5)
                 self.recorder.write_spec_sens('Validate' , spec , sens , step)
 
 
