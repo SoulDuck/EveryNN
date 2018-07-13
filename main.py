@@ -93,10 +93,10 @@ trainer = Trainer(recorder ,train_iter = 100 )
 tester=Tester(recorder)
 
 # Reconstruct Test , Validation Data
-test_imgs, test_labs ,fnames =cnn_model.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.test_tfrecord_path , None)
+test_imgs, test_labs ,fnames =cnn_model.dataprovider.reconstruct_tfrecord_rawdata(cnn_model.dataprovider.test_tfrecord_path , None)
 test_labs=utils.cls2onehot(test_labs, cnn_model.n_classes)
 
-val_imgs, val_labs ,fnames =cnn_model.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.val_tfrecord_path , None)
+val_imgs, val_labs ,fnames =cnn_model.dataprovider.reconstruct_tfrecord_rawdata(cnn_model.dataprovider.val_tfrecord_path , None)
 val_labs=utils.cls2onehot(val_labs, cnn_model.n_classes)
 
 
@@ -110,22 +110,15 @@ if 'aug_projection' in args.aug_list:
     test_imgs=aug.fundus_projection(test_imgs)
     val_imgs = aug.fundus_projection(val_imgs)
 
-
-
 if np.max(test_imgs) > 1 :
     test_imgs = test_imgs / 255.
 if np.max(val_imgs) > 1:
     val_imgs = val_imgs / 255.
 
-
-
-
-
 max_step=int(cnn_model.max_iter)
 print 'Start Training , Max step : {}'.format(max_step)
 for i in range(max_step):
     #val_acc, val_loss, val_preds = tester.validate_tfrecords(my_data.test_tfrecord_path, None, None)
-
     tester.validate(test_imgs[:] ,test_labs[:] ,args.batch_size , trainer.train_step)
     tester.show_acc_loss(trainer.train_step)
     tester.show_acc_by_label()
