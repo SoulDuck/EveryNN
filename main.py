@@ -75,19 +75,29 @@ vgg.sess_stop()
 """
 
 # RESNET
-resnet_v1=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.cropped_size,\
+if 'resnet' in args.model_name:
+    cnn_model=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.cropped_size,\
                     args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name ,args.aug_list)
+elif 'vgg' in args.model_name:
+    cnn_model=VGG(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.cropped_size,\
+                    args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name ,args.aug_list)
+elif 'inception' in args.model_name:
+    pass;
+elif 'densenet' in args.model_name:
+    pass;
+else:
+    pass;
 
 recorder = Recorder(folder_name=args.model_name)
 trainer = Trainer(recorder ,train_iter = 100 )
 tester=Tester(recorder)
 
 # Reconstruct Test , Validation Data
-test_imgs, test_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.test_tfrecord_path , None)
-test_labs=utils.cls2onehot(test_labs, resnet_v1.n_classes)
+test_imgs, test_labs ,fnames =cnn_model.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.test_tfrecord_path , None)
+test_labs=utils.cls2onehot(test_labs, cnn_model.n_classes)
 
-val_imgs, val_labs ,fnames =resnet_v1.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.val_tfrecord_path , None)
-val_labs=utils.cls2onehot(val_labs, resnet_v1.n_classes)
+val_imgs, val_labs ,fnames =cnn_model.dataprovider.reconstruct_tfrecord_rawdata(resnet_v1.dataprovider.val_tfrecord_path , None)
+val_labs=utils.cls2onehot(val_labs, cnn_model.n_classes)
 
 
 if 'aug_clahe' in args.aug_list:
@@ -111,7 +121,7 @@ if np.max(val_imgs) > 1:
 
 
 
-max_step=int(resnet_v1.max_iter)
+max_step=int(cnn_model.max_iter)
 print 'Start Training , Max step : {}'.format(max_step)
 for i in range(max_step):
     #val_acc, val_loss, val_preds = tester.validate_tfrecords(my_data.test_tfrecord_path, None, None)
@@ -120,6 +130,6 @@ for i in range(max_step):
     tester.show_acc_loss(trainer.train_step)
     tester.show_acc_by_label()
     global_step = trainer.training(args.aug_list)
-resnet_v1.sess_stop()
+cnn_model.sess_stop()
 
 
