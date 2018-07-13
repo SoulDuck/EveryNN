@@ -137,6 +137,7 @@ class Densenet(DNN):
             output = self.dropout(output, is_training=self.is_training , keep_prob=self.conv_keep_prob)
         return output
 
+
     def _add_internal_layer(self , _input , growth_rate):
         if not self.bc_mode: #Bottlenect
             comp_out= self._composite_function(_input ,out_features=growth_rate  , kernel_size=3)
