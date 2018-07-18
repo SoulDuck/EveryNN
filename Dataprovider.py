@@ -21,6 +21,16 @@ class Dataprovider():
             self.n_test = 10000
             self.n_val = 5000
             self.n_classes = 10
+        if datatype == 'cifar_10_resized_54' or datatype == 'cifar10_resized_54':
+            # 이미지 사이즈가 54로 되어 있는 것입니다
+            self.train_tfrecord_path = cifar.train_resize_54_tfrecords# list
+            self.test_tfrecord_path = cifar.test_resize_54_tfrecords# list
+            self.val_tfrecord_path = cifar.val_resize_54_tfrecords #list
+            self.n_train =  45000 # DNN 에서 max iter 을 추정하는데 사용됩니다
+            self.n_test = 10000
+            self.n_val = 5000
+            self.n_classes = 10
+
         elif datatype == 'cifar_100' or datatype == 'cifar100':
             raise NotImplementedError
         elif datatype == 'SVNH' or datatype == 'svhn':

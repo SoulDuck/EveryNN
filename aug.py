@@ -216,10 +216,8 @@ if __name__ == '__main__':
                                                                                                   Image.ANTIALIAS)
     print 'a'
     img=np.asarray(img)
-    img=fundus_projection(img , 540)
-    plt.imsave('fundus_projection.png',img)
-
-
+    #img=fundus_projection(img , 540)
+    plt.imsave('original_fundus.png',img)
     img = np.asarray(img)
     imgs = []
     for i in range(64):
@@ -228,7 +226,6 @@ if __name__ == '__main__':
     imgs=aug_lv1(imgs)
 
     for i,img in enumerate(imgs):
-
         plt.imsave('./images/aug_lv1_samples/aug_{}.png'.format(i) , img/255.)
     exit()
     utils.plot_images(imgs , savepath='aug_lv1_proejection.png')
