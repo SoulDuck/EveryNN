@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 from VGG import VGG
 from INCEPTION_V4 import INCEPTION_V4
+from Densenet import Densenet
 from RESNET_V1 import RESNET_V1
 from Recorder import Recorder
 from Trainer import Trainer
@@ -84,7 +85,8 @@ elif 'vgg' in args.model_name:
 elif 'inception' in args.model_name:
     pass;
 elif 'densenet' in args.model_name:
-    pass;
+    cnn_model=VGG(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.cropped_size,\
+                    args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name ,args.aug_list)
 else:
     pass;
 
