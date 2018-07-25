@@ -85,7 +85,7 @@ elif 'vgg' in args.model_name:
 elif 'inception' in args.model_name:
     pass;
 elif 'densenet' in args.model_name:
-    cnn_model=VGG(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.cropped_size,\
+    cnn_model=Densenet(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.cropped_size,\
                     args.num_epoch ,args.init_lr, args.lr_decay_step, args.model_name ,args.aug_list)
 else:
     pass;
