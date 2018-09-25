@@ -16,9 +16,10 @@ best           second
 
 test_imgs = np.load('./wally_data/1.npy')
 test_labs = np.zeros([len(test_imgs)])
-test_labs[73,72]=1
+test_labs[73]=1
+test_labs[72]=1
 
-print test_labs
+
 
 test_imgs = test_imgs/255.
 tester.validate(test_imgs , test_labs, 60 ,0 ,False)
