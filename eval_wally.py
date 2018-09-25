@@ -19,7 +19,7 @@ best           second
 
 """
 
-test_imgs = np.load('./wally_data/1.npy')
+test_imgs = np.load('./wally_data/2.npy')
 test_labs=[0]*len(test_imgs)
 
 
