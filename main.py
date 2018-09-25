@@ -15,7 +15,7 @@ import argparse
 import aug
 
 parser=argparse.ArgumentParser()
-parser.add_argument('--batch_size', type=int , default='60')
+parser.add_argument('--batch_size', type=int)
 parser.add_argument('--datatype', type=str )
 parser.add_argument('--model_name', type=str)
 parser.add_argument('--BN',dest='use_bn', action='store_true')
