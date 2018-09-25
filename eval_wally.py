@@ -1,6 +1,11 @@
 import Tester
 import numpy as np
+def cls2onehot(cls , depth):
 
+    labs=np.zeros([len(cls) , depth])
+    for i,c in enumerate(cls):
+        labs[i,c]=1
+    return labs
 restore_model  = './models/vgg_13/0/model-990'
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)
@@ -18,6 +23,10 @@ test_imgs = np.load('./wally_data/1.npy')
 test_labs = np.zeros([len(test_imgs)])
 test_labs[73]=1
 test_labs[72]=1
+
+test_labs=cls2onehot(test_labs ,2 )
+
+
 
 
 
