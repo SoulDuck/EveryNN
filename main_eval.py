@@ -1,4 +1,3 @@
-import tensorflow as f
 import Tester
 from Dataprovider import Dataprovider
 import numpy as np
@@ -19,7 +18,7 @@ dirpath = './my_data/0100-0000003-019'
 restore_model  = '/home/mediwhale-5/PythonProjects/everyNN/models/resnet_18/10/model-26631'
 dirpath = '/home/mediwhale-5/PythonProjects/cac_regressor/0100-0000003-023/0100-0000003-022'
 
-restore_model  = '/home/mediwhale/PycharmProjects/everyNN/models/resnet_34/4/model-29700'
+restore_model  = './models/vgg_13/0/model-990'
 #dirpath = '/home/mediwhale-5/PythonProjects/cac_regressor/0100-0000003-023/0100-0000003-022'
 """
 test_data = os.path.join(dirpath ,'test_0_10_11_inf.tfrecord')
