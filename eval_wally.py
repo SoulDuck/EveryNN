@@ -22,4 +22,4 @@ print test_labs
 
 test_imgs = test_imgs/255.
 tester.validate(test_imgs , test_labs, 60 ,0 ,False)
-
+print tester.pred_all
