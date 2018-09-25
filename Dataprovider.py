@@ -4,7 +4,7 @@ import numpy as np
 import os
 import aug
 import tensorflow as tf
-import cifar , my_data , kaggle_fundus
+import cifar , my_data , kaggle_fundus , wally
 import sys
 from PIL import Image
 class Dataprovider():
@@ -65,9 +65,9 @@ class Dataprovider():
             self.n_test = 1480
             self.n_val = 1480
 
-            self.train = wally.train_tfrecord_path
-            self.test = wally.test_tfrecord_path
-            self.val = wally.val_tfrecord_path
+            self.train = wally.train_tfrecord
+            self.test = wally.test_tfrecord
+            self.val = wally.val_tfrecord
 
 
         elif datatype == 'kaggle_fundus' or datatype == 'kagglefundus':
