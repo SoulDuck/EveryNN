@@ -40,7 +40,7 @@ print 'Num Epoch  : ', args.num_epoch
 print 'cropped_size:' , args.cropped_size
 print 'Optimzer : ',args.opt
 print 'Inital Learning Rate : ',args.init_lr
-print 'Learning Rage Decay Step : ' , args.lr_decay_step
+print 'Learning rate Decay Step : ' , args.lr_decay_step
 print 'Augmentation list : ', args.aug_list
 
 
