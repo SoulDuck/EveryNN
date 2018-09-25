@@ -65,9 +65,9 @@ class Dataprovider():
             self.n_test = 1480
             self.n_val = 1480
 
-            self.train = wally.train_tfrecord
-            self.test = wally.test_tfrecord
-            self.val = wally.val_tfrecord
+            self.train = wally.train_tfrecord_path
+            self.test = wally.test_tfrecord_path
+            self.val = wally.val_tfrecord_path
 
 
         elif datatype == 'kaggle_fundus' or datatype == 'kagglefundus':
