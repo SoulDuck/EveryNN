@@ -60,6 +60,16 @@ class Dataprovider():
             self.n_val = 301  #
             self.n_classes = 2
 
+        elif datatype == 'wally':
+            self.n_train = 11840
+            self.n_test = 1480
+            self.n_val = 1480
+
+            self.train = wally.train_tfrecord_path
+            self.test = wally.test_tfrecord_path
+            self.val = wally.val_tfrecord_path
+
+
         elif datatype == 'kaggle_fundus' or datatype == 'kagglefundus':
 
             self.train_tfrecord_path = kaggle_fundus.train_tfrecord_path# list
@@ -351,4 +361,3 @@ class Dataprovider():
         return images
 if '__main__' == __name__:
     Dataprovider('cifar10' , 60 , (32,32))
-

@@ -32,3 +32,6 @@ def plot_images(imgs , names=None , random_order=False , savepath=None , no_axis
     if not savepath is None:
         plt.savefig(savepath)
     plt.show()
+
+
+

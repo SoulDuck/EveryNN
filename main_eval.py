@@ -73,11 +73,6 @@ test_imgs=np.asarray(imgs)
 
 assert len(test_labs) == len(test_imgs)
 print np.shape(test_imgs)
-
-
-
-
-
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)
 tester.n_classes =2
@@ -92,8 +87,6 @@ actmap=tester.sess.run(tester.classmap_op , {tester.x_: test_imgs[0:1] , tester.
 actmap=np.squeeze(actmap)
 print np.shape(actmap)
 plt.imsave('actmap_0.png' , actmap)
-
-exit()
 
 print ''
 print tester.acc
@@ -132,9 +125,7 @@ tester.ensemble(test_imgs, test_labs, 60, './models/best_models/0_from_5555/mode
 
 """
 
-
 pred_cls =np.argmax(tester.pred_all , axis= 1)
-
 for i in range(len(pred_cls)):
     if pred_cls[i] == test_cls[i]:
         if pred_cls[i]==0:
