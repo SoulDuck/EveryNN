@@ -21,8 +21,6 @@ best           second
 
 test_imgs = np.load('./wally_data/1.npy')
 test_labs = np.zeros(len(test_imgs))
-test_labs[73]=1
-test_labs[72]=1
 
 test_labs=cls2onehot(test_labs ,2 )
 
