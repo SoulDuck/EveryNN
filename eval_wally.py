@@ -6,7 +6,7 @@ def cls2onehot(cls , depth):
     for i,c in enumerate(cls):
         labs[i,c]=1
     return labs
-restore_model  = './models/vgg_13/0/model-990'
+restore_model  = './models/vgg_13/0/model-792'
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)
 tester.n_classes =2
@@ -22,11 +22,7 @@ best           second
 test_imgs = np.load('./wally_data/2.npy')
 test_labs=[0]*len(test_imgs)
 
-
 test_labs=cls2onehot(test_labs ,2 )
-
-
-
 
 
 test_imgs = test_imgs/255.
