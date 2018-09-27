@@ -44,6 +44,7 @@ print 'Learning rate Decay Step : ' , args.lr_decay_step
 print 'Augmentation list : ', args.aug_list
 
 
+exit()
 # RESNET
 if 'resnet' in args.model_name:
     cnn_model=RESNET_V1(args.opt , args.use_bn , args.l2_weight_decay, args.logit_type , args.datatype ,args.batch_size, args.cropped_size,\
@@ -69,6 +70,8 @@ test_labs=utils.cls2onehot(test_labs, cnn_model.n_classes)
 
 val_imgs, val_labs ,fnames =cnn_model.dataprovider.reconstruct_tfrecord_rawdata(cnn_model.dataprovider.val_tfrecord_path , None)
 val_labs=utils.cls2onehot(val_labs, cnn_model.n_classes)
+
+
 
 
 if 'aug_clahe' in args.aug_list:
