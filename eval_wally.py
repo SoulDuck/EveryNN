@@ -6,11 +6,10 @@ def cls2onehot(cls , depth):
     for i,c in enumerate(cls):
         labs[i,c]=1
     return labs
-restore_model  = './models/vgg_13/0/model-792'
+restore_model  = './models/vgg11/model-3267'
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)
 tester.n_classes =2
-
 """
 best           second 
 # [1,33](73)   [1,32](72)    1.png
