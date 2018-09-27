@@ -10,6 +10,7 @@ def cls2onehot(cls , depth):
 restore_model  = './models/vgg_11/0/model-6732'
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)
+
 tester.n_classes =2
 """
 best           second 
@@ -19,13 +20,15 @@ best           second
 
 """
 
-test_imgs = np.load('./wally_data/3.npy')
+test_imgs = np.load('./wally_data/1.npy')
 test_labs=[0]*len(test_imgs)
 test_labs=cls2onehot(test_labs ,2 )
 
 
 test_imgs = test_imgs/255.
 tester.validate(test_imgs , test_labs, 60 ,0 ,False)
+print tester.pred_all[73]
+print tester.pred_all[72]
 
 indices = np.where([np.asarray(tester.pred_all)[:,0] > 0.5])[1]
 print indices
