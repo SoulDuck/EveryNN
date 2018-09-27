@@ -30,7 +30,10 @@ class Tester(DNN):
             pred_cls = np.argmax(preds, axis=1)
 
         tmp = [true_cls == pred_cls]
-        acc = np.sum(tmp) / float(len(true_cls))
+        if not float(len(true_cls)) ==0:
+            acc = np.sum(tmp) / float(len(true_cls))
+        else:
+            acc = 0
         return acc
 
     def _reconstruct_model(self , model_path , cam_imgSize=540):
