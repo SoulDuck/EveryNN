@@ -1,6 +1,7 @@
-train_tfrecord_path = './wally_data/train.tfrecord'
-test_tfrecord_path = './wally_data/test.tfrecord'
-val_tfrecord_path = './wally_data/val.tfrecord'
+train_tfrecord_path = '/mnt/Find_Wally/Wally_ver3/train.tfrecord'
+test_tfrecord_path = '/mnt/Find_Wally/Wally_ver3/test.tfrecord'
+val_tfrecord_path = '/mnt/Find_Wally/Wally_ver3//val.tfrecord'
+
 
 
 
