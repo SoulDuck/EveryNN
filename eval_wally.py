@@ -7,7 +7,7 @@ def cls2onehot(cls , depth):
     for i,c in enumerate(cls):
         labs[i,c]=1
     return labs
-restore_model  = './models/vgg_11/0/model-6732'
+restore_model  = './models/vgg_13/1/model-7227'
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)
 
