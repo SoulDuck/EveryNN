@@ -18,7 +18,7 @@ best           second
 
 """
 
-test_imgs = np.load('./wally_data/1.npy')
+test_imgs = np.load('./wally_data/3.npy')
 test_labs=[0]*len(test_imgs)
 
 test_labs=cls2onehot(test_labs ,2 )
