@@ -97,6 +97,8 @@ class Tester(DNN):
 
         self.pred_all = pred_all
         self.loss = np.mean(loss_all)
+        print labs
+        print self.pred_all
         self.acc = self.get_acc(labs,  self.pred_all)
 
         # Accuracy By Label
