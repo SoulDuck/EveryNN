@@ -26,12 +26,8 @@ test_labs=cls2onehot(test_labs ,2 )
 
 
 test_imgs = test_imgs/255.
-print np.shape(test_imgs)
 tester.validate(test_imgs , test_labs, 60 ,0 ,False)
-print tester.pred_all[73]
-print tester.pred_all[72]
-
 indices = np.where([np.asarray(tester.pred_all)[:,0] > 0.5])[1]
-print indices
+
 wally_imgs = test_imgs[indices]
 np.save('wally_img.npy' , wally_imgs)
