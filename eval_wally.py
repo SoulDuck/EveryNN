@@ -20,7 +20,7 @@ best           second
 
 """
 
-test_imgs = np.load('val_imgs.npy')/255.
+test_imgs = np.load('val_imgs.npy')
 #test_imgs = np.load('../Find_Wally/wally_raspCam/wally_1_1.npy')
 test_labs=[0]*len(test_imgs)
 test_labs=cls2onehot(test_labs ,2 )
