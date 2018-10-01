@@ -70,6 +70,17 @@ class VGG(DNN):
         ##### define conv connected layer #######
         image_size = int(DNN.x_.get_shape()[-2])
         n_classes = int(DNN.y_.get_shape()[-1])
+        if self.model == 'simple_conv':
+            print 'Model : {}'.format('Simple Convnet')
+            conv_out_features = [16, 16, 32]
+            conv_kernel_sizes = [3, 3, 3]
+            conv_strides = [1, 1, 1]
+            before_act_bn_mode = [False, False, False]
+            after_act_bn_mode = [False, False, False]
+            if self.use_BN == True:
+                before_act_bn_mode = [True, True, True]
+            allow_max_pool_indices = [0, 1, 2]
+
         if self.model == 'vgg_11':
             print 'Model : {}'.format('vgg 11')
             conv_out_features = [64, 128, 256, 256, 512, 512, 512, 512]
