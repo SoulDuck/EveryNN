@@ -70,7 +70,7 @@ class VGG(DNN):
         ##### define conv connected layer #######
         image_size = int(DNN.x_.get_shape()[-2])
         n_classes = int(DNN.y_.get_shape()[-1])
-        if self.model == 'simple_conv':
+        if self.model == 'vgg_simple':
             print 'Model : {}'.format('Simple Convnet')
             conv_out_features = [16, 16, 32]
             conv_kernel_sizes = [3, 3, 3]
