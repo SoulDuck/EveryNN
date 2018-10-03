@@ -31,9 +31,10 @@ best           second
 imgs_list = []
 
 for p in range(1,13):
+    utils.show_progress(p, 13)
     for i in range(7):
         try:
-            utils.show_progress(i, 7)
+
             test_imgs = np.load('../Find_Wally/wally_raspCam_np/second/{}_{}.npy'.format(p,i))
             test_imgs = aug.apply_clahe(test_imgs)
             test_imgs = random_rotate_90_180_270(test_imgs , 3)
