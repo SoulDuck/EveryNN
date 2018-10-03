@@ -7,7 +7,7 @@ def cls2onehot(cls , depth):
     for i,c in enumerate(cls):
         labs[i,c]=1
     return labs
-restore_model  = './models/vgg_simple/0/model-9999'
+restore_model  = './models/vgg_11/18/model-564'
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)
 
@@ -20,11 +20,10 @@ best           second
 
 """
 
-test_imgs = np.load('val_imgs.npy')
+test_imgs = np.load('../Find_Wally/wally_raspCam_np/wally_1_10.jpg.npy')
 #test_imgs = np.load('../Find_Wally/wally_raspCam/wally_1_1.npy')
 test_labs=[0]*len(test_imgs)
 test_labs=cls2onehot(test_labs ,2 )
-
 
 test_imgs = test_imgs/255.
 print np.max(test_imgs)
@@ -33,3 +32,4 @@ indices = np.where([np.asarray(tester.pred_all)[:,0] > 0.5])[1]
 print indices
 wally_imgs = test_imgs[indices]
 np.save('wally_imgs.npy' , wally_imgs)
+
