@@ -31,7 +31,7 @@ best           second
 imgs_list = []
 
 for p in range(1,13):
-    utils.show_progress(p, 13)
+    utils.show_progress(p, 12)
     for i in range(7):
         try:
 
