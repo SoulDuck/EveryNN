@@ -27,7 +27,7 @@ best           second
 
 """
 
-test_imgs = np.load('../Find_Wally/wally_raspCam_np/wally_1_10.jpg.npy')
+test_imgs = np.load('../Find_Wally/wally_raspCam_np/wally_1_3.jpg.npy')
 test_imgs = aug.apply_clahe(test_imgs)
 test_imgs = aug.apply_aug_rotate()
 
