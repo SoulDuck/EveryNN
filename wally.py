@@ -4,9 +4,9 @@ test_tfrecord_path = '/mnt/Find_Wally/Wally_ver3/tfrecords/test.tfrecord'
 val_tfrecord_path = '/mnt/Find_Wally/Wally_ver3/tfrecords/val.tfrecord'
 """
 
-train_tfrecord_path = '/mnt/Find_Wally/wally_raspCam_np/train.tfrecord'
-test_tfrecord_path = '/mnt/Find_Wally/wally_raspCam_np/test.tfrecord'
-val_tfrecord_path = '/mnt/Find_Wally/wally_raspCam_np/val.tfrecord'
+train_tfrecord_path = '/mnt/Find_Wally/wally_raspCam_np/train_80x80.tfrecord'
+test_tfrecord_path = '/mnt/Find_Wally/wally_raspCam_np/test_80x80.tfrecord'
+val_tfrecord_path = '/mnt/Find_Wally/wally_raspCam_np/val_80x80.tfrecord'
 
 
 """
