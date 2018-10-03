@@ -1,13 +1,14 @@
 import Tester
 import numpy as np
 from PIL import Image
+import aug
 def cls2onehot(cls , depth):
 
     labs=np.zeros([len(cls) , depth])
     for i,c in enumerate(cls):
         labs[i,c]=1
     return labs
-restore_model  = './models/vgg_11/18/model-128'
+restore_model  = './models/vgg_11/18/model-565'
 tester=Tester.Tester(None)
 tester._reconstruct_model(restore_model)
 
@@ -21,6 +22,8 @@ best           second
 """
 
 test_imgs = np.load('../Find_Wally/wally_raspCam_np/wally_1_3.jpg.npy')
+test_imgs = aug.apply_clahe(test_imgs)
+
 #test_imgs = np.load('../Find_Wally/wally_raspCam/wally_1_1.npy')
 test_labs=[0]*len(test_imgs)
 test_labs=cls2onehot(test_labs ,2 )
