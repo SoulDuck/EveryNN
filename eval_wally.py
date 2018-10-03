@@ -34,7 +34,6 @@ for p in range(1,13):
     utils.show_progress(p, 12)
     for i in range(7):
         try:
-
             test_imgs = np.load('../Find_Wally/wally_raspCam_np/second/{}_{}.npy'.format(p,i))
             test_imgs = aug.apply_clahe(test_imgs)
             test_imgs = random_rotate_90_180_270(test_imgs , 3)
@@ -45,7 +44,7 @@ for p in range(1,13):
 
             test_imgs = test_imgs/255.
             tester.validate(test_imgs , test_labs, 60 ,0 ,False)
-            indices = np.where([np.asarray(tester.pred_all)[:,0] > 0.5])[1]
+            indices = np.where([np.asarray(tester.pred_all)[:,0] > 0.8])[1]
             print indices
             wally_imgs = test_imgs[indices]
             imgs_list.append(wally_imgs)
