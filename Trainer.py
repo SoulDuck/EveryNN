@@ -40,18 +40,15 @@ class Trainer(DNN):
             self.batch_xs , self.batch_ys=self.sess.run([self.dataprovider.batch_xs ,self.dataprovider.batch_ys])
 
             if 'aug_lv1' in aug_list:
-                print 'aug_lv1 applied '
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
                 self.batch_xs = aug_lv1(self.batch_xs)
             if 'aug_random_clahe' in aug_list:
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
                 self.batch_xs = random_clahe_equalized(self.batch_xs)
             if 'aug_rotate' in aug_list:
-                print 'aug rotate applied '
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
                 self.batch_xs = random_rotate_90_180_270(self.batch_xs)
             if 'aug_clahe' in aug_list:
-                print 'aug clahe applied '
                 self.batch_xs = np.asarray(self.batch_xs).astype('uint8')
                 self.batch_xs=apply_clahe(self.batch_xs)
             if 'fundus_projection' in aug_list:
