@@ -2,6 +2,12 @@ import Tester
 import numpy as np
 from PIL import Image
 import aug
+def random_rotate_90_180_270(images):
+    k=np.random.randint(0,4)
+    images=np.rot90(images , k , axes =(1,2))
+    return images
+
+
 def cls2onehot(cls , depth):
 
     labs=np.zeros([len(cls) , depth])
@@ -21,8 +27,9 @@ best           second
 
 """
 
-test_imgs = np.load('../Find_Wally/wally_raspCam_np/wally_1_11.jpg.npy')
+test_imgs = np.load('../Find_Wally/wally_raspCam_np/wally_1_10.jpg.npy')
 test_imgs = aug.apply_clahe(test_imgs)
+test_imgs = aug.apply_aug_rotate()
 
 #test_imgs = np.load('../Find_Wally/wally_raspCam/wally_1_1.npy')
 test_labs=[0]*len(test_imgs)
