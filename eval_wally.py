@@ -2,8 +2,9 @@ import Tester
 import numpy as np
 from PIL import Image
 import aug
-def random_rotate_90_180_270(images):
-    k=np.random.randint(0,4)
+def random_rotate_90_180_270(images , k ):
+    if k is None :
+        k=np.random.randint(0,4)
     images=np.rot90(images , k , axes =(1,2))
     return images
 
@@ -29,7 +30,7 @@ best           second
 
 test_imgs = np.load('../Find_Wally/wally_raspCam_np/wally_1_3.jpg.npy')
 test_imgs = aug.apply_clahe(test_imgs)
-test_imgs = aug.apply_aug_rotate()
+test_imgs = random_rotate_90_180_270(test_imgs)
 
 #test_imgs = np.load('../Find_Wally/wally_raspCam/wally_1_1.npy')
 test_labs=[0]*len(test_imgs)
