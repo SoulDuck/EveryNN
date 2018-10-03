@@ -172,6 +172,10 @@ class VGG(DNN):
             layer = self.gap(self.top_conv)
             self.logits = self.fc_layer_to_clssses(layer , self.n_classes)
 
+        elif self.logit_type =='overfeat_7x7':
+            layer = self.avg_pool('avg_pool' , self.top_conv , 7,1)
+            self.logits = self.fc_layer_to_clssses(layer, self.n_classes)
+
         elif self.logit_type =='fc':
             fc_features=[4096 ,4096]
             before_act_bn_mode = [False, False]
