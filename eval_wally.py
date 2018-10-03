@@ -30,7 +30,7 @@ best           second
 
 test_imgs = np.load('../Find_Wally/wally_raspCam_np/wally_1_3.jpg.npy')
 test_imgs = aug.apply_clahe(test_imgs)
-test_imgs = random_rotate_90_180_270(test_imgs , 1)
+test_imgs = random_rotate_90_180_270(test_imgs , 2)
 
 #test_imgs = np.load('../Find_Wally/wally_raspCam/wally_1_1.npy')
 test_labs=[0]*len(test_imgs)
