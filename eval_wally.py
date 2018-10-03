@@ -27,21 +27,24 @@ best           second
 # [3,20](146)  [3,21](147)   2.png
 
 """
+imgs_list = []
+for p in range(1,13):
+    for i in range(7):
+        test_imgs = np.load('../Find_Wally/wally_raspCam_np/second/{}_{}.npy'.format(p,i))
+        test_imgs = aug.apply_clahe(test_imgs)
+        test_imgs = random_rotate_90_180_270(test_imgs , 3)
 
-test_imgs = np.load('../Find_Wally/wally_raspCam_np/second/1_6.npy')
-print np.shape(test_imgs)
-test_imgs = aug.apply_clahe(test_imgs)
-test_imgs = random_rotate_90_180_270(test_imgs , 3)
+        #test_imgs = np.load('../Find_Wally/wally_raspCam/wally_1_1.npy')
+        test_labs=[0]*len(test_imgs)
+        test_labs=cls2onehot(test_labs ,2 )
 
-#test_imgs = np.load('../Find_Wally/wally_raspCam/wally_1_1.npy')
-test_labs=[0]*len(test_imgs)
-test_labs=cls2onehot(test_labs ,2 )
+        test_imgs = test_imgs/255.
+        tester.validate(test_imgs , test_labs, 60 ,0 ,False)
+        indices = np.where([np.asarray(tester.pred_all)[:,0] > 0.5])[1]
+        print indices
+        wally_imgs = test_imgs[indices]
+        imgs_list.append(wally_imgs)
 
-test_imgs = test_imgs/255.
-print np.max(test_imgs)
-tester.validate(test_imgs , test_labs, 60 ,0 ,False)
-indices = np.where([np.asarray(tester.pred_all)[:,0] > 0.5])[1]
-print indices
-wally_imgs = test_imgs[indices]
-np.save('wally_imgs.npy' , wally_imgs)
+imgs=np.vstack(imgs_list)
+np.save('wally_imgs.npy' , imgs)
 
