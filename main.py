@@ -60,7 +60,7 @@ else:
     raise NotImplementedError
 
 recorder = Recorder(folder_name=args.model_name)
-trainer = Trainer(recorder ,train_iter = 5 )
+trainer = Trainer(recorder ,train_iter = 10 )
 tester=Tester(recorder)
 
 # Reconstruct Test , Validation Data
