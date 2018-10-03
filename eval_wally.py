@@ -29,6 +29,7 @@ best           second
 """
 
 test_imgs = np.load('../Find_Wally/wally_raspCam_np/second/1_1.npy')
+print np.shape(test_imgs)
 test_imgs = aug.apply_clahe(test_imgs)
 test_imgs = random_rotate_90_180_270(test_imgs , 3)
 
